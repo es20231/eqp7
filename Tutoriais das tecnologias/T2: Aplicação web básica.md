@@ -7,8 +7,13 @@ Certifique-se de ter o Node.js instalado no seu sistema. Você pode verificar a 
 ```bash
 eduardo@eduardo-HP-Pavilion-dv6-Notebook-PC:~/Área de Trabalho/Engenharia de Software II/Tutoriais/T2$
  node -v
+```
+- Saída esperada:
+ 
+```bash
 v20.2.0
 ```
+
 ### Passo 2: Criar um novo projeto Next.js
 
 Abra um terminal e execute o seguinte comando para criar um novo projeto Next.js:
@@ -16,8 +21,9 @@ Abra um terminal e execute o seguinte comando para criar um novo projeto Next.js
 ```bash
 npx create-next-app nome-do-projeto
 ```
+
 Isso criará uma nova pasta com o nome fornecido e configurará um projeto Next.js básico.
-Saída:
+- Saída esperada:
 
 ```bash
 ✔ Would you like to use TypeScript with this project? … No / Yes
@@ -58,13 +64,17 @@ Initialized a git repository.
 
 Success! Created form at /home/eduardo/Área de Trabalho/Engenharia de Software II/Tutoriais/T2/form
 ```
+
 ### Passo 3: Navegar para a pasta do projeto
 Use o comando cd para navegar até a pasta do projeto que foi criada:
+
 ```bash
 cd form
 ```
+
 ### Passo 4: Criar um componente de formulário
 No diretório do projeto, crie um novo arquivo chamado "CadastroUsuarioForm.js" dentro da pasta "components". Nesse arquivo, adicione o seguinte código:
+
 ```javascript
 import React from 'react';
 
@@ -98,8 +108,10 @@ const CadastroUsuarioForm = () => {
 
 export default CadastroUsuarioForm;
 ```
+
 ### Passo 5: Criar uma página para exibir o formulário
 No diretório do projeto, abra o arquivo "src/app/page.tsx" e substitua o código existente pelo seguinte:
+
 ```javascript
 import React from 'react';
 import CadastroUsuarioForm from '../../components/CadastroUsuarioForm';
@@ -115,8 +127,30 @@ const HomePage = () => {
 
 export default HomePage;
 ```
+
 ### Passo 6: Iniciar o servidor de desenvolvimento
 No diretório do projeto, execute o seguinte comando para iniciar o servidor de desenvolvimento:
+
 ```bash
 npm run dev
 ```
+
+- Saída esperada:
+```bash
+
+> form@0.1.0 dev
+> next dev
+
+- ready started server on 0.0.0.0:3000, url: http://localhost:3000
+- event compiled client and server successfully in 1225 ms (306 modules)
+- wait compiling...
+- event compiled client and server successfully in 698 ms (306 modules)
+- wait compiling /page (client and server)...
+```
+
+### Passo 8: Acessar a aplicação
+Abra um navegador da web e acesse http://localhost:3000 para ver a aplicação em execução. Você verá o formulário de cadastro de usuário na página inicial.
+
+![Formulário de cadastro](formularioCadastro.png)
+
+A partir daí, você pode estilizar o formulário, adicionar validações e implementar a lógica de envio de dados para um servidor ou banco de dados, conforme necessário.
