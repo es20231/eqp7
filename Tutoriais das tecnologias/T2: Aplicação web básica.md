@@ -151,6 +151,6 @@ npm run dev
 ### Passo 8: Acessar a aplicação
 Abra um navegador da web e acesse http://localhost:3000 para ver a aplicação em execução. Você verá o formulário de cadastro de usuário na página inicial.
 
-![Formulário de cadastro](formularioCadastro.png)
+![Formulário de cadastro](Imagens/formularioCadastro.png)
 
 A partir daí, você pode estilizar o formulário, adicionar validações e implementar a lógica de envio de dados para um servidor ou banco de dados, conforme necessário.
