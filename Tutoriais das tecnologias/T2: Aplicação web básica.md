@@ -98,4 +98,20 @@ const CadastroUsuarioForm = () => {
 
 export default CadastroUsuarioForm;
 ```
+### Passo 5: Criar uma página para exibir o formulário
+No diretório do projeto, abra o arquivo "src/app/page.tsx" e substitua o código existente pelo seguinte:
+```javascript
+import React from 'react';
+import CadastroUsuarioForm from '../../components/CadastroUsuarioForm';
 
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Cadastro de Usuário</h1>
+      <CadastroUsuarioForm />
+    </div>
+  );
+};
+
+export default HomePage;
+```
