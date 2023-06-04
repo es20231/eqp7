@@ -14,7 +14,6 @@ v20.2.0
 Abra um terminal e execute o seguinte comando para criar um novo projeto Next.js:
 
 ``` bash
-Copy code
 npx create-next-app nome-do-projeto
 ```
 Isso criará uma nova pasta com o nome fornecido e configurará um projeto Next.js básico.
