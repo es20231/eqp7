@@ -115,3 +115,8 @@ const HomePage = () => {
 
 export default HomePage;
 ```
+### Passo 6: Iniciar o servidor de desenvolvimento
+No diretório do projeto, execute o seguinte comando para iniciar o servidor de desenvolvimento:
+```bash
+npm run dev
+```
