@@ -1,0 +1,32 @@
+@startuml Component Diagram (Architecture) - MinIG
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define SPRITES https://raw.githubusercontent.com/plantuml-stdlib/gilbarbara-plantuml-sprites/v1.0/sprites
+
+!include DEVICONS2/typescript.puml
+!include SPRITES/flickr.puml
+!include DEVICONS/react.puml
+!include DEVICONS/mysql.puml
+
+Person(user, "Usuário")
+Container(web_client, "Navegador", "ReactJS", "A interface principal que o usuário vai utilizar", $sprite="react") 
+
+System_Boundary(c1, "Sistema MinIG") {    
+    Container(web_app, "Aplicação web", "TypeScript, Fastify", "Permite a interação entre os usuários", $sprite="typescript")
+    ContainerDb(db, "Database", "SQLite", "Persiste as informações e interações dos usuários", $sprite="mysql")
+}
+System_Ext(archive, "[API]", "Serviço de imagem", $sprite="flickr")
+System_Ext(mail_system, "Sistema de Email")
+
+Rel_Down(user, web_client, "Usa")
+Rel_Down(web_client, web_app, "Usa", "https")
+Rel_R(web_app, db, "Recupera/Persiste")
+Rel_Down(web_app, archive, "Persiste", "arquivos")
+Rel_L(web_app, mail_system, "Cria e-mail")
+Rel_Up(mail_system, user, "Envia e-mail")
+
+SHOW_LEGEND()
+
+@enduml
