@@ -1,0 +1,89 @@
+@startuml Entity Relationship Diagram - MinIG
+!define Table(x) class x << (T,#FFAAAA) >>
+!define PrimaryKey(x, type) <b><u>x</u></b> : <i>type</i>
+!define ForeignKey(x, type) <u>x</u> : <i>type</i>
+!define ZeroToMany(x) "1" --{ "0..*" x
+!define ManyToZeroDirected(x, direction) "0..*" }-direction- "1" x
+!define ZeroToManyDirected(x, direction) "1"-direction-{"0..*" x
+!define CompositionZeroToMany(x) "1" *-- "0..*" x
+!define CompositionZeroToManyDirected(x, direction) "1" *-direction- "0..*" x
+!define AgragationZeroToManyDirected(x, direction) "1" o-direction- "0..*" x
+
+Table(User) {
+  .. PrimaryKey ..
+  + PrimaryKey(id, string)
+  .. Attributes ..
+  + fullName : string
+  # username : string
+  # email : string
+  + emailCheck : boolean
+  + password : string
+  + biography : string
+  + profilePicture : string
+  .. Relationships ..
+  + images : Image[]
+  + posts : Post[]
+  + comments : Comment[]
+  + reactions : Reaction[]
+}
+
+Table(Image) {
+  .. PrimaryKey ..
+  + PrimaryKey(id, string)
+  .. Attributes ..
+  + path : string
+  .. Relationships ..
+  + posts : Post[]
+  .. ForeignKeys ..
+  ForeignKey(user_id, string)
+
+}
+
+Table(Post) {
+  .. PrimaryKey ..
+  + PrimaryKey(id, string)
+  .. Attributes ..
+  + subtitle : string
+  .. Relationships ..
+  + comments: Comment[]
+  + reactions: Reaction[]
+  .. ForeignKeys ..
+  ForeignKey(user_id, string)
+  ForeignKey(image_id, string)
+}
+
+Table(Comment) {
+  .. PrimaryKey ..
+  + PrimaryKey(id, string)
+  .. Attributes .. ..
+  + content : string
+  .. Relationships ..
+  + reactions: Reaction[]
+  .. ForeignKeys ..
+  ForeignKey(user_id, string)
+  ForeignKey(post_id, string)
+}
+
+Table(Reaction) {
+  .. PrimaryKey ..
+  + PrimaryKey(id, string)
+  .. Attributes ..
+  + type : enum[like, deslike]
+  .. ForeignKeys ..
+  ForeignKey(user_id, string)
+  ForeignKey(post_id, string)
+  ForeignKey(comment_id, string)
+}
+
+User CompositionZeroToManyDirected(Image, up) : can upload >
+User CompositionZeroToMany(Comment) : can have >
+User CompositionZeroToManyDirected(Reaction, down) : can have >
+User CompositionZeroToManyDirected(Post, left) : can have >
+
+Post ManyToZeroDirected(Image, up) : have one >
+Post CompositionZeroToMany(Comment) : can have >
+Post AgragationZeroToManyDirected(Reaction, up) : can have >
+
+Comment AgragationZeroToManyDirected(Reaction, right) : can have >
+
+@enduml
