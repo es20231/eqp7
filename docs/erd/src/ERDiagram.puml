@@ -2,12 +2,11 @@
 !define Table(x) class x << (T,#FFAAAA) >>
 !define PrimaryKey(x, type) <b><u>x</u></b> : <i>type</i>
 !define ForeignKey(x, type) <u>x</u> : <i>type</i>
-!define ZeroToMany(x) "1" --{ "0..*" x
-!define ManyToZeroDirected(x, direction) "0..*" }-direction- "1" x
-!define ZeroToManyDirected(x, direction) "1" -direction-{ "0..*" x
-!define CompositionZeroToMany(x) "1" *-- "0..*" x
-!define CompositionZeroToManyDirected(x, direction) "1" *-direction- "0..*" x
-!define AgragationZeroToManyDirected(x, direction) "1" o-direction- "0..*" x
+!define OneToMany(x) "1" --{ "0..*" x
+!define ManyToOneDirected(x, direction) "0..*" }-direction- "1" x
+!define OneToManyDirected(x, direction) "1" -direction-{ "0..*" x
+!define CompositionOneToMany(x) "1" *-- "0..*" x
+!define CompositionOneToManyDirected(x, direction) "1" *-direction- "0..*" x
 
 Table(User) {
   .. PrimaryKey ..
@@ -24,7 +23,8 @@ Table(User) {
   + images : Image[]
   + posts : Post[]
   + comments : Comment[]
-  + reactions : Reaction[]
+  + postReactions : PostReaction[]
+  + commentReactions : CommentReaction[]
 }
 
 Table(Image) {
@@ -36,7 +36,6 @@ Table(Image) {
   + posts : Post[]
   .. ForeignKeys ..
   ForeignKey(user_id, string)
-
 }
 
 Table(Post) {
@@ -46,7 +45,7 @@ Table(Post) {
   + subtitle : string
   .. Relationships ..
   + comments: Comment[]
-  + reactions: Reaction[]
+  + reactions: PostReaction[]
   .. ForeignKeys ..
   ForeignKey(user_id, string)
   ForeignKey(image_id, string)
@@ -58,13 +57,13 @@ Table(Comment) {
   .. Attributes .. ..
   + content : string
   .. Relationships ..
-  + reactions: Reaction[]
+  + reactions: CommentReaction[]
   .. ForeignKeys ..
   ForeignKey(user_id, string)
   ForeignKey(post_id, string)
 }
 
-Table(Reaction) {
+Table(PostReaction) {
   .. PrimaryKey ..
   + PrimaryKey(id, string)
   .. Attributes ..
@@ -72,18 +71,28 @@ Table(Reaction) {
   .. ForeignKeys ..
   ForeignKey(user_id, string)
   ForeignKey(post_id, string)
+}
+
+Table(CommentReaction) {
+  .. PrimaryKey ..
+  + PrimaryKey(id, string)
+  .. Attributes ..
+  + type : enum[like, deslike]
+  .. ForeignKeys ..
+  ForeignKey(user_id, string)
   ForeignKey(comment_id, string)
 }
 
-User CompositionZeroToManyDirected(Image, up) : can upload >
-User CompositionZeroToMany(Comment) : can have >
-User CompositionZeroToManyDirected(Reaction, down) : can have >
-User CompositionZeroToManyDirected(Post, left) : can have >
+User CompositionOneToManyDirected(Image, right) : can upload >
+User CompositionOneToMany(Comment) : can have >
+User CompositionOneToMany(PostReaction) : can have >
+User CompositionOneToMany(CommentReaction) : can have >
+User CompositionOneToMany(Post) : can have >
 
-Post ManyToZeroDirected(Image, up) : have one >
-Post CompositionZeroToMany(Comment) : can have >
-Post AgragationZeroToManyDirected(Reaction, up) : can have >
+Post ManyToOneDirected(Image, up) : have one >
+Post CompositionOneToMany(Comment) : can have >
+Post CompositionOneToManyDirected(PostReaction, left) : can have >
 
-Comment AgragationZeroToManyDirected(Reaction, right) : can have >
+Comment CompositionOneToManyDirected(CommentReaction, up) : can have >
 
 @enduml
