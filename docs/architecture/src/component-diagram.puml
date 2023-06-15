@@ -14,7 +14,7 @@ Person(user, "Usuário")
 Container(web_client, "Navegador", "ReactJS", "A interface principal que o usuário vai utilizar", $sprite="react") 
 
 System_Boundary(c1, "Sistema MinIG") {    
-    Container(web_app, "Aplicação web", "TypeScript, Fastify", "Permite a interação entre os usuários", $sprite="typescript")
+    Container(web_app, "Aplicação web", "TypeScript, Fastify", "Permite aos usuários um ambiente de interação e compartilhamento de momentos.", $sprite="typescript")
     ContainerDb(db, "Database", "SQLite", "Persiste as informações e interações dos usuários", $sprite="mysql")
 }
 System_Ext(archive, "[API]", "Serviço de imagem", $sprite="flickr")
