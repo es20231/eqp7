@@ -4,7 +4,7 @@
 !define ForeignKey(x, type) <u>x</u> : <i>type</i>
 !define ZeroToMany(x) "1" --{ "0..*" x
 !define ManyToZeroDirected(x, direction) "0..*" }-direction- "1" x
-!define ZeroToManyDirected(x, direction) "1"-direction-{"0..*" x
+!define ZeroToManyDirected(x, direction) "1" -direction-{ "0..*" x
 !define CompositionZeroToMany(x) "1" *-- "0..*" x
 !define CompositionZeroToManyDirected(x, direction) "1" *-direction- "0..*" x
 !define AgragationZeroToManyDirected(x, direction) "1" o-direction- "0..*" x
