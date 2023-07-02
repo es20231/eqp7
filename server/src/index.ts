@@ -1,12 +1,10 @@
 import Fastify from "fastify";
+import { UserRoutes } from "./routes/user.routes";
 
 async function bootstrap() {
+  const fastify = Fastify({logger: true})
 
-  const fastify = Fastify()
-
-  fastify.get("/", async (request, reply) => {
-    return { hello: "world" };
-  })
+  fastify.register(UserRoutes)
 
   await fastify.listen({ port: 3333 });
 }
