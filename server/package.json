@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "test": "vitest",
-    "test:production": "vitest run",
+    "test:prod": "vitest run",
     "coverage": "vitest run --coverage"
   },
   "keywords": [],
