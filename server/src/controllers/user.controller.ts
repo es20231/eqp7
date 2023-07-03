@@ -1,6 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { instantiatedUserService } from "../factories/user.factory";
-const UserService = instantiatedUserService;
+import { MemoryUserRepository } from "../repositories/implementations/memory/user.repository";
+
+const UserService = instantiatedUserService(MemoryUserRepository);
 
 const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
