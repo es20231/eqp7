@@ -6,7 +6,7 @@
 !define SPRITES https://raw.githubusercontent.com/plantuml-stdlib/gilbarbara-plantuml-sprites/v1.0/sprites
 
 !include DEVICONS2/typescript.puml
-!include SPRITES/flickr.puml
+!include SPRITES/dropbox.puml
 !include DEVICONS/react.puml
 !include DEVICONS/mysql.puml
 
@@ -17,7 +17,7 @@ System_Boundary(c1, "Sistema MinIG") {
     Container(web_app, "Aplicação web", "TypeScript, Fastify", "Permite aos usuários um ambiente de interação e compartilhamento de momentos.", $sprite="typescript")
     ContainerDb(db, "Database", "SQLite", "Persiste as informações e interações dos usuários", $sprite="mysql")
 }
-System_Ext(archive, "[API]", "Serviço de imagem", $sprite="flickr")
+System_Ext(archive, "[API]", "Serviço de armazenamento", $sprite="dropbox")
 System_Ext(mail_system, "Sistema de Email")
 
 Rel_Down(user, web_client, "Usa")
