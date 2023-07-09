@@ -1,0 +1,34 @@
+{
+  "name": "minig",
+  "version": "1.0.0",
+  "description": "Application that allows users an environment for interaction and sharing moments",
+  "main": "index.ts",
+  "directories": {
+    "doc": "docs",
+    "server": "server",
+    "web": "client"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/es20231/eqp7.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/es20231/eqp7/issues"
+  },
+  "homepage": "https://github.com/es20231/eqp7#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.6",
+    "@commitlint/config-conventional": "^17.6.6",
+    "husky": "^8.0.3"
+  }
+}
