@@ -1,4 +1,4 @@
-name: tests
+name: Back-end Tests
 
 on:
   push:
