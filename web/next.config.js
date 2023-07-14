@@ -2,8 +2,9 @@
 const nextConfig = {
   // Add environment variables
   env: {
-    BASE_URL: process.env.BASE_URL,
+    API_URL: process.env.API_URL,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
   experimental: {
     appDir: true,
