@@ -1,12 +1,12 @@
 interface User {
-  id: string;
-  fullName: string;
-  username: string;
+  id: string
+  fullName: string
+  username: string
   email: string
-  emailVerified: boolean;
-  password: string;
-  biography: string;
-  profilePicture: string;
+  emailVerified: boolean
+  password: string
+  biography: string
+  profilePicture: string
 
   images?: any[]
   posts?: any[]
@@ -15,4 +15,4 @@ interface User {
   commentReactions?: any[]
 }
 
-export { User };
+export { User }
