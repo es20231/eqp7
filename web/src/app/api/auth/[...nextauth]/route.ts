@@ -23,7 +23,7 @@ export const AuthOptions = {
           id: 'user-1',
           name: 'John Doe',
           email: 'johndoe@mail.com',
-          image: '',
+          token: 'access-token',
         }
       },
     }),
@@ -38,15 +38,12 @@ export const AuthOptions = {
     // signIn: '/login',
   },
   callbacks: {
-    async session({ session, token }: { token: any; session: any }) {
-      session.token = token.user.token
-      return session
-    },
     async jwt({ token, user }: { token: any; user: any }) {
-      if (user) {
-        token.user = user
-      }
-      return token
+      return { ...token, ...user }
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      session.user = token
+      return session
     },
   },
 }
