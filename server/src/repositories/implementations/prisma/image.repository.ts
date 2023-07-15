@@ -10,28 +10,12 @@ const PrismaImageRepository: IImageRepository = {
       },
     })
 
-    if (!image) {
-      return {
-        ok: false,
-        message: `Image #${id} not found`,
-        payload: undefined,
-      }
-    }
-
-    return {
-      ok: true,
-      message: 'Image found successfully',
-      payload: image,
-    }
+    return image || undefined
   },
   getImages: async () => {
     const images = await prisma.image.findMany()
 
-    return {
-      ok: true,
-      message: 'Images found successfully',
-      payload: images,
-    }
+    return images
   },
   createImage: async (image: CreateImageDTO) => {
     const imageCreated = await prisma.image.create({
@@ -41,38 +25,16 @@ const PrismaImageRepository: IImageRepository = {
       },
     })
 
-    return {
-      ok: true,
-      message: 'Image created successfully',
-      payload: imageCreated,
-    }
+    return imageCreated
   },
   deleteImage: async (id: string) => {
-    const image = await prisma.image.findUnique({
+    const deleted = await prisma.image.delete({
       where: {
         id,
       },
     })
 
-    if (!image) {
-      return {
-        ok: false,
-        message: `Image #${id} not found`,
-        payload: undefined,
-      }
-    }
-
-    await prisma.image.delete({
-      where: {
-        id,
-      },
-    })
-
-    return {
-      ok: true,
-      message: 'Image deleted successfully',
-      payload: undefined,
-    }
+    return deleted || undefined
   },
 }
 

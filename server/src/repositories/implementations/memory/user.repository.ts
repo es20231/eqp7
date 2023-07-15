@@ -1,70 +1,43 @@
-import { User } from "../../../entities/user.entity";
-import { IUserRepository, UserWithoutPassword } from "../../iuser.repository";
+import { User } from '../../../entities/user.entity'
+import { delay } from '../../../utils'
+import { IUserRepository, UserWithoutPassword } from '../../iuser.repository'
+
+const users = [] as User[]
 
 const MemoryUserRepository: IUserRepository = {
-  getUserById: (id: string) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: `User #${id} found`,
-        payload: {} as UserWithoutPassword
-      });
-    });
+  getUserById: async (id: string) => {
+    await delay()
+    return {} as UserWithoutPassword
   },
-  getUserByUsername: (username: string) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: `Username ${username} found`,
-        payload: {} as UserWithoutPassword
-      });
-    });
+  getUserByUsername: async (username: string) => {
+    await delay()
+    return {} as UserWithoutPassword
   },
-  getUserByEmail: (email: string) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: `Email ${email} found`,
-        payload: {} as UserWithoutPassword
-      });
-    });
+  getUserByEmail: async (email: string) => {
+    await delay()
+    return {} as UserWithoutPassword
   },
-  getUsers: () => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: "All users",
-        payload: [] as UserWithoutPassword[]
-      });
-    });
+  getUsers: async () => {
+    await delay()
+    return [] as UserWithoutPassword[]
   },
-  createUser: (user: User) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: "User created",
-        payload: {} as UserWithoutPassword
-      });
-    });
+  createUser: async (user: User) => {
+    await delay()
+    return {} as UserWithoutPassword
   },
-  updateUser: (id: string, user: Partial<User>) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: `User #${id} updated`,
-        payload: {} as UserWithoutPassword
-      });
-    });
+  updateUser: async (id: string, user: Partial<User>) => {
+    await delay()
+    return {} as UserWithoutPassword
   },
-  deleteUser: (id: string) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        ok: true,
-        message: `User #${id} deleted`,
-        payload: {} as UserWithoutPassword
-      })
-    })
-  }
+  deleteUser: async (id: string) => {
+    await delay()
+    return {} as UserWithoutPassword
+  },
 }
 
-export { MemoryUserRepository };
+const clearUserMemory = async () => {
+  await delay()
+  users.splice(0, users.length)
+}
+
+export { MemoryUserRepository }

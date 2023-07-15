@@ -7,59 +7,34 @@ const images = [] as Image[]
 const MemoryImageRepository: IImageRepository = {
   getImage: async (id: string) => {
     await delay()
-    const image = images.find((image) => image.id === id)
-    if (!image) {
-      return {
-        ok: false,
-        message: `Image #${id} not found`,
-        payload: undefined,
-      }
-    }
-    return {
-      ok: true,
-      message: 'Image found successfully',
-      payload: image,
-    }
+    return images.find((image) => image.id === id)
   },
   getImages: async () => {
     await delay()
-    return {
-      ok: true,
-      message: 'Images found successfully',
-      payload: images,
-    }
+    return images
   },
   createImage: async (image: CreateImageDTO) => {
     await delay()
-    const newImage = {
+    const imageCreated = {
       ...image,
       id: generateRandomId(),
       createdAt: new Date(),
       updatedAt: new Date(),
     } as Image
-    images.push(newImage)
-    return {
-      ok: true,
-      message: 'Image created successfully',
-      payload: newImage,
-    }
+
+    images.push(imageCreated)
+
+    return imageCreated
   },
   deleteImage: async (id: string) => {
     await delay()
     const imageIndex = images.findIndex((image) => image.id === id)
-    if (imageIndex < 0) {
-      return {
-        ok: false,
-        message: `Image #${id} not found`,
-        payload: undefined,
-      }
-    }
-    images.splice(imageIndex, 1)
-    return {
-      ok: true,
-      message: 'Image deleted successfully',
-      payload: undefined,
-    }
+
+    if (imageIndex === -1) return undefined
+
+    const deleted = images.splice(imageIndex, 1)
+
+    return deleted[0]
   },
 }
 
