@@ -36,11 +36,10 @@ describe('ImageRepository', () => {
       url: 'https://github.com/CassianoJunior.png',
       userId,
     }
-    const { ok, message, payload } = await repository.createImage(image)
-    expect(ok).toBe(true)
-    expect(message).toBe('Image created successfully')
-    expect(payload).toBeTruthy()
-    expect(payload).toStrictEqual({
+    const created = await repository.createImage(image)
+
+    expect(created).toBeTruthy()
+    expect(created).toStrictEqual({
       id: expect.any(String),
       url: image.url,
       userId: image.userId,
@@ -54,18 +53,12 @@ describe('ImageRepository', () => {
       url: 'https://github.com/CassianoJunior.png',
       userId,
     }
-    const { payload } = await repository.createImage(image)
-    const id = payload?.id
+    const created = await repository.createImage(image)
+    const id = created?.id
     if (!id) throw new Error('Image id not created')
-    const {
-      ok,
-      message,
-      payload: imageFound,
-    } = await repository.getImage(payload.id)
-    expect(ok).toBe(true)
-    expect(message).toBe('Image found successfully')
-    expect(imageFound).toBeTruthy()
-    expect(imageFound).toStrictEqual({
+    const finded = await repository.getImage(id)
+    expect(finded).toBeTruthy()
+    expect(finded).toStrictEqual({
       id,
       url: image.url,
       userId: image.userId,
@@ -74,11 +67,9 @@ describe('ImageRepository', () => {
     })
   })
 
-  it('should not get an image by invalid id', async () => {
-    const { ok, message, payload } = await repository.getImage('invalid-id')
-    expect(ok).toBe(false)
-    expect(message).toBe('Image #invalid-id not found')
-    expect(payload).toBeUndefined()
+  it('should return undefined when try to get an image by invalid id', async () => {
+    const image = await repository.getImage('invalid-id')
+    expect(image).toBeUndefined()
   })
 
   it('should get all images', async () => {
@@ -95,12 +86,11 @@ describe('ImageRepository', () => {
     await repository.createImage(image1)
     await repository.createImage(image2)
 
-    const { ok, message, payload } = await repository.getImages()
-    expect(ok).toBe(true)
-    expect(message).toBe('Images found successfully')
-    expect(payload).toBeTruthy()
-    expect(payload).toHaveLength(2)
-    expect(payload).toStrictEqual(
+    const images = await repository.getImages()
+
+    expect(images).toBeTruthy()
+    expect(images).toHaveLength(2)
+    expect(images).toStrictEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(String),
@@ -126,26 +116,29 @@ describe('ImageRepository', () => {
       userId,
     }
 
-    const { payload } = await repository.createImage(image)
-    const id = payload?.id
+    const created = await repository.createImage(image)
+    const id = created?.id
 
     if (!id) throw new Error('Image id not created')
 
-    const { ok, message } = await repository.deleteImage(id)
+    const deleted = await repository.deleteImage(id)
 
-    expect(ok).toBe(true)
-    expect(message).toBe('Image deleted successfully')
+    expect(deleted).toBeTruthy()
+    expect(deleted).toStrictEqual({
+      id,
+      url: image.url,
+      userId: image.userId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
 
-    const { ok: okAfterDelete, message: messageAfterDelete } =
-      await repository.getImage(id)
+    const finded = await repository.getImage(id)
 
-    expect(okAfterDelete).toBe(false)
-    expect(messageAfterDelete).toBe(`Image #${id} not found`)
+    expect(finded).toBeUndefined()
   })
 
-  it('should not delete an image by invalid id', async () => {
-    const { ok, message } = await repository.deleteImage('invalid-id')
-    expect(ok).toBe(false)
-    expect(message).toBe('Image #invalid-id not found')
+  it('should return undefined when try to delete an image by invalid id', async () => {
+    const image = await repository.deleteImage('invalid-id')
+    expect(image).toBeUndefined()
   })
 })
