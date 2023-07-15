@@ -1,22 +1,40 @@
+import { prisma } from '../../../../src/lib/prisma'
 import {
-  MemoryImageRepository,
-  clearImageMemory,
-} from '../../../../src/repositories/implementations/memory/image.repository'
+  PrismaImageRepository,
+  clearImagesPrisma,
+} from '../../../../src/repositories/implementations/prisma/image.repository'
 
 describe('ImageRepository', () => {
-  const repository = MemoryImageRepository
+  const repository = PrismaImageRepository
+  let userId: string
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
 
-  beforeEach(() => {
-    clearImageMemory()
+  beforeAll(async () => {
+    const user = await prisma.user.create({
+      data: {},
+    })
+
+    userId = user.id
+  })
+
+  afterAll(async () => {
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    })
+  })
+
+  afterEach(() => {
+    clearImagesPrisma()
   })
 
   it('should create an image', async () => {
     const image = {
       url: 'https://github.com/CassianoJunior.png',
-      userId: 'test-user-id',
+      userId,
     }
     const { ok, message, payload } = await repository.createImage(image)
     expect(ok).toBe(true)
@@ -34,7 +52,7 @@ describe('ImageRepository', () => {
   it('should get an image by id', async () => {
     const image = {
       url: 'https://github.com/CassianoJunior.png',
-      userId: 'test-user-id',
+      userId,
     }
     const { payload } = await repository.createImage(image)
     const id = payload?.id
@@ -66,12 +84,12 @@ describe('ImageRepository', () => {
   it('should get all images', async () => {
     const image1 = {
       url: 'https://github.com/CassianoJunior.png',
-      userId: 'test-user-id',
+      userId,
     }
 
     const image2 = {
       url: 'https://github.com/CassianoJunior.png',
-      userId: 'test-user-id-2',
+      userId,
     }
 
     await repository.createImage(image1)
@@ -105,7 +123,7 @@ describe('ImageRepository', () => {
   it('should delete an image by id', async () => {
     const image = {
       url: 'https://github.com/CassianoJunior.png',
-      userId: 'test-user-id',
+      userId,
     }
 
     const { payload } = await repository.createImage(image)

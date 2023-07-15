@@ -1,13 +1,15 @@
 import { CreateImageDTO } from '../../../dtos/image/create-image.dto'
-import { Image } from '../../../entities/image.entity'
-import { delay, generateRandomId } from '../../../utils'
+import { prisma } from '../../../lib/prisma'
 import { IImageRepository } from '../../iimage.repository'
 
-const images = [] as Image[]
-const MemoryImageRepository: IImageRepository = {
+const PrismaImageRepository: IImageRepository = {
   getImage: async (id: string) => {
-    await delay()
-    const image = images.find((image) => image.id === id)
+    const image = await prisma.image.findUnique({
+      where: {
+        id,
+      },
+    })
+
     if (!image) {
       return {
         ok: false,
@@ -15,6 +17,7 @@ const MemoryImageRepository: IImageRepository = {
         payload: undefined,
       }
     }
+
     return {
       ok: true,
       message: 'Image found successfully',
@@ -22,7 +25,8 @@ const MemoryImageRepository: IImageRepository = {
     }
   },
   getImages: async () => {
-    await delay()
+    const images = await prisma.image.findMany()
+
     return {
       ok: true,
       message: 'Images found successfully',
@@ -30,31 +34,40 @@ const MemoryImageRepository: IImageRepository = {
     }
   },
   createImage: async (image: CreateImageDTO) => {
-    await delay()
-    const newImage = {
-      ...image,
-      id: generateRandomId(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    } as Image
-    images.push(newImage)
+    const imageCreated = await prisma.image.create({
+      data: {
+        url: image.url,
+        userId: image.userId,
+      },
+    })
+
     return {
       ok: true,
       message: 'Image created successfully',
-      payload: newImage,
+      payload: imageCreated,
     }
   },
   deleteImage: async (id: string) => {
-    await delay()
-    const imageIndex = images.findIndex((image) => image.id === id)
-    if (imageIndex < 0) {
+    const image = await prisma.image.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!image) {
       return {
         ok: false,
         message: `Image #${id} not found`,
         payload: undefined,
       }
     }
-    images.splice(imageIndex, 1)
+
+    await prisma.image.delete({
+      where: {
+        id,
+      },
+    })
+
     return {
       ok: true,
       message: 'Image deleted successfully',
@@ -63,9 +76,8 @@ const MemoryImageRepository: IImageRepository = {
   },
 }
 
-const clearImageMemory = async () => {
-  await delay()
-  images.splice(0, images.length)
+const clearImagesPrisma = async () => {
+  await prisma.image.deleteMany()
 }
 
-export { MemoryImageRepository, clearImageMemory }
+export { PrismaImageRepository, clearImagesPrisma }
