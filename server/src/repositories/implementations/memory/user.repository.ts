@@ -1,37 +1,118 @@
+import bcrypt from 'bcrypt'
+import { CreateUserDTO } from '../../../dtos/user/create-user.dto'
 import { User } from '../../../entities/user.entity'
-import { delay } from '../../../utils'
-import { IUserRepository, UserWithoutPassword } from '../../iuser.repository'
+import { delay, generateRandomId } from '../../../utils'
+import { IUserRepository } from '../../iuser.repository'
 
 const users = [] as User[]
 
 const MemoryUserRepository: IUserRepository = {
   getUserById: async (id: string) => {
     await delay()
-    return {} as UserWithoutPassword
+
+    const user = users.find((user) => user.id === id)
+
+    if (!user) return undefined
+
+    return { ...user, password: undefined }
   },
   getUserByUsername: async (username: string) => {
     await delay()
-    return {} as UserWithoutPassword
+    const user = users.find((user) => user.username === username)
+
+    if (!user) return undefined
+
+    return { ...user, password: undefined }
   },
   getUserByEmail: async (email: string) => {
     await delay()
-    return {} as UserWithoutPassword
+    const user = users.find((user) => user.email === email)
+
+    if (!user) return undefined
+
+    return { ...user, password: undefined }
   },
   getUsers: async () => {
     await delay()
-    return [] as UserWithoutPassword[]
+    return users.map((user) => ({ ...user, password: undefined }))
   },
-  createUser: async (user: User) => {
+  createUser: async (user: CreateUserDTO) => {
     await delay()
-    return {} as UserWithoutPassword
+
+    const { username, email } = user
+
+    const usernameAlreadyExists = users.some(
+      (user) => user.username === username,
+    )
+
+    const emailAlreadyExists = users.some((user) => user.email === email)
+
+    if (usernameAlreadyExists)
+      throw new Error('Unique constraint error. Username already exists')
+
+    if (emailAlreadyExists)
+      throw new Error('Unique constraint error. Email already exists')
+
+    const newUser = {
+      ...user,
+      id: generateRandomId(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      password: await bcrypt.hash(user.password, 10),
+      emailVerified: false,
+      biography: '',
+      profilePicture: '',
+    } as User
+
+    users.push(newUser)
+
+    return { ...newUser, password: undefined }
   },
-  updateUser: async (id: string, user: Partial<User>) => {
+  updateUser: async (id: string, user: Partial<CreateUserDTO>) => {
     await delay()
-    return {} as UserWithoutPassword
+
+    const { username, email } = user
+
+    const usernameAlreadyExists = users.some(
+      (user) => user.username === username && user.id !== id,
+    )
+
+    const emailAlreadyExists = users.some(
+      (user) => user.email === email && user.id !== id,
+    )
+
+    if (usernameAlreadyExists)
+      throw new Error('Unique constraint error. Username already exists')
+
+    if (emailAlreadyExists)
+      throw new Error('Unique constraint error. Email already exists')
+
+    const userIndex = users.findIndex((user) => user.id === id)
+
+    if (userIndex === -1) throw new Error('User does not exists')
+
+    const updatedUser = {
+      ...users[userIndex],
+      ...user,
+      updatedAt: new Date(),
+    }
+
+    users[userIndex] = updatedUser
+
+    return { ...updatedUser, password: undefined }
   },
   deleteUser: async (id: string) => {
     await delay()
-    return {} as UserWithoutPassword
+
+    const userIndex = users.findIndex((user) => user.id === id)
+
+    if (userIndex === -1) throw new Error('User does not exists')
+
+    const deletedUser = users[userIndex]
+
+    users.splice(userIndex, 1)
+
+    return { ...deletedUser, password: undefined }
   },
 }
 
@@ -40,4 +121,4 @@ const clearUserMemory = async () => {
   users.splice(0, users.length)
 }
 
-export { MemoryUserRepository }
+export { MemoryUserRepository, clearUserMemory }

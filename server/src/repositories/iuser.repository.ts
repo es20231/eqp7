@@ -4,9 +4,9 @@ import { User } from '../entities/user.entity'
 type UserWithoutPassword = Omit<User, 'password'>
 
 interface IUserRepository {
-  getUserById(id: string): Promise<UserWithoutPassword>
-  getUserByUsername(username: string): Promise<UserWithoutPassword>
-  getUserByEmail(email: string): Promise<UserWithoutPassword>
+  getUserById(id: string): Promise<UserWithoutPassword | undefined>
+  getUserByUsername(username: string): Promise<UserWithoutPassword | undefined>
+  getUserByEmail(email: string): Promise<UserWithoutPassword | undefined>
   getUsers(): Promise<UserWithoutPassword[]>
   createUser(user: CreateUserDTO): Promise<UserWithoutPassword>
   updateUser(id: string, user: UpdateUserDTO): Promise<UserWithoutPassword>

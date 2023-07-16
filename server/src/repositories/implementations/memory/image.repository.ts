@@ -7,7 +7,11 @@ const images = [] as Image[]
 const MemoryImageRepository: IImageRepository = {
   getImage: async (id: string) => {
     await delay()
-    return images.find((image) => image.id === id)
+    const image = images.find((image) => image.id === id)
+
+    if (!image) throw new Error('Image not found')
+
+    return image
   },
   getImages: async () => {
     await delay()
@@ -30,7 +34,7 @@ const MemoryImageRepository: IImageRepository = {
     await delay()
     const imageIndex = images.findIndex((image) => image.id === id)
 
-    if (imageIndex === -1) return undefined
+    if (imageIndex === -1) throw new Error('Image not found')
 
     const deleted = images.splice(imageIndex, 1)
 

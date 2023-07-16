@@ -10,7 +10,7 @@ describe('ImageRepository', () => {
     expect(repository).toBeTruthy()
   })
 
-  beforeEach(() => {
+  afterEach(() => {
     clearImageMemory()
   })
 
