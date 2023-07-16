@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import { CreateUserDTO } from '../../../dtos/user/create-user.dto'
+import { UpdateUserDTO } from '../../../dtos/user/update-user.dto'
 import { User } from '../../../entities/user.entity'
 import { delay, generateRandomId } from '../../../utils'
 import { IUserRepository } from '../../iuser.repository'
@@ -68,7 +69,7 @@ const MemoryUserRepository: IUserRepository = {
 
     return { ...newUser, password: undefined }
   },
-  updateUser: async (id: string, user: Partial<CreateUserDTO>) => {
+  updateUser: async (id: string, user: UpdateUserDTO) => {
     await delay()
 
     const { username, email } = user

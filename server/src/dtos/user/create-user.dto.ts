@@ -3,6 +3,8 @@ type CreateUserDTO = {
   email: string
   username: string
   password: string
+  biography?: string
+  profilePicture?: string
 }
 
 export { CreateUserDTO }

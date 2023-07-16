@@ -1,4 +1,5 @@
 import { CreateUserDTO } from '../dtos/user/create-user.dto'
+import { UpdateUserDTO } from '../dtos/user/update-user.dto'
 import { User } from '../entities/user.entity'
 
 type UserWithoutPassword = Omit<User, 'password'>

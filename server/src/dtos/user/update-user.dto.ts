@@ -6,3 +6,5 @@ type UpdateUserDTO = {
   biography?: string
   profilePicture?: string
 }
+
+export { UpdateUserDTO }

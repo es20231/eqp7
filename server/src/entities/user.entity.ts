@@ -1,3 +1,5 @@
+import { Image } from './image.entity'
+
 interface User {
   id: string
   fullName: string
@@ -5,10 +7,10 @@ interface User {
   email: string
   emailVerified: boolean
   password: string
-  biography: string
-  profilePicture: string
+  biography?: string
+  profilePicture?: string
 
-  images?: any[]
+  images?: Image[]
   posts?: any[]
   comments?: any[]
   postReactions?: any[]
