@@ -15,7 +15,12 @@ const MemoryUserRepository: IUserRepository = {
 
     if (!user) return undefined
 
-    return { ...user, password: undefined }
+    return {
+      ...user,
+      password: undefined,
+      biography: user.biography || undefined,
+      profilePicture: user.profilePicture || undefined,
+    }
   },
   getUserByUsername: async (username: string) => {
     await delay()
@@ -23,7 +28,12 @@ const MemoryUserRepository: IUserRepository = {
 
     if (!user) return undefined
 
-    return { ...user, password: undefined }
+    return {
+      ...user,
+      password: undefined,
+      biography: user.biography || undefined,
+      profilePicture: user.profilePicture || undefined,
+    }
   },
   getUserByEmail: async (email: string) => {
     await delay()
@@ -31,11 +41,21 @@ const MemoryUserRepository: IUserRepository = {
 
     if (!user) return undefined
 
-    return { ...user, password: undefined }
+    return {
+      ...user,
+      password: undefined,
+      biography: user.biography || undefined,
+      profilePicture: user.profilePicture || undefined,
+    }
   },
   getUsers: async () => {
     await delay()
-    return users.map((user) => ({ ...user, password: undefined }))
+    return users.map((user) => ({
+      ...user,
+      password: undefined,
+      biography: user.biography || undefined,
+      profilePicture: user.profilePicture || undefined,
+    }))
   },
   createUser: async (user: CreateUserDTO) => {
     await delay()
@@ -61,13 +81,16 @@ const MemoryUserRepository: IUserRepository = {
       updatedAt: new Date(),
       password: await bcrypt.hash(user.password, 10),
       emailVerified: false,
-      biography: '',
-      profilePicture: '',
     } as User
 
     users.push(newUser)
 
-    return { ...newUser, password: undefined }
+    return {
+      ...newUser,
+      password: undefined,
+      biography: newUser.biography || undefined,
+      profilePicture: newUser.profilePicture || undefined,
+    }
   },
   updateUser: async (id: string, user: UpdateUserDTO) => {
     await delay()
@@ -100,7 +123,12 @@ const MemoryUserRepository: IUserRepository = {
 
     users[userIndex] = updatedUser
 
-    return { ...updatedUser, password: undefined }
+    return {
+      ...updatedUser,
+      password: undefined,
+      biography: updatedUser.biography || undefined,
+      profilePicture: updatedUser.profilePicture || undefined,
+    }
   },
   deleteUser: async (id: string) => {
     await delay()
@@ -113,7 +141,12 @@ const MemoryUserRepository: IUserRepository = {
 
     users.splice(userIndex, 1)
 
-    return { ...deletedUser, password: undefined }
+    return {
+      ...deletedUser,
+      password: undefined,
+      biography: deletedUser.biography || undefined,
+      profilePicture: deletedUser.profilePicture || undefined,
+    }
   },
 }
 
