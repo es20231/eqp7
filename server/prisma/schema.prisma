@@ -9,3 +9,36 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id             String      @id @default(cuid())
+  fullName       String
+  username       String      @unique
+  email          String      @unique
+  emailVerified  Boolean     @default(false)
+  password       String
+  biography      String?
+  profilePicture String?
+  Images         Image[]
+  Posts          Post[]
+}
+
+model Image{
+  id        String      @id @default(cuid())
+  path      String
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  posts     Post[]
+  createdAt DateTime    @default(now())
+}
+
+model Post{
+  id        String      @id @default(cuid())
+  subTitle  String
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  image     Image       @relation(fields: [imageId], references: [id])
+  imageId   String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
