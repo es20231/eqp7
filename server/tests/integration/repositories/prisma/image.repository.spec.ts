@@ -4,7 +4,7 @@ import {
   clearImagesPrisma,
 } from '../../../../src/repositories/implementations/prisma/image.repository'
 
-describe('ImageRepository', () => {
+describe('PrismaImageRepository', () => {
   const repository = PrismaImageRepository
   let userId: string
   it('should be defined', () => {
@@ -13,7 +13,12 @@ describe('ImageRepository', () => {
 
   beforeAll(async () => {
     const user = await prisma.user.create({
-      data: {},
+      data: {
+        username: 'Cassiano',
+        email: 'cassiano@mail.com',
+        fullName: 'Cassiano Junior',
+        password: 'test',
+      },
     })
 
     userId = user.id
@@ -48,14 +53,22 @@ describe('ImageRepository', () => {
     })
   })
 
+  it('should throw error when try to create an image with non existent user', async () => {
+    const image = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId: 'non-existent-user',
+    }
+
+    await expect(repository.createImage(image)).rejects.toThrowError()
+  })
+
   it('should get an image by id', async () => {
     const image = {
       url: 'https://github.com/CassianoJunior.png',
       userId,
     }
-    const created = await repository.createImage(image)
-    const id = created?.id
-    if (!id) throw new Error('Image id not created')
+    const { id } = await repository.createImage(image)
+
     const finded = await repository.getImage(id)
     expect(finded).toBeTruthy()
     expect(finded).toStrictEqual({
@@ -67,8 +80,8 @@ describe('ImageRepository', () => {
     })
   })
 
-  it('should return undefined when try to get an image by invalid id', async () => {
-    const image = await repository.getImage('invalid-id')
+  it('should return undefined when try to get an image by non existent id', async () => {
+    const image = await repository.getImage('non-existent-id')
     expect(image).toBeUndefined()
   })
 
@@ -137,8 +150,7 @@ describe('ImageRepository', () => {
     expect(finded).toBeUndefined()
   })
 
-  it('should return undefined when try to delete an image by invalid id', async () => {
-    const image = await repository.deleteImage('invalid-id')
-    expect(image).toBeUndefined()
+  it('should throw error when try to delete an image by non existent id', async () => {
+    await expect(repository.deleteImage('non-existent-id')).rejects.toThrow()
   })
 })
