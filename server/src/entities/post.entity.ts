@@ -3,8 +3,8 @@ interface Post {
   subTitle: string;
   comments?: any[];
   reactions?: any[];
-  user_id: string;
-  image_id: string;
+  userId: string;
+  imageId: string;
 }
 
 export { Post };
