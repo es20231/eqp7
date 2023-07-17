@@ -3,7 +3,7 @@ import {
   clearImageMemory,
 } from '../../../../src/repositories/implementations/memory/image.repository'
 
-describe('ImageRepository', () => {
+describe('MemoryImageRepository', () => {
   const repository = MemoryImageRepository
   const userId = 'user-test-id'
   it('should be defined', () => {
@@ -37,8 +37,7 @@ describe('ImageRepository', () => {
       userId,
     }
     const created = await repository.createImage(image)
-    const id = created?.id
-    if (!id) throw new Error('Image id not created')
+    const { id } = created
     const finded = await repository.getImage(id)
     expect(finded).toBeTruthy()
     expect(finded).toStrictEqual({
@@ -50,9 +49,8 @@ describe('ImageRepository', () => {
     })
   })
 
-  it('should return undefined when try to get an image by invalid id', async () => {
-    const image = await repository.getImage('invalid-id')
-    expect(image).toBeUndefined()
+  it('should throw error when try to get an image by non existent id', async () => {
+    await expect(repository.getImage('non-existent-id')).rejects.toThrow()
   })
 
   it('should get all images', async () => {
@@ -99,10 +97,7 @@ describe('ImageRepository', () => {
       userId,
     }
 
-    const created = await repository.createImage(image)
-    const id = created?.id
-
-    if (!id) throw new Error('Image id not created')
+    const { id } = await repository.createImage(image)
 
     const deleted = await repository.deleteImage(id)
 
@@ -115,13 +110,10 @@ describe('ImageRepository', () => {
       updatedAt: expect.any(Date),
     })
 
-    const finded = await repository.getImage(id)
-
-    expect(finded).toBeUndefined()
+    await expect(repository.getImage(id)).rejects.toThrow()
   })
 
-  it('should return undefined when try to delete an image by invalid id', async () => {
-    const image = await repository.deleteImage('invalid-id')
-    expect(image).toBeUndefined()
+  it('should throw error when try to delete an image by non existent id', async () => {
+    await expect(repository.deleteImage('non-existent-id')).rejects.toThrow()
   })
 })

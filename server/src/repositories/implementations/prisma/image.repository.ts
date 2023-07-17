@@ -34,7 +34,7 @@ const PrismaImageRepository: IImageRepository = {
       },
     })
 
-    return deleted || undefined
+    return deleted
   },
 }
 
