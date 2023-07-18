@@ -9,9 +9,7 @@ const MemoryImageRepository: IImageRepository = {
     await delay()
     const image = images.find((image) => image.id === id)
 
-    if (!image) throw new Error('Image not found')
-
-    return image
+    return image || undefined
   },
   getImages: async () => {
     await delay()

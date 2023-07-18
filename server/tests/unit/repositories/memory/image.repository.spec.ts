@@ -49,8 +49,10 @@ describe('MemoryImageRepository', () => {
     })
   })
 
-  it('should throw error when try to get an image by non existent id', async () => {
-    await expect(repository.getImage('non-existent-id')).rejects.toThrow()
+  it('should return undefined when try to get an image by non existent id', async () => {
+    const image = await repository.getImage('non-existent-id')
+
+    expect(image).toBeUndefined()
   })
 
   it('should get all images', async () => {
@@ -110,7 +112,9 @@ describe('MemoryImageRepository', () => {
       updatedAt: expect.any(Date),
     })
 
-    await expect(repository.getImage(id)).rejects.toThrow()
+    const finded = await repository.getImage(id)
+
+    expect(finded).toBeUndefined()
   })
 
   it('should throw error when try to delete an image by non existent id', async () => {
