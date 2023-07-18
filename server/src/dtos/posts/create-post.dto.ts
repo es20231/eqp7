@@ -1,5 +1,7 @@
 type CreatePostDTO = {
   subTitle: string;
   userId: string;
-  ImageId: string;
+  imageId: string;
 };
+
+export { CreatePostDTO };

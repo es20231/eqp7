@@ -3,3 +3,5 @@ type UpdatePostDTO = {
   userId?: string;
   ImageId?: string;
 };
+
+export { UpdatePostDTO };
