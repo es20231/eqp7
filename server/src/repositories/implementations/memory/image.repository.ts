@@ -15,6 +15,12 @@ const MemoryImageRepository: IImageRepository = {
     await delay()
     return images
   },
+  getUserImages: async (userId: string) => {
+    await delay()
+    const userImages = images.filter((image) => image.userId === userId)
+
+    return userImages
+  },
   createImage: async (image: CreateImageDTO) => {
     await delay()
     const imageCreated = {

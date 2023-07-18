@@ -17,6 +17,15 @@ const PrismaImageRepository: IImageRepository = {
 
     return images
   },
+  getUserImages: async (userId: string) => {
+    const userImages = await prisma.image.findMany({
+      where: {
+        userId,
+      },
+    })
+
+    return userImages
+  },
   createImage: async (image: CreateImageDTO) => {
     const imageCreated = await prisma.image.create({
       data: {
