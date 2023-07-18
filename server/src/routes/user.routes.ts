@@ -7,6 +7,7 @@ const UserRoutes = (fastify: FastifyInstance, options: FastifyPluginOptions, don
   fastify.get('/users/username/:username', options, UserController.getUserByUsername);
   fastify.get('/users/email/:email', options, UserController.getUserByEmail);
   fastify.post('/users', options, UserController.createUser);
+  fastify.post('/login', options, UserController.createUser);
   fastify.put('/users/:id', options, UserController.updateUser);
   fastify.delete('/users/:id', options, UserController.deleteUser);
 

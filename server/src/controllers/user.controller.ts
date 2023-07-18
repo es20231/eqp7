@@ -77,4 +77,15 @@ const UserController = {
   }
 }
 
+
+const LoginController = {
+  getLogin: async (request: FastifyRequest, reply: FastifyReply) => {
+    const { ok, message, payload } = await UserService.getUsers();
+
+    if (!ok) reply.code(400).send({ message })
+
+    reply.status(200).send({ message, payload });
+  },
+
+
 export { UserController };
