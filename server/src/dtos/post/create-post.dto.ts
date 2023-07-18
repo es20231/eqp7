@@ -1,5 +1,5 @@
 type CreatePostDTO = {
-  subTitle: string;
+  subtitle: string;
   userId: string;
   imageId: string;
 };

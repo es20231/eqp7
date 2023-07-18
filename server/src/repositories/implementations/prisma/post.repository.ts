@@ -1,5 +1,5 @@
-import { CreatePostDTO } from "../../../dtos/posts/create-post.dto";
-import { UpdatePostDTO } from "../../../dtos/posts/update-post.dto";
+import { CreatePostDTO } from "../../../dtos/post/create-post.dto";
+import { UpdatePostDTO } from "../../../dtos/post/update-post.dto";
 import { prisma } from "../../../lib/prisma";
 import { IPostRepository } from "../../ipost.repository";
 
@@ -19,7 +19,7 @@ const PrismaPostRepository: IPostRepository = {
   createPost: async (post: CreatePostDTO) => {
     const createdPost = await prisma.post.create({
       data: {
-        subTitle: post.subTitle,
+        subtitle: post.subtitle,
         userId: post.userId,
         imageId: post.imageId,
       },

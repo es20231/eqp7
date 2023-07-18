@@ -45,7 +45,7 @@ model Image {
 
 model Post {
   id        String   @id @default(cuid())
-  subTitle  String
+  subtitle  String
   userId    String
   user User @relation(fields: [userId], references: [id])
   imageId String

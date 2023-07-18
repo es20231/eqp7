@@ -1,5 +1,5 @@
-import { CreatePostDTO } from "../../../dtos/posts/create-post.dto";
-import { UpdatePostDTO } from "../../../dtos/posts/update-post.dto";
+import { CreatePostDTO } from "../../../dtos/post/create-post.dto";
+import { UpdatePostDTO } from "../../../dtos/post/update-post.dto";
 import { Post } from "../../../entities/post.entity";
 import { delay, generateRandomId } from "../../../utils";
 import { IPostRepository } from "../../ipost.repository";
@@ -10,12 +10,17 @@ const MemoryPostRepository: IPostRepository = {
   getPostById: async (id: string) => {
     await delay();
     const post = posts.find((post) => post.id === id);
-    if (!post) throw new Error("Post not found");
-    return post;
+
+    return post || undefined;
   },
   getPosts: async () => {
     await delay();
     return posts;
+  },
+  getPostsByUserId: async (userId: string) => {
+    await delay();
+    const userPosts = posts.filter((post) => post.userId === userId);
+    return userPosts;
   },
   createPost: async (post: CreatePostDTO) => {
     await delay();
@@ -49,4 +54,9 @@ const MemoryPostRepository: IPostRepository = {
   },
 };
 
-export { MemoryPostRepository };
+const clearPostMemory = async () => {
+  await delay();
+  posts.splice(0, posts.length);
+};
+
+export { MemoryPostRepository, clearPostMemory };
