@@ -12,6 +12,14 @@ const PrismaPostRepository: IPostRepository = {
     });
     return post || undefined;
   },
+  getPostsByUserId: async (userId: string) => {
+    const posts = await prisma.post.findMany({
+      where: {
+        userId,
+      },
+    });
+    return posts;
+  },
   getPosts: async () => {
     const posts = await prisma.post.findMany();
     return posts;
@@ -47,4 +55,8 @@ const PrismaPostRepository: IPostRepository = {
   },
 };
 
-export { PrismaPostRepository };
+const clearPostsPrisma = async () => {
+  await prisma.post.deleteMany();
+};
+
+export { PrismaPostRepository, clearPostsPrisma };
