@@ -1,8 +1,8 @@
 import { CreateImageDTO } from '../dtos/image/create-image.dto'
 import { Image } from '../entities/image.entity'
 import { IImageRepository } from '../repositories/iimage.repository'
+import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
-import { IUserService } from './user.service'
 
 interface IImageService {
   getImages: () => Promise<ServiceResult<Image[]>>
@@ -14,7 +14,7 @@ interface IImageService {
 
 const ImageService = (
   imageRepository: IImageRepository,
-  userService: IUserService,
+  userRepository: IUserRepository,
 ): IImageService => ({
   getImages: async (): Promise<ServiceResult<Image[]>> => {
     const images = await imageRepository.getImages()
@@ -42,12 +42,12 @@ const ImageService = (
     }
   },
   createImage: async (image: CreateImageDTO): Promise<ServiceResult<Image>> => {
-    const { ok, message } = await userService.getUserById(image.userId)
+    const user = await userRepository.getUserById(image.userId)
 
-    if (!ok) {
+    if (!user) {
       return {
-        ok,
-        message,
+        ok: false,
+        message: `User #${image.userId} not found`,
         payload: undefined,
       }
     }
@@ -80,12 +80,12 @@ const ImageService = (
     }
   },
   getUserImages: async (userId: string) => {
-    const { ok, message } = await userService.getUserById(userId)
+    const user = await userRepository.getUserById(userId)
 
-    if (!ok) {
+    if (!user) {
       return {
-        ok,
-        message,
+        ok: false,
+        message: `User #${userId} not found`,
         payload: undefined,
       }
     }
