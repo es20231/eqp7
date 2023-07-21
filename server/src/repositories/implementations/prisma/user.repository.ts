@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import { CreateUserDTO } from '../../../dtos/user/create-user.dto'
 import { UpdateUserDTO } from '../../../dtos/user/update-user.dto'
 import { prisma } from '../../../lib/prisma'
@@ -64,7 +65,10 @@ const PrismaUserRepository: IUserRepository = {
   },
   createUser: async (user: CreateUserDTO) => {
     const createdUser = await prisma.user.create({
-      data: user,
+      data: {
+        ...user,
+        password: await bcrypt.hash(user.password, 10),
+      },
     })
 
     return {
@@ -79,7 +83,12 @@ const PrismaUserRepository: IUserRepository = {
       where: {
         id,
       },
-      data: user,
+      data: {
+        ...user,
+        password: user.password
+          ? await bcrypt.hash(user.password, 10)
+          : undefined,
+      },
     })
 
     return {

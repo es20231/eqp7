@@ -118,8 +118,11 @@ const MemoryUserRepository: IUserRepository = {
     const updatedUser = {
       ...users[userIndex],
       ...user,
+      password: user.password
+        ? await bcrypt.hash(user.password, 10)
+        : users[userIndex].password,
       updatedAt: new Date(),
-    }
+    } as User
 
     users[userIndex] = updatedUser
 
