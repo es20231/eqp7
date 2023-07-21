@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "test": "jest --watch",
+    "test": "jest --watch --runInBand",
     "test:prod": "jest",
     "test:cov": "jest --coverage"
   },
