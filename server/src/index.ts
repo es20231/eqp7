@@ -7,7 +7,7 @@ import fastifyMultipart = require('@fastify/multipart')
 async function bootstrap() {
   const fastify = Fastify({
     logger: true,
-    bodyLimit: 1024 * 1024 * 15, // 15mb
+    bodyLimit: 1024 * 1024 * 1, // 1mb
   })
 
   fastify.register(fastifyCors, {
@@ -18,6 +18,8 @@ async function bootstrap() {
     limits: {
       fileSize: 1024 * 1024 * 10, // 10mb
     },
+    attachFieldsToBody: true,
+    throwFileSizeLimit: true,
   })
 
   fastify.register(UserRoutes)

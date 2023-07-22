@@ -50,73 +50,35 @@ const ImageController = {
 
     reply.status(200).send({ message, payload })
   },
-  // TODO: this must receive a image file, upload to dropbox, get url and save on db
   createImage: async (request: FastifyRequest, reply: FastifyReply) => {
-    const fileReceived = await request.file()
-    // const fileBackup = fileReceived ? { ...fileReceived } : undefined
-
-    if (!fileReceived) {
-      return reply.status(400).send({ message: 'File is required' })
+    const body = request.body as unknown as {
+      userId: { value: string }
+      file: { filename: string; toBuffer: () => Promise<Buffer> }
     }
 
-    // try {
-    //   await fileBackup.toBuffer()
-    // } catch (err) {
-    //   console.log('error truncate', err)
-    //   return reply.status(400).send({
-    //     message:
-    //       'Maximum file size exceeded. File must contain a maximum of 10 mb',
-    //   })
-    // }
-
-    console.log('fileee', fileReceived)
-
-    const { filename, file, fields } = fileReceived
-
-    const userIdObject = {
-      userId: fields.userId?.value || undefined,
-      fieldname: fields.userId?.fieldname || undefined,
+    const bodyObject = {
+      userId: body.userId.value,
+      file: await body.file.toBuffer(),
+      filename: body.file.filename,
     }
 
-    const userIdSchema = z.object({
-      userId: z.string().nonempty('User id is required'),
-      fieldname: z.string().nonempty('Fieldname is required to be: userId'),
-    })
+    console.log('bodyObj', bodyObject)
 
-    const { ok: okParseUserId, payload: payloadParseUserId } = handleZodParse(
-      userIdObject,
-      userIdSchema,
+    const bodySchema = z
+      .object({
+        userId: z.string().nonempty('UserId is required on body'),
+        filename: z.string().nonempty('Filename is required on body'),
+        file: z.any(),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      bodyObject,
+      bodySchema,
     )
 
-    if (!okParseUserId) return reply.status(400).send(payloadParseUserId)
-
-    const fileObject = {
-      filename,
-      fieldname: fields.file ? 'file' : undefined,
-      file,
-      size: fileReceived.file.bytesRead,
-    }
-
-    const fileSchema = z.object({
-      filename: z
-        .string()
-        .nonempty('Filename is required')
-        .regex(
-          /\.(jpg|jpeg|png)$/i,
-          'File must be an image on format jpg, jpeg or png',
-        ),
-      fieldname: z.string().regex(/file/, 'Fieldname must be file'),
-      file: z.any(),
-      size: z.number().max(1024 * 1024 * 10, 'File must be less than 10MB'),
-    })
-
-    const { ok: okParseFile, payload: payloadParseFile } = handleZodParse(
-      fileObject,
-      fileSchema,
-    )
-
-    if (!okParseFile) {
-      reply.status(400).send(payloadParseFile)
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
       return
     }
 
@@ -125,8 +87,8 @@ const ImageController = {
       message: messageUpload,
       payload: payloadUpload,
     } = await DropboxUploadImageService.upload(
-      payloadParseFile.file,
-      payloadParseFile.filename,
+      payloadParse.file,
+      payloadParse.filename,
     )
 
     if (!okUpload || !payloadUpload) {
@@ -134,7 +96,7 @@ const ImageController = {
     }
 
     const image = {
-      userId: payloadParseUserId.userId,
+      userId: payloadParse.userId,
       url: payloadUpload.url,
     }
 
