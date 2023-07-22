@@ -10,13 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id        String      @id @default(cuid())
-  fullName  String
-  username  String      @unique
-  email     String      @unique
-  emailVerified Boolean  @default(false)
-  password  String
-  biography String?
+model User {
+  id             String  @id @default(cuid())
+  fullName       String
+  username       String  @unique
+  email          String  @unique
+  emailVerified  Boolean @default(false)
+  password       String
+  biography      String?
   profilePicture String?
+
+  images Image[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Image {
+  id     String @id @default(cuid())
+  url    String
+  userId String
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("images")
 }

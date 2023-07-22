@@ -1,0 +1,48 @@
+name: Back-end Tests
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: cd server && npm ci
+      - name: Run server
+        run: cd server && tsc
+
+  test:
+    runs-on: ubuntu-latest
+    
+    env:
+      DATABASE_URL: "file:./database.db"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: cd server && npm ci
+      - name: Prisma generate 
+        run: cd server && npx prisma generate
+      - name: Prisma migrations
+        run: cd server && npx prisma migrate dev --name init
+      - name: Run tests
+        run: cd server && npm run test:prod
+
