@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { PostController } from "../controllers/post.controller";
 
-const potRoutes = (
+const PostRoutes = (
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
   done: any
@@ -15,4 +15,4 @@ const potRoutes = (
   done();
 };
 
-export { potRoutes };
+export { PostRoutes };
