@@ -18,4 +18,4 @@ interface User {
   commentReactions?: any[];
 }
 
-export { User };
+export { User }

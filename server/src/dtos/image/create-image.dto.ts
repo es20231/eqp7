@@ -1,6 +1,6 @@
 type CreateImageDTO = {
-  url: string;
-  userId: string;
-};
+  url: string
+  userId: string
+}
 
-export { CreateImageDTO };
+export { CreateImageDTO }

@@ -1,6 +1,6 @@
-import { CreateImageDTO } from "../../../dtos/image/create-image.dto";
-import { prisma } from "../../../lib/prisma";
-import { IImageRepository } from "../../iimage.repository";
+import { CreateImageDTO } from '../../../dtos/image/create-image.dto'
+import { prisma } from '../../../lib/prisma'
+import { IImageRepository } from '../../iimage.repository'
 
 const PrismaImageRepository: IImageRepository = {
   getImage: async (id: string) => {
@@ -8,23 +8,23 @@ const PrismaImageRepository: IImageRepository = {
       where: {
         id,
       },
-    });
+    })
 
-    return image || undefined;
+    return image || undefined
   },
   getImages: async () => {
-    const images = await prisma.image.findMany();
+    const images = await prisma.image.findMany()
 
-    return images;
+    return images
   },
   getUserImages: async (userId: string) => {
     const userImages = await prisma.image.findMany({
       where: {
         userId,
       },
-    });
+    })
 
-    return userImages;
+    return userImages
   },
   createImage: async (image: CreateImageDTO) => {
     const imageCreated = await prisma.image.create({
@@ -32,23 +32,23 @@ const PrismaImageRepository: IImageRepository = {
         url: image.url,
         userId: image.userId,
       },
-    });
+    })
 
-    return imageCreated;
+    return imageCreated
   },
   deleteImage: async (id: string) => {
     const deleted = await prisma.image.delete({
       where: {
         id,
       },
-    });
+    })
 
-    return deleted;
+    return deleted
   },
-};
+}
 
 const clearImagesPrisma = async () => {
-  await prisma.image.deleteMany();
-};
+  await prisma.image.deleteMany()
+}
 
-export { PrismaImageRepository, clearImagesPrisma };
+export { PrismaImageRepository, clearImagesPrisma }

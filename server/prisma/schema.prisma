@@ -21,6 +21,7 @@ model User {
   profilePicture String?
 
   images Image[]
+
   posts Post[]
 
   createdAt DateTime @default(now())
@@ -33,6 +34,7 @@ model Image {
   id     String @id @default(cuid())
   url    String
   userId String
+
   user User @relation(fields: [userId], references: [id])
 
   posts Post[]
