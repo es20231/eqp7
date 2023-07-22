@@ -1,4 +1,4 @@
-import { dropbox } from '../lib/dropbox'
+import { instantiateDropbox } from '../lib/dropbox'
 import { generateRandomId } from '../utils'
 import { ServiceResult } from './result'
 
@@ -12,6 +12,16 @@ interface IUploadImageService {
 
 const DropboxUploadImageService: IUploadImageService = {
   upload: async (file, filename) => {
+    const { ok, payload: dropbox } = await instantiateDropbox()
+
+    if (!ok || !dropbox) {
+      return {
+        ok: false,
+        message: 'Error on instantiate dropbox',
+        payload: undefined,
+      }
+    }
+
     try {
       const [name, extension] = filename.split('.')
 
@@ -45,6 +55,16 @@ const DropboxUploadImageService: IUploadImageService = {
     }
   },
   delete: async (deleteInfo) => {
+    const { ok, payload: dropbox } = await instantiateDropbox()
+
+    if (!ok || !dropbox) {
+      return {
+        ok: false,
+        message: 'Error on instantiate dropbox',
+        payload: undefined,
+      }
+    }
+
     try {
       await dropbox.filesDeleteV2({ path: deleteInfo })
 
