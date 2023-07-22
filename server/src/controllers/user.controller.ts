@@ -1,80 +1,299 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { instantiatedUserService } from "../factories/user.factory";
-import { MemoryUserRepository } from "../repositories/implementations/memory/user.repository";
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
+import { instantiatedUserService } from '../factories/user.factory'
+import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
+import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { handleZodParse } from '../utils'
 
-const UserService = instantiatedUserService(MemoryUserRepository);
+// const UserService = instantiatedUserService(
+//   PrismaUserRepository,
+//   PrismaImageRepository,
+// )
+
+const UserService = instantiatedUserService(
+  MemoryUserRepository,
+  MemoryImageRepository,
+)
 
 const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { ok, message, payload } = await UserService.getUsers();
+    const { ok, message, payload } = await UserService.getUsers()
 
-    if (!ok) reply.code(400).send({ message })
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
 
-    reply.status(200).send({ message, payload });
+    reply.status(200).send({ message, payload })
   },
 
   getUserById: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { id } = request.params as unknown as {id: string};
+    const paramsSchema = z.object({
+      id: z.string().nonempty('Id is required on url params'),
+    })
 
-    const {ok, message, payload} = await UserService.getUserById(id);
-    
-    if (!ok) reply.code(400).send({ message })
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
 
-    reply.status(200).send({ message, payload });
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { id } = payloadParse
+
+    const { ok, message, payload } = await UserService.getUserById(id)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
   },
 
   getUserByUsername: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { username } = request.params as unknown as {username: string};
+    const paramsSchema = z.object({
+      username: z.string().nonempty('Username is required on url params'),
+    })
 
-    const {ok, message, payload} = await UserService.getUserByUsername(username);
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
 
-    if (!ok) reply.code(400).send({ message })
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
 
-    reply.status(200).send({ message, payload });
+    const { username } = payloadParse
+
+    const { ok, message, payload } = await UserService.getUserByUsername(
+      username,
+    )
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
   },
 
   getUserByEmail: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { email } = request.params as unknown as {email: string};
+    const paramsSchema = z
+      .object({
+        email: z
+          .string()
+          .nonempty('Email is required on url params')
+          .email('Email is invalid'),
+      })
+      .strict()
 
-    const {ok, message, payload} = await UserService.getUserByEmail(email);
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
 
-    if (!ok) reply.code(400).send({ message })
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
 
-    reply.status(200).send({ message, payload });
+    const { email } = payloadParse
+
+    const { ok, message, payload } = await UserService.getUserByEmail(email)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
   },
 
   createUser: async (request: FastifyRequest, reply: FastifyReply) => {
-    // Validate request body with Zod
+    const userSchema = z
+      .object({
+        fullName: z.string().nonempty('Full name is required'),
+        username: z.string().nonempty('Username is required'),
+        email: z
+          .string()
+          .nonempty('Email is required')
+          .email('Email is invalid'),
+        password: z.string().nonempty('Password is required').min(8, {
+          message: 'Password must be at least 8 characters long',
+        }),
+      })
+      .strict()
 
-    const user = request.body;
-    
-    const {ok, message, payload} = await UserService.createUser(user);
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.body as object,
+      userSchema,
+    )
 
-    if (!ok) reply.code(400).send({ message })
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
 
-    reply.status(201).send({ message, payload });
+    const user = payloadParse
+
+    const { ok, message, payload } = await UserService.createUser(user)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(201).send({ message, payload })
   },
 
   updateUser: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { id } = request.params as unknown as {id: string};
-    const user = request.body;
-    
-    const {ok, message, payload} = await UserService.updateUser(id, user);
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Id is required on url params'),
+      })
+      .strict()
 
-    if (!ok) reply.code(400).send({ message })
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
 
-    reply.status(200).send({ message, payload });
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
+
+    const { id } = payloadParseParams
+
+    const userSchema = z
+      .object({
+        fullName: z.string().optional(),
+        username: z.string().optional(),
+        email: z.string().optional(),
+        password: z.string().optional(),
+        biography: z.string().optional(),
+        profilePicture: z.string().optional(),
+      })
+      .strict()
+      .refine(
+        (data) => Object.keys(data).length > 0,
+        'At least one field is required to update: fullName, username, email, password, biography, profilePicture',
+      )
+
+    const { ok: okParseBody, payload: payloadParseBody } = handleZodParse(
+      request.body as object,
+      userSchema,
+    )
+
+    if (!okParseBody) {
+      reply.status(400).send(payloadParseBody)
+      return
+    }
+
+    const user = payloadParseBody
+
+    const { ok, message, payload } = await UserService.updateUser(id, user)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
   },
 
   deleteUser: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { id } = request.params as unknown as {id: string};
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Id is required on url params'),
+      })
+      .strict()
 
-    const {ok, message, payload} = await UserService.deleteUser(id);
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
 
-    if (!ok) reply.code(400).send({ message })
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
 
-    reply.status(200).send({ message, payload });
-  }
+    const { id } = payloadParse
+
+    const { ok, message, payload } = await UserService.deleteUser(id)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
+  },
+
+  getUserImages: async (request: FastifyRequest, reply: FastifyReply) => {
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
+
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { id } = payloadParse
+
+    const { ok, message, payload } = await UserService.getUserImages(id)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
+  },
+
+  getUserPosts: async (request: FastifyRequest, reply: FastifyReply) => {
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
+
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { id } = payloadParse
+
+    const { ok, message, payload } = await UserService.getUserPosts(id)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({ message, payload })
+  },
 }
 
-export { UserController };
+export { UserController }

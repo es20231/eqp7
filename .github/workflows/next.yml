@@ -1,4 +1,4 @@
-name: Next build
+name: Front-end Build
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - 'main'
 
 jobs:
-  Build:
+  Next-Build:
     runs-on: ubuntu-latest
   
     steps:
