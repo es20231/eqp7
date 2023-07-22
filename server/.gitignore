@@ -1,3 +1,8 @@
 node_modules
 .env
 coverage
+
+# prisma
+*.db
+
+*.db-journal
