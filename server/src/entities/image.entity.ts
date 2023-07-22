@@ -1,10 +1,11 @@
-interface Image {
-  id: string
-  url: string
-  userId: string
+import { Post } from "./post.entity";
 
-  // FIXME: change any[] to Post[] after model and entity Post is created
-  posts?: any[]
+interface Image {
+  id: string;
+  url: string;
+  userId: string;
+
+  posts?: Post[];
 }
 
-export { Image }
+export { Image };

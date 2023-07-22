@@ -1,12 +1,14 @@
 import Fastify from 'fastify'
 import { ImageRoutes } from './routes/image.routes'
 import { UserRoutes } from './routes/user.routes'
+import { PostRoutes } from "./routes/post.routes";
 
 async function bootstrap() {
-  const fastify = Fastify({ logger: true })
+  const fastify = Fastify({ logger: true });
 
   fastify.register(UserRoutes)
   fastify.register(ImageRoutes)
+  fastify.register(PostRoutes)
 
   fastify.get('/', async () => {
     return {
@@ -21,7 +23,7 @@ async function bootstrap() {
     }
   })
 
-  await fastify.listen({ port: 3333 })
+  await fastify.listen({ port: 3333 });
 }
 
-bootstrap()
+bootstrap();
