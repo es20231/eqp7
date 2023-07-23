@@ -1,7 +1,7 @@
 type UpdatePostDTO = {
-  subtitle?: string;
-  userId?: string;
-  imageId?: string;
-};
+  subtitle?: string
+  userId?: string
+  imageId?: string
+}
 
-export { UpdatePostDTO };
+export { UpdatePostDTO }

@@ -1,12 +1,12 @@
 interface Post {
-  id: string;
-  subtitle: string;
-  userId: string;
-  imageId: string;
+  id: string
+  subtitle: string
+  userId: string
+  imageId: string
 
-  //fixme: change any to the correct type
-  comments?: any[];
-  reactions?: any[];
+  // fixme: change any to the correct type
+  comments?: any[]
+  reactions?: any[]
 }
 
-export { Post };
+export { Post }

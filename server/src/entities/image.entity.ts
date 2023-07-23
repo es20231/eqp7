@@ -1,11 +1,11 @@
-import { Post } from "./post.entity";
+import { Post } from './post.entity'
 
 interface Image {
-  id: string;
-  url: string;
-  userId: string;
+  id: string
+  url: string
+  userId: string
 
-  posts?: Post[];
+  posts?: Post[]
 }
 
-export { Image };
+export { Image }

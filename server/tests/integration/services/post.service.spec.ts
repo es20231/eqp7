@@ -1,66 +1,66 @@
-import { instatiatedPostService } from "../../../src/factories/post.factory";
-import { prisma } from "../../../src/lib/prisma";
-import { MemoryImageRepository } from "../../../src/repositories/implementations/memory/image.repository";
+import { instatiatedPostService } from '../../../src/factories/post.factory'
+import { prisma } from '../../../src/lib/prisma'
+import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import {
   clearPostMemory,
   MemoryPostRepository,
-} from "../../../src/repositories/implementations/memory/post.repository";
-import { MemoryUserRepository } from "../../../src/repositories/implementations/memory/user.repository";
-import { PrismaImageRepository } from "../../../src/repositories/implementations/prisma/image.repository";
+} from '../../../src/repositories/implementations/memory/post.repository'
+import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
+import { PrismaImageRepository } from '../../../src/repositories/implementations/prisma/image.repository'
 import {
   clearPostsPrisma,
   PrismaPostRepository,
-} from "../../../src/repositories/implementations/prisma/post.repository";
-import { PrismaUserRepository } from "../../../src/repositories/implementations/prisma/user.repository";
+} from '../../../src/repositories/implementations/prisma/post.repository'
+import { PrismaUserRepository } from '../../../src/repositories/implementations/prisma/user.repository'
 
-describe("MemoryPostService", () => {
+describe('MemoryPostService', () => {
   const service = instatiatedPostService(
     MemoryPostRepository,
     MemoryUserRepository,
-    MemoryImageRepository
-  );
+    MemoryImageRepository,
+  )
 
-  it("should to be defined", () => {
-    expect(service).toBeDefined();
-  });
+  it('should to be defined', () => {
+    expect(service).toBeDefined()
+  })
 
-  let userId: string;
-  let imageId: string;
+  let userId: string
+  let imageId: string
 
   beforeAll(async () => {
     const user = await MemoryUserRepository.createUser({
-      username: "test",
-      email: "test@mail.com",
-      fullName: "User Test",
-      password: "123456",
-    });
+      username: 'test',
+      email: 'test@mail.com',
+      fullName: 'User Test',
+      password: '123456',
+    })
 
-    userId = user.id;
+    userId = user.id
 
     const image = await MemoryImageRepository.createImage({
-      url: "https://github.com/JoseeAugusto.png",
-      userId: userId,
-    });
+      url: 'https://github.com/JoseeAugusto.png',
+      userId,
+    })
 
-    imageId = image.id;
-  });
+    imageId = image.id
+  })
 
   afterEach(async () => {
-    await clearPostMemory();
-  });
+    await clearPostMemory()
+  })
 
-  describe("create", () => {
-    it("should create a post", async () => {
+  describe('create', () => {
+    it('should create a post', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const result = await service.createPost(post);
+      const result = await service.createPost(post)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post created successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post created successfully')
       expect(result.payload).toStrictEqual({
         id: expect.any(String),
         subtitle: post.subtitle,
@@ -68,61 +68,61 @@ describe("MemoryPostService", () => {
         imageId: post.imageId,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-      });
-    });
+      })
+    })
 
-    it("should not create a post with invalid user id", async () => {
+    it('should not create a post with invalid user id', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: "invalid",
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId: 'invalid',
+        imageId,
+      }
 
-      const result = await service.createPost(post);
+      const result = await service.createPost(post)
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("User");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('User')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
 
-    it("should not create a post with invalid image id", async () => {
+    it('should not create a post with invalid image id', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: "invalid",
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId: 'invalid',
+      }
 
-      const result = await service.createPost(post);
+      const result = await service.createPost(post)
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Image");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Image')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
 
-  describe("get", () => {
-    it("should be able to get all posts", async () => {
+  describe('get', () => {
+    it('should be able to get all posts', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
       const post2 = {
-        subtitle: "Teste 2",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
 
-      await service.createPost(post);
-      await service.createPost(post2);
+      await service.createPost(post)
+      await service.createPost(post2)
 
-      const result = await service.getPosts();
+      const result = await service.getPosts()
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Posts found successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
       expect(result.payload).toStrictEqual([
         {
           id: expect.any(String),
@@ -140,24 +140,24 @@ describe("MemoryPostService", () => {
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
-      ]);
-    });
+      ])
+    })
 
-    it("should be able to get a post by id", async () => {
+    it('should be able to get a post by id', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const created = await service.createPost(post);
+      const created = await service.createPost(post)
 
-      if (!created.payload) throw new Error("Post not created");
+      if (!created.payload) throw new Error('Post not created')
 
-      const result = await service.getPostById(created.payload.id);
+      const result = await service.getPostById(created.payload.id)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post found successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post found successfully')
       expect(result.payload).toStrictEqual({
         id: expect.any(String),
         subtitle: post.subtitle,
@@ -165,38 +165,38 @@ describe("MemoryPostService", () => {
         imageId: post.imageId,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-      });
-    });
+      })
+    })
 
-    it("should not be able to get a post by invalid id", async () => {
-      const result = await service.getPostById("invalid");
+    it('should not be able to get a post by invalid id', async () => {
+      const result = await service.getPostById('invalid')
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Post");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
 
-    it("should be able to get all posts from a user", async () => {
+    it('should be able to get all posts from a user', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
       const post2 = {
-        subtitle: "Teste 2",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
 
-      await service.createPost(post);
-      await service.createPost(post2);
+      await service.createPost(post)
+      await service.createPost(post2)
 
-      const result = await service.getPostsByUserId(userId);
+      const result = await service.getPostsByUserId(userId)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Posts found successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
       expect(result.payload).toStrictEqual([
         {
           id: expect.any(String),
@@ -214,150 +214,150 @@ describe("MemoryPostService", () => {
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
-      ]);
-    });
+      ])
+    })
 
-    it("should not be able to get all posts from a user with invalid id", async () => {
-      const result = await service.getPostsByUserId("invalid");
+    it('should not be able to get all posts from a user with invalid id', async () => {
+      const result = await service.getPostsByUserId('invalid')
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("User");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('User')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
 
-  describe("update", () => {
-    it("should be able to update a post", async () => {
+  describe('update', () => {
+    it('should be able to update a post', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const created = await service.createPost(post);
+      const created = await service.createPost(post)
 
-      if (!created.payload) throw new Error("Post not created");
+      if (!created.payload) throw new Error('Post not created')
 
       const result = await service.updatePost(created.payload.id, {
-        subtitle: "Teste 2",
-      });
+        subtitle: 'Teste 2',
+      })
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post updated successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post updated successfully')
       expect(result.payload).toStrictEqual({
         id: expect.any(String),
-        subtitle: "Teste 2",
+        subtitle: 'Teste 2',
         userId: post.userId,
         imageId: post.imageId,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-      });
-    });
+      })
+    })
 
-    it("should not be able to update a post with invalid id", async () => {
-      const result = await service.updatePost("invalid", {
-        subtitle: "Teste 2",
-      });
+    it('should not be able to update a post with invalid id', async () => {
+      const result = await service.updatePost('invalid', {
+        subtitle: 'Teste 2',
+      })
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Post");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
 
-  describe("delete", () => {
-    it("should be able to delete a post", async () => {
+  describe('delete', () => {
+    it('should be able to delete a post', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const created = await service.createPost(post);
+      const created = await service.createPost(post)
 
-      if (!created.payload) throw new Error("Post not created");
+      if (!created.payload) throw new Error('Post not created')
 
-      const result = await service.deletePost(created.payload.id);
+      const result = await service.deletePost(created.payload.id)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post deleted successfully");
-      expect(result.payload).toBeUndefined();
-    });
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post deleted successfully')
+      expect(result.payload).toBeUndefined()
+    })
 
-    it("should not be able to delete a post with invalid id", async () => {
-      const result = await service.deletePost("invalid");
+    it('should not be able to delete a post with invalid id', async () => {
+      const result = await service.deletePost('invalid')
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Post");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
-});
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
+})
 
-describe("PrismaPostService", () => {
+describe('PrismaPostService', () => {
   const service = instatiatedPostService(
     PrismaPostRepository,
     PrismaUserRepository,
-    PrismaImageRepository
-  );
-  it("should be defined", () => {
-    expect(service).toBeTruthy();
-  });
+    PrismaImageRepository,
+  )
+  it('should be defined', () => {
+    expect(service).toBeTruthy()
+  })
 
-  let userId: string;
-  let imageId: string;
+  let userId: string
+  let imageId: string
 
   beforeAll(async () => {
     const { id: userIdCreated } = await PrismaUserRepository.createUser({
-      username: "test",
-      email: "test@mail.com",
-      fullName: "Test User",
-      password: "123456",
-    });
+      username: 'test',
+      email: 'test@mail.com',
+      fullName: 'Test User',
+      password: '123456',
+    })
 
-    userId = userIdCreated;
+    userId = userIdCreated
 
     const { id: imageIdCreated } = await PrismaImageRepository.createImage({
-      url: "https://github.com/JoseeAugusto.png",
-      userId: userId,
-    });
+      url: 'https://github.com/JoseeAugusto.png',
+      userId,
+    })
 
-    imageId = imageIdCreated;
-  });
+    imageId = imageIdCreated
+  })
 
   afterAll(async () => {
     await prisma.image.delete({
       where: {
         id: imageId,
       },
-    });
+    })
 
     await prisma.user.delete({
       where: {
         id: userId,
       },
-    });
-  });
+    })
+  })
 
   afterEach(() => {
-    clearPostsPrisma();
-  });
+    clearPostsPrisma()
+  })
 
-  describe("create", () => {
-    it("should be able to create a post", async () => {
+  describe('create', () => {
+    it('should be able to create a post', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const result = await service.createPost(post);
+      const result = await service.createPost(post)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post created successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post created successfully')
       expect(result.payload).toStrictEqual({
         id: expect.any(String),
         subtitle: post.subtitle,
@@ -365,61 +365,61 @@ describe("PrismaPostService", () => {
         imageId: post.imageId,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-      });
-    });
+      })
+    })
 
-    it("should not be able to create a post with invalid user id", async () => {
+    it('should not be able to create a post with invalid user id', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: "invalid",
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId: 'invalid',
+        imageId,
+      }
 
-      const result = await service.createPost(post);
+      const result = await service.createPost(post)
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("User");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('User')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
 
-    it("should not be able to create a post with invalid image id", async () => {
+    it('should not be able to create a post with invalid image id', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: "invalid",
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId: 'invalid',
+      }
 
-      const result = await service.createPost(post);
+      const result = await service.createPost(post)
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Image");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Image')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
 
-  describe("get", () => {
-    it("should be able to get all posts", async () => {
+  describe('get', () => {
+    it('should be able to get all posts', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
       const post2 = {
-        subtitle: "Teste 2",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
 
-      await service.createPost(post);
-      await service.createPost(post2);
+      await service.createPost(post)
+      await service.createPost(post2)
 
-      const result = await service.getPosts();
+      const result = await service.getPosts()
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Posts found successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
       expect(result.payload).toStrictEqual([
         {
           id: expect.any(String),
@@ -437,24 +437,24 @@ describe("PrismaPostService", () => {
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
-      ]);
-    });
+      ])
+    })
 
-    it("should be able to get a post by id", async () => {
+    it('should be able to get a post by id', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const created = await service.createPost(post);
+      const created = await service.createPost(post)
 
-      if (!created.payload) throw new Error("Post not created");
+      if (!created.payload) throw new Error('Post not created')
 
-      const result = await service.getPostById(created.payload.id);
+      const result = await service.getPostById(created.payload.id)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post found successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post found successfully')
       expect(result.payload).toStrictEqual({
         id: expect.any(String),
         subtitle: post.subtitle,
@@ -462,38 +462,38 @@ describe("PrismaPostService", () => {
         imageId: post.imageId,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-      });
-    });
+      })
+    })
 
-    it("should not be able to get a post with invalid id", async () => {
-      const result = await service.getPostById("invalid");
+    it('should not be able to get a post with invalid id', async () => {
+      const result = await service.getPostById('invalid')
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Post");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
 
-    it("should be able to get all posts from a user", async () => {
+    it('should be able to get all posts from a user', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
       const post2 = {
-        subtitle: "Teste 2",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
 
-      await service.createPost(post);
-      await service.createPost(post2);
+      await service.createPost(post)
+      await service.createPost(post2)
 
-      const result = await service.getPostsByUserId(userId);
+      const result = await service.getPostsByUserId(userId)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Posts found successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
       expect(result.payload).toStrictEqual([
         {
           id: expect.any(String),
@@ -511,85 +511,85 @@ describe("PrismaPostService", () => {
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
-      ]);
-    });
+      ])
+    })
 
-    it("should not be able to get all posts from a user with invalid id", async () => {
-      const result = await service.getPostsByUserId("invalid");
+    it('should not be able to get all posts from a user with invalid id', async () => {
+      const result = await service.getPostsByUserId('invalid')
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("User");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('User')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
 
-  describe("update", () => {
-    it("should be able to update a post", async () => {
+  describe('update', () => {
+    it('should be able to update a post', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const created = await service.createPost(post);
+      const created = await service.createPost(post)
 
-      if (!created.payload) throw new Error("Post not created");
+      if (!created.payload) throw new Error('Post not created')
 
       const result = await service.updatePost(created.payload.id, {
-        subtitle: "Teste 2",
-      });
+        subtitle: 'Teste 2',
+      })
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post updated successfully");
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post updated successfully')
       expect(result.payload).toStrictEqual({
         id: expect.any(String),
-        subtitle: "Teste 2",
+        subtitle: 'Teste 2',
         userId: post.userId,
         imageId: post.imageId,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-      });
-    });
+      })
+    })
 
-    it("should not be able to update a post with invalid id", async () => {
-      const result = await service.updatePost("invalid", {
-        subtitle: "Teste 2",
-      });
+    it('should not be able to update a post with invalid id', async () => {
+      const result = await service.updatePost('invalid', {
+        subtitle: 'Teste 2',
+      })
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Post");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
 
-  describe("delete", () => {
-    it("should be able to delete a post", async () => {
+  describe('delete', () => {
+    it('should be able to delete a post', async () => {
       const post = {
-        subtitle: "Teste",
-        userId: userId,
-        imageId: imageId,
-      };
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
 
-      const created = await service.createPost(post);
+      const created = await service.createPost(post)
 
-      if (!created.payload) throw new Error("Post not created");
+      if (!created.payload) throw new Error('Post not created')
 
-      const result = await service.deletePost(created.payload.id);
+      const result = await service.deletePost(created.payload.id)
 
-      expect(result.ok).toBeTruthy();
-      expect(result.message).toBe("Post deleted successfully");
-      expect(result.payload).toBeUndefined();
-    });
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Post deleted successfully')
+      expect(result.payload).toBeUndefined()
+    })
 
-    it("should not be able to delete a post with invalid id", async () => {
-      const result = await service.deletePost("invalid");
+    it('should not be able to delete a post with invalid id', async () => {
+      const result = await service.deletePost('invalid')
 
-      expect(result.ok).toBeFalsy();
-      expect(result.message).toContain("Post");
-      expect(result.message).toContain("not found");
-      expect(result.payload).toBeUndefined();
-    });
-  });
-});
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+  })
+})
