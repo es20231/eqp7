@@ -1,10 +1,10 @@
-import { instatiatedPostService } from '../../../src/factories/post.factory'
+import { instantiatedPostService } from '../../../src/factories/post.factory'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import { MemoryPostRepository } from '../../../src/repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 
 describe('Post Factory', () => {
-  const service = instatiatedPostService(
+  const service = instantiatedPostService(
     MemoryPostRepository,
     MemoryUserRepository,
     MemoryImageRepository,

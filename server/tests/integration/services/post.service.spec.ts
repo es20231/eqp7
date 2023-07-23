@@ -1,4 +1,4 @@
-import { instatiatedPostService } from '../../../src/factories/post.factory'
+import { instantiatedPostService } from '../../../src/factories/post.factory'
 import { prisma } from '../../../src/lib/prisma'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import {
@@ -14,7 +14,7 @@ import {
 import { PrismaUserRepository } from '../../../src/repositories/implementations/prisma/user.repository'
 
 describe('MemoryPostService', () => {
-  const service = instatiatedPostService(
+  const service = instantiatedPostService(
     MemoryPostRepository,
     MemoryUserRepository,
     MemoryImageRepository,
@@ -298,7 +298,7 @@ describe('MemoryPostService', () => {
 })
 
 describe('PrismaPostService', () => {
-  const service = instatiatedPostService(
+  const service = instantiatedPostService(
     PrismaPostRepository,
     PrismaUserRepository,
     PrismaImageRepository,

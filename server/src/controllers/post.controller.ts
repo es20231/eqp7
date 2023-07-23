@@ -1,12 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { instatiatedPostService } from '../factories/post.factory'
+import { instantiatedPostService } from '../factories/post.factory'
 import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
 import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
 import { handleZodParse } from '../utils'
 
-const postService = instatiatedPostService(
+const postService = instantiatedPostService(
   MemoryPostRepository,
   MemoryUserRepository,
   MemoryImageRepository,
