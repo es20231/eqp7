@@ -18,7 +18,6 @@ const PrismaUserRepository: IUserRepository = {
       ...user,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
-      password: undefined,
     }
   },
   getUserByUsername: async (username: string) => {
@@ -34,7 +33,6 @@ const PrismaUserRepository: IUserRepository = {
       ...user,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
-      password: undefined,
     }
   },
   getUserByEmail: async (email: string) => {
@@ -50,7 +48,6 @@ const PrismaUserRepository: IUserRepository = {
       ...user,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
-      password: undefined,
     }
   },
   getUsers: async () => {
@@ -60,7 +57,6 @@ const PrismaUserRepository: IUserRepository = {
       ...user,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
-      password: undefined,
     }))
   },
   createUser: async (user: CreateUserDTO) => {
@@ -75,7 +71,6 @@ const PrismaUserRepository: IUserRepository = {
       ...createdUser,
       biography: createdUser.biography || undefined,
       profilePicture: createdUser.profilePicture || undefined,
-      password: undefined,
     }
   },
   updateUser: async (id: string, user: UpdateUserDTO) => {
@@ -95,7 +90,6 @@ const PrismaUserRepository: IUserRepository = {
       ...updatedUser,
       biography: updatedUser.biography || undefined,
       profilePicture: updatedUser.profilePicture || undefined,
-      password: undefined,
     }
   },
   deleteUser: async (id: string) => {
@@ -109,7 +103,6 @@ const PrismaUserRepository: IUserRepository = {
       ...deletedUser,
       biography: deletedUser.biography || undefined,
       profilePicture: deletedUser.profilePicture || undefined,
-      password: undefined,
     }
   },
 }
