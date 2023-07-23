@@ -17,7 +17,6 @@ const MemoryUserRepository: IUserRepository = {
 
     return {
       ...user,
-      password: undefined,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
     }
@@ -30,7 +29,6 @@ const MemoryUserRepository: IUserRepository = {
 
     return {
       ...user,
-      password: undefined,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
     }
@@ -43,7 +41,6 @@ const MemoryUserRepository: IUserRepository = {
 
     return {
       ...user,
-      password: undefined,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
     }
@@ -52,7 +49,6 @@ const MemoryUserRepository: IUserRepository = {
     await delay()
     return users.map((user) => ({
       ...user,
-      password: undefined,
       biography: user.biography || undefined,
       profilePicture: user.profilePicture || undefined,
     }))
@@ -87,7 +83,6 @@ const MemoryUserRepository: IUserRepository = {
 
     return {
       ...newUser,
-      password: undefined,
       biography: newUser.biography || undefined,
       profilePicture: newUser.profilePicture || undefined,
     }
@@ -128,7 +123,6 @@ const MemoryUserRepository: IUserRepository = {
 
     return {
       ...updatedUser,
-      password: undefined,
       biography: updatedUser.biography || undefined,
       profilePicture: updatedUser.profilePicture || undefined,
     }
@@ -146,7 +140,6 @@ const MemoryUserRepository: IUserRepository = {
 
     return {
       ...deletedUser,
-      password: undefined,
       biography: deletedUser.biography || undefined,
       profilePicture: deletedUser.profilePicture || undefined,
     }
