@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: cd server && npm ci
+        run: cd server && npm i
       - name: Run server
         run: cd server && tsc --project tsconfig.build.json
 
@@ -38,7 +38,7 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: cd server && npm ci
+        run: cd server && npm i
       - name: Prisma generate 
         run: cd server && npx prisma generate
       - name: Prisma migrations
