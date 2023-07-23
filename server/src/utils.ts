@@ -3,7 +3,7 @@ import { ZodError, ZodSchema } from 'zod'
 
 const generateRandomId = () => randomBytes(16).toString('hex')
 
-const delay = (ms = 100) => new Promise((resolve) => setTimeout(resolve, ms))
+const delay = (ms = 25) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const handleZodParse = (object: object, schema: ZodSchema) => {
   try {
@@ -14,7 +14,7 @@ const handleZodParse = (object: object, schema: ZodSchema) => {
       return { ok: false, payload: error.issues }
     } else {
       console.log(error)
-      return { ok: false, payload: 'Internal Server Error' }
+      return { ok: false, payload: { message: 'Internal Server Error' } }
     }
   }
 }

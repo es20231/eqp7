@@ -15,8 +15,16 @@ const UserRoutes = (
   )
   fastify.get('/users/email/:email', options, UserController.getUserByEmail)
   fastify.post('/users', options, UserController.createUser)
+<<<<<<< HEAD
   fastify.put('/users/:id', options, UserController.updateUser)
   fastify.delete('/users/:id', options, UserController.deleteUser)
+=======
+  fastify.patch('/users/:id', options, UserController.updateUser)
+  fastify.delete('/users/:id', options, UserController.deleteUser)
+
+  fastify.get('/users/:id/images', options, UserController.getUserImages)
+  fastify.get('/users/:id/posts', options, UserController.getUserPosts)
+>>>>>>> main
 
   done()
 }

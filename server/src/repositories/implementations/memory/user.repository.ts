@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt'
+import bcrypt from 'bcrypt'
 import { CreateUserDTO } from '../../../dtos/user/create-user.dto'
 import { UpdateUserDTO } from '../../../dtos/user/update-user.dto'
 import { User } from '../../../entities/user.entity'
@@ -79,7 +79,7 @@ const MemoryUserRepository: IUserRepository = {
       id: generateRandomId(),
       createdAt: new Date(),
       updatedAt: new Date(),
-      password: await hash(user.password, 10),
+      password: await bcrypt.hash(user.password, 10),
       emailVerified: false,
     } as User
 
@@ -118,8 +118,11 @@ const MemoryUserRepository: IUserRepository = {
     const updatedUser = {
       ...users[userIndex],
       ...user,
+      password: user.password
+        ? await bcrypt.hash(user.password, 10)
+        : users[userIndex].password,
       updatedAt: new Date(),
-    }
+    } as User
 
     users[userIndex] = updatedUser
 
