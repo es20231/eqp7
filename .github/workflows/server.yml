@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: cd server && npm ci
       - name: Run server
-        run: cd server && tsc
+        run: cd server && tsc --project tsconfig.build.json
 
   test:
     runs-on: ubuntu-latest
