@@ -1,14 +1,16 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
 import { z } from 'zod'
-import { handleZodParse } from '../utils'
 import { CreateUserDTO } from '../dtos/user/create-user.dto'
 import { instantiatedAuthService } from '../factories/auth.factory'
+import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
+import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
+import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { handleZodParse } from '../utils'
 
 const authService = instantiatedAuthService(
   MemoryUserRepository,
   MemoryImageRepository,
+  MemoryPostRepository,
 )
 
 const AuthController = {
