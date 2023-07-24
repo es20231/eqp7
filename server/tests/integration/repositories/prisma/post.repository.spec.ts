@@ -194,6 +194,72 @@ describe('PrismaPostRepository', () => {
     ).rejects.toThrow()
   })
 
+  it('should be able to update a post with the same subtitle', async () => {
+    const post = {
+      subtitle: 'Teste',
+      userId,
+      imageId,
+    }
+    const { id } = await repository.createPost(post)
+    const updated = await repository.updatePost(id, {
+      subtitle: 'Teste',
+    })
+
+    expect(updated).toBeTruthy()
+    expect(updated).toStrictEqual({
+      id,
+      subtitle: 'Teste',
+      userId: post.userId,
+      imageId: post.imageId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+
+  it('should be able to update a post with the same image id', async () => {
+    const post = {
+      subtitle: 'Teste',
+      userId,
+      imageId,
+    }
+    const { id } = await repository.createPost(post)
+    const updated = await repository.updatePost(id, {
+      imageId,
+    })
+
+    expect(updated).toBeTruthy()
+    expect(updated).toStrictEqual({
+      id,
+      subtitle: post.subtitle,
+      userId: post.userId,
+      imageId: post.imageId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+
+  it('should be able to update a post with the same user id', async () => {
+    const post = {
+      subtitle: 'Teste',
+      userId,
+      imageId,
+    }
+    const { id } = await repository.createPost(post)
+    const updated = await repository.updatePost(id, {
+      userId,
+    })
+
+    expect(updated).toBeTruthy()
+    expect(updated).toStrictEqual({
+      id,
+      subtitle: post.subtitle,
+      userId: post.userId,
+      imageId: post.imageId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+
   it('should delete a post', async () => {
     const post = {
       subtitle: 'Teste',

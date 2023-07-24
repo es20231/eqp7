@@ -265,6 +265,48 @@ describe('MemoryPostService', () => {
       expect(result.message).toContain('not found')
       expect(result.payload).toBeUndefined()
     })
+
+    it('should not be able to update a post with a invalid user id', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const created = await service.createPost(post)
+
+      if (!created.payload) throw new Error('Post not created')
+
+      const result = await service.updatePost(created.payload.id, {
+        userId: 'invalid',
+      })
+
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('User')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+
+    it('should not be able to update a post with a invalid image id', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const created = await service.createPost(post)
+
+      if (!created.payload) throw new Error('Post not created')
+
+      const result = await service.updatePost(created.payload.id, {
+        imageId: 'invalid',
+      })
+
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Image')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
   })
 
   describe('delete', () => {
@@ -329,21 +371,13 @@ describe('PrismaPostService', () => {
   })
 
   afterAll(async () => {
-    await prisma.image.delete({
-      where: {
-        id: imageId,
-      },
-    })
+    await prisma.image.deleteMany()
 
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    })
+    await prisma.user.deleteMany()
   })
 
-  afterEach(() => {
-    clearPostsPrisma()
+  afterEach(async () => {
+    await clearPostsPrisma()
   })
 
   describe('create', () => {
@@ -559,6 +593,48 @@ describe('PrismaPostService', () => {
 
       expect(result.ok).toBeFalsy()
       expect(result.message).toContain('Post')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+
+    it('should not be able to update a post with a invalid user id', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const created = await service.createPost(post)
+
+      if (!created.payload) throw new Error('Post not created')
+
+      const result = await service.updatePost(created.payload.id, {
+        userId: 'invalid',
+      })
+
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('User')
+      expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+
+    it('should not be able to update a post with a invalid image id', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const created = await service.createPost(post)
+
+      if (!created.payload) throw new Error('Post not created')
+
+      const result = await service.updatePost(created.payload.id, {
+        imageId: 'invalid',
+      })
+
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toContain('Image')
       expect(result.message).toContain('not found')
       expect(result.payload).toBeUndefined()
     })
