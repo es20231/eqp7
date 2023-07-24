@@ -1,11 +1,12 @@
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import { CreateUserDTO } from '../dtos/user/create-user.dto'
 import { User } from '../entities/user.entity'
 import { instantiatedUserService } from '../factories/user.factory'
 import { IImageRepository } from '../repositories/iimage.repository'
+import { IPostRepository } from '../repositories/ipost.repository'
 import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 
 const jwtSecret = process.env.JWT_SECRET
 
@@ -22,6 +23,7 @@ interface IAuthService {
 interface UserServiceProps {
   userRepository: IUserRepository
   imageRepository: IImageRepository
+  postRepository: IPostRepository
 }
 
 interface AuthServiceProps {
@@ -29,12 +31,16 @@ interface AuthServiceProps {
 }
 
 const AuthService = ({
-  userServiceProps: { userRepository, imageRepository },
+  userServiceProps: { userRepository, imageRepository, postRepository },
 }: AuthServiceProps): IAuthService => ({
   login: async (username, password) => {
     if (!jwtSecret) throw new Error('JWT secret not found')
 
-    const userService = instantiatedUserService(userRepository, imageRepository)
+    const userService = instantiatedUserService(
+      userRepository,
+      imageRepository,
+      postRepository,
+    )
 
     const { ok, message, payload } = await userService.getUserByUsername(
       username,
@@ -68,7 +74,11 @@ const AuthService = ({
   register: async (user) => {
     if (!jwtSecret) throw new Error('JWT secret not found')
 
-    const userService = instantiatedUserService(userRepository, imageRepository)
+    const userService = instantiatedUserService(
+      userRepository,
+      imageRepository,
+      postRepository,
+    )
 
     const { ok, message, payload } = await userService.createUser(user)
 

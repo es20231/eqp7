@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedUserService } from '../factories/user.factory'
 import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
+import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
 import { handleZodParse } from '../utils'
 
@@ -13,6 +14,7 @@ import { handleZodParse } from '../utils'
 const UserService = instantiatedUserService(
   MemoryUserRepository,
   MemoryImageRepository,
+  MemoryPostRepository,
 )
 
 const UserController = {
