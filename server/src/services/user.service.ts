@@ -7,22 +7,13 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface IUserService {
-  getUsers: () => Promise<ServiceResult<Omit<User, 'password'>[]>>
-  getUserById: (id: string) => Promise<ServiceResult<Omit<User, 'password'>>>
-  getUserByUsername: (
-    username: string,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  getUserByEmail: (
-    email: string,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  createUser: (
-    user: CreateUserDTO,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  updateUser: (
-    id: string,
-    user: UpdateUserDTO,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  deleteUser: (id: string) => Promise<ServiceResult<Omit<User, 'password'>>>
+  getUsers: () => Promise<ServiceResult<User[]>>
+  getUserById: (id: string) => Promise<ServiceResult<User>>
+  getUserByUsername: (username: string) => Promise<ServiceResult<User>>
+  getUserByEmail: (email: string) => Promise<ServiceResult<User>>
+  createUser: (user: CreateUserDTO) => Promise<ServiceResult<User>>
+  updateUser: (id: string, user: UpdateUserDTO) => Promise<ServiceResult<User>>
+  deleteUser: (id: string) => Promise<ServiceResult<User>>
   getUserImages: (id: string) => Promise<ServiceResult<Image[]>>
   // FIXME: change any to Post entity
   getUserPosts: (id: string) => Promise<ServiceResult<any[]>>
