@@ -311,39 +311,38 @@ describe('PrismaPostService', () => {
   let imageId: string
 
   beforeAll(async () => {
-    const { id: userIdCreated } = await PrismaUserRepository.createUser({
-      username: 'test',
-      email: 'test@mail.com',
-      fullName: 'Test User',
-      password: '123456',
+    await prisma.user.deleteMany()
+    await prisma.image.deleteMany()
+
+    const { id: userIdCreated } = await prisma.user.create({
+      data: {
+        username: 'test',
+        email: 'test@mail.com',
+        fullName: 'Test User',
+        password: '123456',
+      },
     })
 
     userId = userIdCreated
 
-    const { id: imageIdCreated } = await PrismaImageRepository.createImage({
-      url: 'https://github.com/JoseeAugusto.png',
-      userId,
+    const { id: imageIdCreated } = await prisma.image.create({
+      data: {
+        url: 'https://github.com/JoseeAugusto.png',
+        userId,
+      },
     })
 
     imageId = imageIdCreated
   })
 
   afterAll(async () => {
-    await prisma.image.delete({
-      where: {
-        id: imageId,
-      },
-    })
+    await prisma.image.deleteMany()
 
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    })
+    await prisma.user.deleteMany()
   })
 
-  afterEach(() => {
-    clearPostsPrisma()
+  afterEach(async () => {
+    await clearPostsPrisma()
   })
 
   describe('create', () => {
