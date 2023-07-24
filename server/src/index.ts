@@ -1,4 +1,5 @@
 import Fastify from 'fastify'
+import { AuthRoutes } from './routes/auth.routes'
 import { ImageRoutes } from './routes/image.routes'
 import { UserRoutes } from './routes/user.routes'
 
@@ -7,6 +8,7 @@ async function bootstrap() {
 
   fastify.register(UserRoutes)
   fastify.register(ImageRoutes)
+  fastify.register(AuthRoutes)
 
   fastify.get('/', async () => {
     return {
