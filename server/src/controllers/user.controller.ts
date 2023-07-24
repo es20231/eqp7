@@ -51,9 +51,11 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.getUserById(id)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const user = {
+      ...payload,
+      password: undefined,
     }
 
     const userWithoutPassword = {
@@ -85,9 +87,11 @@ const UserController = {
       username,
     )
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const user = {
+      ...payload,
+      password: undefined,
     }
 
     const userWithoutPassword = {
@@ -122,9 +126,11 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.getUserByEmail(email)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const user = {
+      ...payload,
+      password: undefined,
     }
 
     const userWithoutPassword = {
@@ -164,9 +170,11 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.createUser(user)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const userWithoutPassword = {
+      ...payload,
+      password: undefined,
     }
 
     const userWithoutPassword = {
@@ -225,9 +233,11 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.updateUser(id, user)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const userWithoutPassword = {
+      ...payload,
+      password: undefined,
     }
 
     const userWithoutPassword = {
