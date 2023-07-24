@@ -19,12 +19,14 @@ const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
     const { ok, message, payload } = await UserService.getUsers()
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
-    }
+    if (!ok || !payload) return reply.status(400).send({ message })
 
-    reply.status(200).send({ message, payload })
+    const users = payload.map((user) => ({
+      ...user,
+      password: undefined,
+    }))
+
+    return reply.status(200).send({ message, payload: users })
   },
 
   getUserById: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -46,12 +48,14 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.getUserById(id)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const user = {
+      ...payload,
+      password: undefined,
     }
 
-    reply.status(200).send({ message, payload })
+    return reply.status(200).send({ message, payload: user })
   },
 
   getUserByUsername: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -75,12 +79,14 @@ const UserController = {
       username,
     )
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const user = {
+      ...payload,
+      password: undefined,
     }
 
-    reply.status(200).send({ message, payload })
+    return reply.status(200).send({ message, payload: user })
   },
 
   getUserByEmail: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -107,12 +113,14 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.getUserByEmail(email)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const user = {
+      ...payload,
+      password: undefined,
     }
 
-    reply.status(200).send({ message, payload })
+    return reply.status(200).send({ message, payload: user })
   },
 
   createUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -144,12 +152,14 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.createUser(user)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const userWithoutPassword = {
+      ...payload,
+      password: undefined,
     }
 
-    reply.status(201).send({ message, payload })
+    return reply.status(200).send({ message, payload: userWithoutPassword })
   },
 
   updateUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -200,12 +210,14 @@ const UserController = {
 
     const { ok, message, payload } = await UserService.updateUser(id, user)
 
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
+    if (!ok || !payload) return reply.status(400).send({ message })
+
+    const userWithoutPassword = {
+      ...payload,
+      password: undefined,
     }
 
-    reply.status(200).send({ message, payload })
+    return reply.status(200).send({ message, payload: userWithoutPassword })
   },
 
   deleteUser: async (request: FastifyRequest, reply: FastifyReply) => {

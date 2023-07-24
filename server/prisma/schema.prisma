@@ -21,6 +21,7 @@ model User {
   profilePicture String?
 
   images Image[]
+  posts Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -32,11 +33,26 @@ model Image {
   id     String @id @default(cuid())
   url    String
   userId String
-
   user User @relation(fields: [userId], references: [id])
+
+  posts Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("images")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  subtitle  String
+  userId    String
+  user User @relation(fields: [userId], references: [id])
+  imageId String
+  image Image @relation(fields: [imageId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
 }

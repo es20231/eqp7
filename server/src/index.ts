@@ -1,5 +1,7 @@
 import Fastify from 'fastify'
+import { AuthRoutes } from './routes/auth.routes'
 import { ImageRoutes } from './routes/image.routes'
+import { PostRoutes } from './routes/post.routes'
 import { UserRoutes } from './routes/user.routes'
 import fastifyCors = require('@fastify/cors')
 import fastifyMultipart = require('@fastify/multipart')
@@ -23,7 +25,9 @@ async function bootstrap() {
   })
 
   fastify.register(UserRoutes)
+  fastify.register(PostRoutes)
   fastify.register(ImageRoutes)
+  fastify.register(AuthRoutes)
 
   fastify.get('/', async () => {
     return {

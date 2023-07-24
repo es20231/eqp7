@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: cd web && npm ci
+        run: cd web && npm i
       - name: Build
         run: cd web && npm run build

@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import { CreateUserDTO } from '../../../../src/dtos/user/create-user.dto'
 import {
   MemoryUserRepository,
@@ -29,7 +30,7 @@ describe('UserMemoryRepository', () => {
       expect(created).toBeDefined()
       expect(created).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
@@ -37,6 +38,10 @@ describe('UserMemoryRepository', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       })
+
+      expect(await bcrypt.compare(defaultUser.password, created.password)).toBe(
+        true,
+      )
     })
 
     it('should not create a user with the same username', async () => {
@@ -87,7 +92,7 @@ describe('UserMemoryRepository', () => {
         expect.arrayContaining([
           expect.objectContaining({
             ...defaultUser,
-            password: undefined,
+            password: expect.any(String),
             id: expect.any(String),
             profilePicture: undefined,
             biography: undefined,
@@ -100,7 +105,7 @@ describe('UserMemoryRepository', () => {
             email: 'test2@test.com',
             fullName: 'Test2 tested',
             id: expect.any(String),
-            password: undefined,
+            password: expect.any(String),
             profilePicture: undefined,
             biography: undefined,
             emailVerified: false,
@@ -118,7 +123,7 @@ describe('UserMemoryRepository', () => {
       expect(user).toBeDefined()
       expect(user).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
@@ -141,7 +146,7 @@ describe('UserMemoryRepository', () => {
       expect(user).toBeDefined()
       expect(user).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
@@ -164,7 +169,7 @@ describe('UserMemoryRepository', () => {
       expect(user).toBeDefined()
       expect(user).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
@@ -193,7 +198,7 @@ describe('UserMemoryRepository', () => {
       expect(updated).toStrictEqual({
         ...defaultUser,
         username: 'test2',
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
@@ -252,7 +257,7 @@ describe('UserMemoryRepository', () => {
       expect(updated).toBeDefined()
       expect(updated).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
@@ -271,7 +276,7 @@ describe('UserMemoryRepository', () => {
       expect(updated).toBeDefined()
       expect(updated).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
@@ -279,6 +284,31 @@ describe('UserMemoryRepository', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       })
+    })
+
+    it('should be able to update user password', async () => {
+      const created = await repository.createUser(defaultUser)
+      const updated = await repository.updateUser(created.id, {
+        password: 'test2',
+      })
+
+      expect(updated).toBeDefined()
+      expect(updated).toStrictEqual({
+        ...defaultUser,
+        password: expect.any(String),
+        id: created.id,
+        profilePicture: undefined,
+        biography: undefined,
+        emailVerified: false,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      })
+      expect(
+        await bcrypt.compare('test2', updated.password as string),
+      ).toBeTruthy()
+      expect(
+        await bcrypt.compare('test', updated.password as string),
+      ).toBeFalsy()
     })
   })
 
@@ -290,7 +320,7 @@ describe('UserMemoryRepository', () => {
       expect(deleted).toBeDefined()
       expect(deleted).toStrictEqual({
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         id: created.id,
         profilePicture: undefined,
         biography: undefined,
