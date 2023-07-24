@@ -13,6 +13,7 @@ const MailgunMailService: IMailService = {
         subject,
         text: body,
         html,
+        template: 'minig',
       })
       .catch((err) => {
         console.log('Mailgun error: ', err)
