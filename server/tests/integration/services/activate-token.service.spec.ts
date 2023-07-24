@@ -1,5 +1,6 @@
 import { CreateActivateTokenDTO } from '../../../src/dtos/activate-token/create-activate-token.dto'
 import { instantiatedActivateTokenService } from '../../../src/factories/activate-token.factory'
+import { prisma } from '../../../src/lib/prisma'
 import {
   MemoryActivateTokenRepository,
   clearMemoryActivateToken,
@@ -8,8 +9,14 @@ import {
   MemoryUserRepository,
   clearUserMemory,
 } from '../../../src/repositories/implementations/memory/user.repository'
-import { PrismaActivateTokenRepository } from '../../../src/repositories/implementations/prisma/activate-token.repository'
-import { PrismaUserRepository } from '../../../src/repositories/implementations/prisma/user.repository'
+import {
+  PrismaActivateTokenRepository,
+  clearPrismaActivateToken,
+} from '../../../src/repositories/implementations/prisma/activate-token.repository'
+import {
+  PrismaUserRepository,
+  clearUsersPrisma,
+} from '../../../src/repositories/implementations/prisma/user.repository'
 
 describe('MemoryActivateTokenService', () => {
   const service = instantiatedActivateTokenService(
@@ -37,7 +44,7 @@ describe('MemoryActivateTokenService', () => {
     userId = user.id
   })
 
-  beforeEach(async () => {
+  afterEach(async () => {
     await clearMemoryActivateToken()
   })
 
@@ -267,21 +274,23 @@ describe('PrismaActivateTokenService', () => {
   })
 
   beforeAll(async () => {
-    await clearMemoryActivateToken()
-    await clearUserMemory()
+    await clearPrismaActivateToken()
+    await clearUsersPrisma()
 
-    const user = await MemoryUserRepository.createUser({
-      fullName: 'Test User',
-      email: 'test@mail.com',
-      password: 'password',
-      username: 'test',
+    const user = await prisma.user.create({
+      data: {
+        fullName: 'Test User',
+        email: 'test@mail.com',
+        password: 'password',
+        username: 'test',
+      },
     })
 
     userId = user.id
   })
 
-  beforeEach(async () => {
-    await clearMemoryActivateToken()
+  afterEach(async () => {
+    await clearPrismaActivateToken()
   })
 
   describe('create', () => {

@@ -311,6 +311,9 @@ describe('PrismaPostService', () => {
   let imageId: string
 
   beforeAll(async () => {
+    await prisma.image.deleteMany()
+    await prisma.user.deleteMany()
+
     const { id: userIdCreated } = await PrismaUserRepository.createUser({
       username: 'test',
       email: 'test@mail.com',
@@ -329,21 +332,12 @@ describe('PrismaPostService', () => {
   })
 
   afterAll(async () => {
-    await prisma.image.delete({
-      where: {
-        id: imageId,
-      },
-    })
-
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    })
+    await prisma.image.deleteMany()
+    await prisma.user.deleteMany()
   })
 
-  afterEach(() => {
-    clearPostsPrisma()
+  afterEach(async () => {
+    await clearPostsPrisma()
   })
 
   describe('create', () => {
