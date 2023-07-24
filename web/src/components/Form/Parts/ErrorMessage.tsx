@@ -21,7 +21,7 @@ function get(obj: Record<any, any>, path: string) {
   return result
 }
 
-const ErrorMessage = ({ field, className, ...rest }: ErrorMessageProps) => {
+const ErrorMessage = ({ field }: ErrorMessageProps) => {
   const {
     formState: { errors },
   } = useFormContext()
@@ -33,11 +33,10 @@ const ErrorMessage = ({ field, className, ...rest }: ErrorMessageProps) => {
   }
 
   return (
-    <span className={`text-xs text-red-500 mt-1 ${className}`}>
+    <span className="text-xs text-red-500 mt-1">
       {fieldError.message?.toString()}
     </span>
   )
 }
 
 export { ErrorMessage }
-
