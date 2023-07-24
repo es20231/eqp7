@@ -6,11 +6,11 @@
   "scripts": {
     "start:dev": "tsx src/index.ts",
     "start:prod": "node dist/index.js",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "dev": "tsx watch src/index.ts",
     "test": "jest --watch --runInBand",
     "test:prod": "jest --runInBand",
-    "test:cov": "jest --coverage"
+    "test:cov": "jest --runInBand --coverage"
   },
   "keywords": [],
   "author": "",
@@ -50,7 +50,7 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
 }

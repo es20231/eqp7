@@ -39,10 +39,7 @@ const UserService = (
     return {
       ok: true,
       message: 'Users found successfully',
-      payload: users.map((user) => ({
-        ...user,
-        password: undefined,
-      })),
+      payload: users,
     }
   },
 
@@ -60,10 +57,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User found successfully',
-      payload: {
-        ...user,
-        password: undefined,
-      },
+      payload: user,
     }
   },
 
@@ -81,10 +75,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User found successfully',
-      payload: {
-        ...user,
-        password: undefined,
-      },
+      payload: user,
     }
   },
 
@@ -102,10 +93,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User found successfully',
-      payload: {
-        ...user,
-        password: undefined,
-      },
+      payload: user,
     }
   },
 
@@ -137,10 +125,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User created successfully',
-      payload: {
-        ...created,
-        password: undefined,
-      },
+      payload: created,
     }
   },
 
@@ -186,10 +171,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User updated successfully',
-      payload: {
-        ...updated,
-        password: undefined,
-      },
+      payload: updated,
     }
   },
 
