@@ -1,8 +1,8 @@
 'use client'
 
 import {
-    RegisterFormComponent,
-    RegisterFormProvider,
+  RegisterFormComponent,
+  RegisterFormProvider,
 } from '@/components/Form/Providers/RegisterForm'
 import { Logo } from '@/components/Logo'
 import { Waves } from '@/components/Waves'
