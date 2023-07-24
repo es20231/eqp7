@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/Button'
-import { Checkbox } from '@/components/Checkbox'
 import { Form } from '@/components/Form/Parts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
@@ -90,12 +89,11 @@ const LoginFormComponent = () => {
       </Form.Field>
 
       <div className="flex flex-row justify-between">
-        <Checkbox name="manterConectado" type="checkbox" />
         <p
-          className="hover:cursor-pointer hover:opacity-75 text-dark-slate-gray text-sm right"
+          className="hover:cursor-pointer hover:opacity-75 text-dark-slate-gray text-sm right-0"
           onClick={() => router.push('/auth/register')}
         >
-          Esqueceu a senha?
+          Registre-se
         </p>
       </div>
       {!loading ? (

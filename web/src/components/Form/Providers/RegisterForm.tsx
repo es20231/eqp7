@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { CircleNotch } from 'phosphor-react'
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
@@ -33,13 +33,8 @@ const RegisterFormProvider = ({ children }: RegisterFormProviderProps) => {
 }
 
 const RegisterFormComponent = () => {
-  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-
-  const togglePasswordVisibility = useCallback(() => {
-    setShowPassword((prevState) => !prevState)
-  }, [setShowPassword])
 
   const [formData, setFormData] = useState<CreateRegisterData | undefined>(
     undefined,
