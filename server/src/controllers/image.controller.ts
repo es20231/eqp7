@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { instantiatedImageService } from '../factories/image.factory'
 import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
 import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { DropboxUploadImageService } from '../services/upload-image.service'
 import { handleZodParse } from '../utils'
 
 const ImageService = instantiatedImageService(
@@ -49,20 +50,30 @@ const ImageController = {
 
     reply.status(200).send({ message, payload })
   },
-  // TODO: this must receive a image file, upload to dropbox, get url and save on db
   createImage: async (request: FastifyRequest, reply: FastifyReply) => {
+    const body = request.body as unknown as {
+      userId: { value: string }
+      file: { filename: string; toBuffer: () => Promise<Buffer> }
+    }
+
+    const bodyObject = {
+      userId: body.userId.value,
+      file: await body.file.toBuffer(),
+      filename: body.file.filename,
+    }
+
+    console.log('bodyObj', bodyObject)
+
     const bodySchema = z
       .object({
-        userId: z.string().nonempty('User id is required'),
-        url: z
-          .string()
-          .nonempty('Url is required')
-          .url('Url must be a valid url'),
+        userId: z.string().nonempty('UserId is required on body'),
+        filename: z.string().nonempty('Filename is required on body'),
+        file: z.any(),
       })
       .strict()
 
     const { ok: okParse, payload: payloadParse } = handleZodParse(
-      request.body as object,
+      bodyObject,
       bodySchema,
     )
 
@@ -71,11 +82,28 @@ const ImageController = {
       return
     }
 
-    const image = payloadParse
+    const {
+      ok: okUpload,
+      message: messageUpload,
+      payload: payloadUpload,
+    } = await DropboxUploadImageService.upload(
+      payloadParse.file,
+      payloadParse.filename,
+    )
+
+    if (!okUpload || !payloadUpload) {
+      return reply.status(400).send({ message: messageUpload })
+    }
+
+    const image = {
+      userId: payloadParse.userId,
+      url: payloadUpload.url,
+    }
 
     const { ok, message, payload } = await ImageService.createImage(image)
 
     if (!ok) {
+      await DropboxUploadImageService.delete(payloadUpload.deleteInfo)
       reply.status(400).send({ message })
       return
     }
