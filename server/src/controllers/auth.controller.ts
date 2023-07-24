@@ -6,12 +6,12 @@ import { instantiatedAuthService } from '../factories/auth.factory'
 import { MemoryActivateTokenRepository } from '../repositories/implementations/memory/activate-token.repository'
 import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
 import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
-import { MailgunMailService } from '../services/outsourced/implementations/MailgunMailService'
+import { NodemailerMailService } from '../services/outsourced/implementations/NodemailerMailService'
 import { handleZodParse } from '../utils'
 
 const authService = instantiatedAuthService(
   MemoryActivateTokenRepository,
-  MailgunMailService,
+  NodemailerMailService,
   MemoryUserRepository,
   MemoryImageRepository,
 )

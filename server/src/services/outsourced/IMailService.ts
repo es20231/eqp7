@@ -1,7 +1,7 @@
 interface IMailServiceProps {
   to: string
   subject: string
-  body: string
+  body?: string
   html?: string
 }
 
