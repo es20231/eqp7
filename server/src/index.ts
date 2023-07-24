@@ -1,4 +1,5 @@
 import Fastify from 'fastify'
+import { PostRoutes } from './routes/post.routes'
 import { ImageRoutes } from './routes/image.routes'
 import { UserRoutes } from './routes/user.routes'
 import { AuthRoutes } from './routes/auth.routes'
@@ -7,6 +8,7 @@ async function bootstrap() {
   const fastify = Fastify({ logger: true })
 
   fastify.register(UserRoutes)
+  fastify.register(PostRoutes)
   fastify.register(ImageRoutes)
   fastify.register(AuthRoutes)
 

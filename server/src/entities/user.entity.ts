@@ -1,4 +1,5 @@
 import { Image } from './image.entity'
+import { Post } from './post.entity'
 
 interface User {
   id: string
@@ -11,7 +12,7 @@ interface User {
   profilePicture?: string
 
   images?: Image[]
-  posts?: any[]
+  posts?: Post[]
   comments?: any[]
   postReactions?: any[]
   commentReactions?: any[]

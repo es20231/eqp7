@@ -1,10 +1,11 @@
+import { Post } from './post.entity'
+
 interface Image {
   id: string
   url: string
   userId: string
 
-  // FIXME: change any[] to Post[] after model and entity Post is created
-  posts?: any[]
+  posts?: Post[]
 }
 
 export { Image }
