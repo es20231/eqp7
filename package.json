@@ -32,7 +32,12 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
+    "@types/jsonwebtoken": "^9.0.2",
     "concurrently": "^8.2.0",
     "husky": "^8.0.3"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.1",
+    "mailgun.js": "^9.2.0"
   }
 }

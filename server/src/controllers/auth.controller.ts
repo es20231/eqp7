@@ -1,12 +1,17 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
 import { z } from 'zod'
-import { handleZodParse } from '../utils'
+import { CreateActivateTokenDTO } from '../dtos/activate-token/create-activate-token.dto'
 import { CreateUserDTO } from '../dtos/user/create-user.dto'
 import { instantiatedAuthService } from '../factories/auth.factory'
+import { MemoryActivateTokenRepository } from '../repositories/implementations/memory/activate-token.repository'
+import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
+import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { NodemailerMailService } from '../services/outsourced/implementations/NodemailerMailService'
+import { handleZodParse } from '../utils'
 
 const authService = instantiatedAuthService(
+  MemoryActivateTokenRepository,
+  NodemailerMailService,
   MemoryUserRepository,
   MemoryImageRepository,
 )
@@ -93,6 +98,65 @@ const AuthController = {
     }
 
     reply.status(201).send({ message, payload: payloadWithoutPassword })
+  },
+  activate: async (request: FastifyRequest, reply: FastifyReply) => {
+    const paramsSchema = z
+      .object({
+        token: z.string().nonempty('Token is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
+
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { token }: CreateActivateTokenDTO = payloadParse
+
+    const { ok, message, payload } = await authService.activate(token)
+
+    if (!ok) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    const payloadWithoutPassword = {
+      ...payload,
+      password: undefined,
+    }
+
+    reply.status(200).send({ message, payload: payloadWithoutPassword })
+  },
+  getActivateToken: async (request: FastifyRequest, reply: FastifyReply) => {
+    const paramsSchema = z
+      .object({
+        userId: z.string().nonempty('User id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
+
+    if (!okParse) {
+      return reply.status(400).send(payloadParse)
+    }
+
+    const { userId } = payloadParse
+
+    const { ok, message, payload } = await authService.getActivateToken(userId)
+
+    if (!ok) {
+      return reply.status(400).send({ message })
+    }
+
+    return reply.status(200).send({ message, payload })
   },
 }
 
