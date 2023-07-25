@@ -4,7 +4,7 @@ interface Post {
   userId: string
   imageId: string
 
-  // fixme: change any to the correct type
+  // FIXME: change any to the correct type
   comments?: any[]
   reactions?: any[]
 }

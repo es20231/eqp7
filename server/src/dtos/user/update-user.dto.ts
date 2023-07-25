@@ -5,6 +5,7 @@ type UpdateUserDTO = {
   password?: string
   biography?: string
   profilePicture?: string
+  emailVerified?: boolean
 }
 
 export { UpdateUserDTO }

@@ -1,11 +1,13 @@
 import { instantiatedUserService } from '../../../src/factories/user.factory'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
+import { MemoryPostRepository } from '../../../src/repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 
 describe('User Factory', () => {
   const service = instantiatedUserService(
     MemoryUserRepository,
     MemoryImageRepository,
+    MemoryPostRepository,
   )
   it('should be defined', () => {
     expect(service).toBeTruthy()

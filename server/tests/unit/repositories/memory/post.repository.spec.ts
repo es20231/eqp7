@@ -157,6 +157,69 @@ describe('MemoryPostRepository', () => {
       }),
     ).rejects.toThrow()
   })
+  it('should be able to update a post with the same subtitle', async () => {
+    const post = {
+      subtitle: 'Post Title',
+      userId: 'post-id',
+      imageId: 'image-id',
+    }
+    const created = await repository.createPost(post)
+    const { id } = created
+    const updated = await repository.updatePost(id, {
+      subtitle: 'Post Title',
+    })
+    expect(updated).toBeTruthy()
+    expect(updated).toStrictEqual({
+      id,
+      subtitle: 'Post Title',
+      userId: 'post-id',
+      imageId: 'image-id',
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should be able to update a post with the same image id', async () => {
+    const post = {
+      subtitle: 'Post Title',
+      userId: 'post-id',
+      imageId: 'image-id',
+    }
+    const created = await repository.createPost(post)
+    const { id } = created
+    const updated = await repository.updatePost(id, {
+      imageId: 'image-id',
+    })
+    expect(updated).toBeTruthy()
+    expect(updated).toStrictEqual({
+      id,
+      subtitle: 'Post Title',
+      userId: 'post-id',
+      imageId: 'image-id',
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should be able to update a post with the same user id', async () => {
+    const post = {
+      subtitle: 'Post Title',
+      userId: 'post-id',
+      imageId: 'image-id',
+    }
+    const created = await repository.createPost(post)
+    const { id } = created
+    const updated = await repository.updatePost(id, {
+      userId: 'post-id',
+    })
+    expect(updated).toBeTruthy()
+    expect(updated).toStrictEqual({
+      id,
+      subtitle: 'Post Title',
+      userId: 'post-id',
+      imageId: 'image-id',
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
   it('should delete a post', async () => {
     const post = {
       subtitle: 'Post Title',
