@@ -190,13 +190,13 @@ const PostController = {
     }
 
     const { id } = payloadParseParams
-    const { subtitle, userId, imageId } = payloadParseBody
 
-    const { ok, message, payload } = await postService.updatePost(id, {
-      subtitle,
-      userId,
-      imageId,
-    })
+    const postToUpdate = payloadParseBody
+
+    const { ok, message, payload } = await postService.updatePost(
+      id,
+      postToUpdate,
+    )
 
     if (!ok) {
       reply.status(400).send({ message })
