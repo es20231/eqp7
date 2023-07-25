@@ -52,7 +52,6 @@ const LoginFormComponent = () => {
         redirect: false,
       })
         .then((res) => {
-          console.log(res)
           if (res?.error === 'CredentialsSignin') {
             toast.error('Usuário ou senha incorretos')
             return
@@ -108,3 +107,4 @@ const LoginFormComponent = () => {
 }
 
 export { LoginFormComponent, LoginFormProvider }
+
