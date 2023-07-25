@@ -1,9 +1,14 @@
 import { instantiatedImageService } from '../../../src/factories/image.factory'
+import { instantiatedPostService } from '../../../src/factories/post.factory'
 import { instantiatedUserService } from '../../../src/factories/user.factory'
 import {
   MemoryImageRepository,
   clearImageMemory,
 } from '../../../src/repositories/implementations/memory/image.repository'
+import {
+  MemoryPostRepository,
+  clearPostMemory,
+} from '../../../src/repositories/implementations/memory/post.repository'
 import {
   MemoryUserRepository,
   clearUserMemory,
@@ -13,6 +18,10 @@ import {
   clearImagesPrisma,
 } from '../../../src/repositories/implementations/prisma/image.repository'
 import {
+  PrismaPostRepository,
+  clearPostsPrisma,
+} from '../../../src/repositories/implementations/prisma/post.repository'
+import {
   PrismaUserRepository,
   clearUsersPrisma,
 } from '../../../src/repositories/implementations/prisma/user.repository'
@@ -21,11 +30,18 @@ describe('Memory User Service', () => {
   const service = instantiatedUserService(
     MemoryUserRepository,
     MemoryImageRepository,
+    MemoryPostRepository,
   )
 
   const imageService = instantiatedImageService(
     MemoryImageRepository,
     MemoryUserRepository,
+  )
+
+  const postService = instantiatedPostService(
+    MemoryPostRepository,
+    MemoryUserRepository,
+    MemoryImageRepository,
   )
 
   it('should be defined', () => {
@@ -42,6 +58,7 @@ describe('Memory User Service', () => {
   afterEach(async () => {
     await clearImageMemory()
     await clearUserMemory()
+    await clearPostMemory()
   })
 
   describe('create', () => {
@@ -54,7 +71,7 @@ describe('Memory User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -110,7 +127,7 @@ describe('Memory User Service', () => {
           expect.objectContaining({
             id: expect.any(String),
             ...defaultUser,
-            password: undefined,
+            password: expect.any(String),
             profilePicture: undefined,
             biography: undefined,
             emailVerified: false,
@@ -122,7 +139,7 @@ describe('Memory User Service', () => {
             ...defaultUser,
             username: 'diferent',
             email: 'diferent@mail.com',
-            password: undefined,
+            password: expect.any(String),
             profilePicture: undefined,
             biography: undefined,
             emailVerified: false,
@@ -148,7 +165,7 @@ describe('Memory User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -181,7 +198,7 @@ describe('Memory User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -216,7 +233,7 @@ describe('Memory User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -259,7 +276,7 @@ describe('Memory User Service', () => {
         username: 'updated',
         email: 'updated@mail.com',
         fullName: 'Updated',
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -276,7 +293,7 @@ describe('Memory User Service', () => {
         username: 'updated',
         email: 'updated@mail.com',
         fullName: 'Updated',
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -363,7 +380,7 @@ describe('Memory User Service', () => {
       expect(payload).toStrictEqual({
         id,
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -450,21 +467,72 @@ describe('Memory User Service', () => {
     })
   })
 
-  // describe('getUserPosts', () => {
-  //   it('should get user posts', async () => {})
-  //   it('should not get user posts from non existent user', async () => {})
-  // })
+  describe('getUserPosts', () => {
+    it('should get user posts', async () => {
+      const { payload: created } = await service.createUser(defaultUser)
+
+      if (!created) throw new Error('User not created')
+
+      const { payload: imageCreated } = await imageService.createImage({
+        userId: created.id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      if (!imageCreated) throw new Error('Image not created')
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test',
+        userId: created.id,
+      })
+
+      const { ok, message, payload } = await service.getUserPosts(created.id)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Posts found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            imageId: imageCreated.id,
+            subtitle: 'test',
+            userId: created.id,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+    it('should not get user posts from non existent user', async () => {
+      const { ok, message, payload } = await service.getUserPosts(
+        'non-existent',
+      )
+
+      expect(ok).toBe(false)
+      expect(message).toContain('User')
+      expect(message).toContain('not found')
+      expect(payload).toBeUndefined()
+    })
+  })
 })
 
 describe('Prisma User Service', () => {
   const service = instantiatedUserService(
     PrismaUserRepository,
     PrismaImageRepository,
+    PrismaPostRepository,
   )
 
   const imageService = instantiatedImageService(
     PrismaImageRepository,
     PrismaUserRepository,
+  )
+
+  const postService = instantiatedPostService(
+    PrismaPostRepository,
+    PrismaUserRepository,
+    PrismaImageRepository,
   )
 
   it('should be defined', () => {
@@ -479,6 +547,7 @@ describe('Prisma User Service', () => {
   }
 
   afterEach(async () => {
+    await clearPostsPrisma()
     await clearImagesPrisma()
     await clearUsersPrisma()
   })
@@ -493,7 +562,7 @@ describe('Prisma User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -549,7 +618,7 @@ describe('Prisma User Service', () => {
           expect.objectContaining({
             id: expect.any(String),
             ...defaultUser,
-            password: undefined,
+            password: expect.any(String),
             profilePicture: undefined,
             biography: undefined,
             emailVerified: false,
@@ -561,7 +630,7 @@ describe('Prisma User Service', () => {
             ...defaultUser,
             username: 'diferent',
             email: 'diferent@mail.com',
-            password: undefined,
+            password: expect.any(String),
             profilePicture: undefined,
             biography: undefined,
             emailVerified: false,
@@ -587,7 +656,7 @@ describe('Prisma User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -620,7 +689,7 @@ describe('Prisma User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -655,7 +724,7 @@ describe('Prisma User Service', () => {
       expect(payload).toStrictEqual({
         id: expect.any(String),
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -698,7 +767,7 @@ describe('Prisma User Service', () => {
         username: 'updated',
         email: 'updated@mail.com',
         fullName: 'Updated',
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -715,7 +784,7 @@ describe('Prisma User Service', () => {
         username: 'updated',
         email: 'updated@mail.com',
         fullName: 'Updated',
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -802,7 +871,7 @@ describe('Prisma User Service', () => {
       expect(payload).toStrictEqual({
         id,
         ...defaultUser,
-        password: undefined,
+        password: expect.any(String),
         profilePicture: undefined,
         biography: undefined,
         emailVerified: false,
@@ -889,8 +958,52 @@ describe('Prisma User Service', () => {
     })
   })
 
-  // describe('getUserPosts', () => {
-  //   it('should get user posts', async () => {})
-  //   it('should not get user posts from non existent user', async () => {})
-  // })
+  describe('getUserPosts', () => {
+    it('should get user posts', async () => {
+      const { payload: created } = await service.createUser(defaultUser)
+
+      if (!created) throw new Error('User not created')
+
+      const { payload: imageCreated } = await imageService.createImage({
+        userId: created.id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      if (!imageCreated) throw new Error('Image not created')
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test',
+        userId: created.id,
+      })
+
+      const { ok, message, payload } = await service.getUserPosts(created.id)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Posts found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            imageId: imageCreated.id,
+            subtitle: 'test',
+            userId: created.id,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+    it('should not get user posts from non existent user', async () => {
+      const { ok, message, payload } = await service.getUserPosts(
+        'non-existent',
+      )
+
+      expect(ok).toBe(false)
+      expect(message).toContain('User')
+      expect(message).toContain('not found')
+      expect(payload).toBeUndefined()
+    })
+  })
 })

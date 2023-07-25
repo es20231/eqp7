@@ -1,37 +1,29 @@
 import { CreateUserDTO } from '../dtos/user/create-user.dto'
 import { UpdateUserDTO } from '../dtos/user/update-user.dto'
 import { Image } from '../entities/image.entity'
+import { Post } from '../entities/post.entity'
 import { User } from '../entities/user.entity'
 import { IImageRepository } from '../repositories/iimage.repository'
+import { IPostRepository } from '../repositories/ipost.repository'
 import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface IUserService {
-  getUsers: () => Promise<ServiceResult<Omit<User, 'password'>[]>>
-  getUserById: (id: string) => Promise<ServiceResult<Omit<User, 'password'>>>
-  getUserByUsername: (
-    username: string,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  getUserByEmail: (
-    email: string,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  createUser: (
-    user: CreateUserDTO,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  updateUser: (
-    id: string,
-    user: UpdateUserDTO,
-  ) => Promise<ServiceResult<Omit<User, 'password'>>>
-  deleteUser: (id: string) => Promise<ServiceResult<Omit<User, 'password'>>>
+  getUsers: () => Promise<ServiceResult<User[]>>
+  getUserById: (id: string) => Promise<ServiceResult<User>>
+  getUserByUsername: (username: string) => Promise<ServiceResult<User>>
+  getUserByEmail: (email: string) => Promise<ServiceResult<User>>
+  createUser: (user: CreateUserDTO) => Promise<ServiceResult<User>>
+  updateUser: (id: string, user: UpdateUserDTO) => Promise<ServiceResult<User>>
+  deleteUser: (id: string) => Promise<ServiceResult<User>>
   getUserImages: (id: string) => Promise<ServiceResult<Image[]>>
-  // FIXME: change any to Post entity
-  getUserPosts: (id: string) => Promise<ServiceResult<any[]>>
+  getUserPosts: (id: string) => Promise<ServiceResult<Post[]>>
 }
 
 const UserService = (
   userRepository: IUserRepository,
   imageRepository: IImageRepository,
-  // Add post service as dependency
+  postRepository: IPostRepository,
 ): IUserService => ({
   getUsers: async () => {
     const users = await userRepository.getUsers()
@@ -39,10 +31,7 @@ const UserService = (
     return {
       ok: true,
       message: 'Users found successfully',
-      payload: users.map((user) => ({
-        ...user,
-        password: undefined,
-      })),
+      payload: users,
     }
   },
 
@@ -60,10 +49,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User found successfully',
-      payload: {
-        ...user,
-        password: undefined,
-      },
+      payload: user,
     }
   },
 
@@ -81,10 +67,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User found successfully',
-      payload: {
-        ...user,
-        password: undefined,
-      },
+      payload: user,
     }
   },
 
@@ -102,10 +85,7 @@ const UserService = (
     return {
       ok: true,
       message: 'User found successfully',
-      payload: {
-        ...user,
-        password: undefined,
-      },
+      payload: user,
     }
   },
 
@@ -139,7 +119,6 @@ const UserService = (
       message: 'User created successfully',
       payload: {
         ...created,
-        password: undefined,
       },
     }
   },
@@ -188,7 +167,6 @@ const UserService = (
       message: 'User updated successfully',
       payload: {
         ...updated,
-        password: undefined,
       },
     }
   },
@@ -233,7 +211,6 @@ const UserService = (
     }
   },
 
-  // TODO
   getUserPosts: async (id: string) => {
     const user = await userRepository.getUserById(id)
 
@@ -245,12 +222,12 @@ const UserService = (
       }
     }
 
-    // FIXME: use post service to get user posts
+    const posts = await postRepository.getPostsByUserId(id)
 
     return {
       ok: true,
       message: 'Posts found successfully',
-      payload: [],
+      payload: posts,
     }
   },
 })
