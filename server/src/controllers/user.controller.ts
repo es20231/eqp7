@@ -19,14 +19,17 @@ const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
     const { ok, message, payload } = await UserService.getUsers()
 
-    if (!ok || !payload) return reply.status(400).send({ message })
+    if (!ok || !payload) {
+      reply.status(400).send({ message })
+      return
+    }
 
-    const users = payload.map((user) => ({
+    const usersWithoutPassword = payload.map((user) => ({
       ...user,
       password: undefined,
     }))
 
-    return reply.status(200).send({ message, payload: users })
+    return reply.status(200).send({ message, payload: usersWithoutPassword })
   },
 
   getUserById: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -55,7 +58,7 @@ const UserController = {
       password: undefined,
     }
 
-    return reply.status(200).send({ message, payload: user })
+    reply.status(200).send({ message, payload: user })
   },
 
   getUserByUsername: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -86,7 +89,7 @@ const UserController = {
       password: undefined,
     }
 
-    return reply.status(200).send({ message, payload: user })
+    reply.status(200).send({ message, payload: user })
   },
 
   getUserByEmail: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -120,7 +123,7 @@ const UserController = {
       password: undefined,
     }
 
-    return reply.status(200).send({ message, payload: user })
+    reply.status(200).send({ message, payload: user })
   },
 
   createUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -159,7 +162,7 @@ const UserController = {
       password: undefined,
     }
 
-    return reply.status(200).send({ message, payload: userWithoutPassword })
+    return reply.status(201).send({ message, payload: userWithoutPassword })
   },
 
   updateUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -217,7 +220,7 @@ const UserController = {
       password: undefined,
     }
 
-    return reply.status(200).send({ message, payload: userWithoutPassword })
+    reply.status(200).send({ message, payload: userWithoutPassword })
   },
 
   deleteUser: async (request: FastifyRequest, reply: FastifyReply) => {

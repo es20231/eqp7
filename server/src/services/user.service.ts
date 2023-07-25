@@ -116,7 +116,9 @@ const UserService = (
     return {
       ok: true,
       message: 'User created successfully',
-      payload: created,
+      payload: {
+        ...created,
+      },
     }
   },
 
@@ -162,7 +164,9 @@ const UserService = (
     return {
       ok: true,
       message: 'User updated successfully',
-      payload: updated,
+      payload: {
+        ...updated,
+      },
     }
   },
 
