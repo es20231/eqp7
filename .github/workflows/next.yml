@@ -1,4 +1,4 @@
-name: Next build
+name: Front-end Build
 
 on:
   push:
@@ -9,12 +9,12 @@ on:
       - 'main'
 
 jobs:
-  Build:
+  Next-Build:
     runs-on: ubuntu-latest
   
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: cd web && npm ci
+        run: cd web && npm i
       - name: Build
         run: cd web && npm run build

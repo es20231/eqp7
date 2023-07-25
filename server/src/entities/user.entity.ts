@@ -1,18 +1,21 @@
-interface User {
-  id: string;
-  fullName: string;
-  username: string;
-  email: string
-  emailVerified: boolean;
-  password: string;
-  biography: string;
-  profilePicture: string;
+import { Image } from './image.entity'
+import { Post } from './post.entity'
 
-  images?: any[]
-  posts?: any[]
+interface User {
+  id: string
+  fullName: string
+  username: string
+  email: string
+  emailVerified: boolean
+  password: string
+  biography?: string
+  profilePicture?: string
+
+  images?: Image[]
+  posts?: Post[]
   comments?: any[]
   postReactions?: any[]
   commentReactions?: any[]
 }
 
-export { User };
+export { User }
