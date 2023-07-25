@@ -284,7 +284,7 @@ const AuthService = ({
       subject: 'Account activation - MinIG',
       html: `
         <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
-          <p>Olá,</p>
+          <p style="text-align: center;">Olá,</p>
           <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
           <p style="text-align: center;">
             <a href="http://localhost:3333/auth/activate/${activateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
