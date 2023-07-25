@@ -5,6 +5,7 @@ import { CreateUserDTO } from '../dtos/user/create-user.dto'
 import { instantiatedAuthService } from '../factories/auth.factory'
 import { MemoryActivateTokenRepository } from '../repositories/implementations/memory/activate-token.repository'
 import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
+import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
 import { NodemailerMailService } from '../services/outsourced/implementations/NodemailerMailService'
 import { handleZodParse } from '../utils'
@@ -14,6 +15,7 @@ const authService = instantiatedAuthService(
   NodemailerMailService,
   MemoryUserRepository,
   MemoryImageRepository,
+  MemoryPostRepository,
 )
 
 const AuthController = {
