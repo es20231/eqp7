@@ -95,6 +95,26 @@ const PostService = (
         payload: undefined,
       }
     }
+    if (post.userId) {
+      const existingUser = await userRepository.getUserById(post.userId)
+      if (!existingUser) {
+        return {
+          ok: false,
+          message: `User #${post.userId} not found`,
+          payload: undefined,
+        }
+      }
+    }
+    if (post.imageId) {
+      const existingImage = await imageRepository.getImage(post.imageId)
+      if (!existingImage) {
+        return {
+          ok: false,
+          message: `Image #${post.imageId} not found`,
+          payload: undefined,
+        }
+      }
+    }
     const updatedPost = await postRepository.updatePost(id, post)
     return {
       ok: true,

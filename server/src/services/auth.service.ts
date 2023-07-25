@@ -7,6 +7,7 @@ import { instantiatedActivateTokenService } from '../factories/activate-token.fa
 import { instantiatedUserService } from '../factories/user.factory'
 import { IActivateTokenRepository } from '../repositories/iactivate-token.repository'
 import { IImageRepository } from '../repositories/iimage.repository'
+import { IPostRepository } from '../repositories/ipost.repository'
 import { IUserRepository } from '../repositories/iuser.repository'
 import { generateRandomId } from '../utils'
 import { IMailService } from './outsourced/IMailService'
@@ -29,6 +30,7 @@ interface IAuthService {
 interface UserServiceProps {
   userRepository: IUserRepository
   imageRepository: IImageRepository
+  postRepository: IPostRepository
 }
 
 interface ActivateTokenServiceProps {
@@ -46,14 +48,18 @@ interface AuthServiceProps {
 }
 
 const AuthService = ({
-  userServiceProps: { userRepository, imageRepository },
+  userServiceProps: { userRepository, imageRepository, postRepository },
   activateTokenServiceProps: { activateTokenRepository },
   mailServiceProps: { mailService },
 }: AuthServiceProps): IAuthService => ({
   login: async (username, password) => {
     if (!jwtSecret) throw new Error('JWT secret not found')
 
-    const userService = instantiatedUserService(userRepository, imageRepository)
+    const userService = instantiatedUserService(
+      userRepository,
+      imageRepository,
+      postRepository,
+    )
 
     const { ok, message, payload } = await userService.getUserByUsername(
       username,
@@ -87,7 +93,11 @@ const AuthService = ({
   register: async (user) => {
     if (!jwtSecret) throw new Error('JWT secret not found')
 
-    const userService = instantiatedUserService(userRepository, imageRepository)
+    const userService = instantiatedUserService(
+      userRepository,
+      imageRepository,
+      postRepository,
+    )
 
     const activateTokenService = instantiatedActivateTokenService(
       activateTokenRepository,
@@ -151,7 +161,11 @@ const AuthService = ({
     }
   },
   activate: async (token) => {
-    const userService = instantiatedUserService(userRepository, imageRepository)
+    const userService = instantiatedUserService(
+      userRepository,
+      imageRepository,
+      postRepository,
+    )
 
     const activateTokenService = instantiatedActivateTokenService(
       activateTokenRepository,
@@ -224,7 +238,11 @@ const AuthService = ({
     }
   },
   getActivateToken: async (userId) => {
-    const userService = instantiatedUserService(userRepository, imageRepository)
+    const userService = instantiatedUserService(
+      userRepository,
+      imageRepository,
+      postRepository,
+    )
 
     const activateTokenService = instantiatedActivateTokenService(
       activateTokenRepository,
@@ -266,7 +284,7 @@ const AuthService = ({
       subject: 'Account activation - MinIG',
       html: `
         <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
-          <p>Olá,</p>
+          <p style="text-align: center;">Olá,</p>
           <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
           <p style="text-align: center;">
             <a href="http://localhost:3333/auth/activate/${activateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>

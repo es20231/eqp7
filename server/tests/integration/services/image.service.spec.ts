@@ -251,6 +251,10 @@ describe('PrismaImageService', () => {
     userId = id
   })
 
+  afterAll(async () => {
+    await PrismaUserRepository.deleteUser(userId)
+  })
+
   afterEach(async () => {
     await clearImagesPrisma()
   })
