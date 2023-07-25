@@ -1,0 +1,21 @@
+ID,Caso de Teste,Resultado
+CT-TU-1,Fábrica de Tokens de Ativação,Passou
+CT-TU-2,Fábrica de Imagens,Passou
+CT-TU-3,Fábrica de Posts,Passou
+CT-TU-4,Fábrica de Usuários,Passou
+CT-TU-5,MemoryActivateTokenRepository,Passou
+CT-TU-6,MemoryImageRepository,Passou
+CT-TU-7,MemoryPostRepository,Passou
+CT-TU-8,MemoryUserRepository,Passou
+CT-TI-9,PrismaActivateTokenRepository,Passou
+CT-TI-10,PrismaImageRepository,Passou
+CT-TI-11,PrismaPostRepository,Passou
+CT-TI-12,UserPrismaRepository,Passou
+CT-TI-13,MemoryActivateTokenService,Passou
+CT-TI-14,PrismaActivateTokenService,Passou
+CT-TI-15,MemoryImageService,Passou
+CT-TI-16,PrismaImageService,Passou
+CT-TI-17,MemoryPostService,Passou
+CT-TI-18,PrismaPostService,Passou
+CT-TI-19,MemoryUserService,Passou
+CT-TI-20,PrismaUserService,Passou
