@@ -1,9 +1,9 @@
 import { withAuth } from 'next-auth/middleware'
 
 export default withAuth({
-  // pages: {
-  //   signIn: '/login',
-  // },
+  pages: {
+    signIn: '/auth/login',
+  },
 })
 
 export const config = {
@@ -14,10 +14,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - InfatecLogo.svg (logo file)
-     * - LoginFormImage.svg (login form image file)
-     * - PEGELogo.svg (logo file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|public/:path).*)',
   ],
 }

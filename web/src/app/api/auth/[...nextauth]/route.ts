@@ -19,6 +19,8 @@ export const AuthOptions = {
 
         if (!username || !password) return null
 
+        if (username !== 'test' && password !== 'testtest') return null
+
         return {
           id: 'user-1',
           name: 'John Doe',
@@ -35,7 +37,7 @@ export const AuthOptions = {
     maxAge: 60 * 60 * 24 * 7, // 1 week
   },
   pages: {
-    // signIn: '/login',
+    signIn: '/auth/login',
   },
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {

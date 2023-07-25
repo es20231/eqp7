@@ -1,9 +1,10 @@
 import { AppProvider } from '@/providers/app.provider'
 import { Roboto_Mono as RobotoMono } from 'next/font/google'
+import { ReactNode } from 'react'
 import './globals.css'
 
 const roboto = RobotoMono({
-  weight: ['400', '500', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   preload: true,
   subsets: ['latin'],
   adjustFontFallback: true,
@@ -18,13 +19,15 @@ export default function RootLayout({
   children,
   session,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   session: any
 }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <body className={roboto.className}>
-        <AppProvider NextAuthSession={session}>{children}</AppProvider>
+        <main className="w-screen h-screen flex flex-col items-center justify-center">
+          <AppProvider NextAuthSession={session}>{children}</AppProvider>
+        </main>
       </body>
     </html>
   )
