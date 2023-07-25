@@ -84,7 +84,7 @@ const PostController = {
   createPost: async (request: FastifyRequest, reply: FastifyReply) => {
     const bodySchema = z
       .object({
-        subtitle: z.string(),
+        subtitle: z.string().nonempty('subtitle is required'),
         userId: z.string().nonempty('userId is required'),
         imageId: z.string().nonempty('imageId is required'),
       })
@@ -154,7 +154,7 @@ const PostController = {
 
     const bodySchema = z
       .object({
-        subtitle: z.string(),
+        subtitle: z.string().optional(),
         userId: z.string().optional(),
         imageId: z.string().optional(),
       })
