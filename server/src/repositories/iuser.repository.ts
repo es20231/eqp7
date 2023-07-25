@@ -1,21 +1,15 @@
-import { User } from "../entities/user.entity";
-
-type RepositoryResult<T> = {
-  ok: boolean;
-  message: string;
-  payload: T | undefined
-}
-
-type UserWithoutPassword = Omit<User, "password">
+import { CreateUserDTO } from '../dtos/user/create-user.dto'
+import { UpdateUserDTO } from '../dtos/user/update-user.dto'
+import { User } from '../entities/user.entity'
 
 interface IUserRepository {
-  getUserById(id: string): Promise<RepositoryResult<UserWithoutPassword>>;
-  getUserByUsername(username: string): Promise<RepositoryResult<UserWithoutPassword>>;
-  getUserByEmail(email: string): Promise<RepositoryResult<UserWithoutPassword>>;
-  getUsers(): Promise<RepositoryResult<UserWithoutPassword[]>>;
-  createUser(user: User): Promise<RepositoryResult<UserWithoutPassword>>;
-  updateUser(id:string, user: Partial<UserWithoutPassword>): Promise<RepositoryResult<UserWithoutPassword>>;
-  deleteUser(id: string): Promise<RepositoryResult<UserWithoutPassword>>;
+  getUserById(id: string): Promise<User | undefined>
+  getUserByUsername(username: string): Promise<User | undefined>
+  getUserByEmail(email: string): Promise<User | undefined>
+  getUsers(): Promise<User[]>
+  createUser(user: CreateUserDTO): Promise<User>
+  updateUser(id: string, user: UpdateUserDTO): Promise<User>
+  deleteUser(id: string): Promise<User>
 }
 
-export { IUserRepository, UserWithoutPassword };
+export { IUserRepository }
