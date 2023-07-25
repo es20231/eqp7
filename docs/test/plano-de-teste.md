@@ -154,11 +154,23 @@ O objetivo deste teste é verificar se a MemoryPostRepository é capaz de atuali
 
 O objetivo deste teste é verificar se a MemoryPostRepository lança um erro ao tentar atualizar um post com um ID que não existe.
 
-#### CT-TU-7.9 - Deve excluir o post com o ID fornecido
+#### CT-TU-7.9 Deve ser capaz de atualizar um post com o mesmo subtítulo
+
+Este método verifica se o método "updatePost" consegue atualizar um post com um subtítulo igual ao que já havia
+
+#### CT-TU-7.10 Deve ser capaz de atualizar um post com o mesmo ID de imagem
+
+Este método verifica se o método "updatePost" consegue atualizar um post com um ID de imagem igual ao que já havia
+
+#### CT-TU-7.11 Deve ser capaz de atualizar um post com o mesmo ID de usuário
+
+Este método verifica se o método "updatePost" consegue atualizar um post com um ID de usuário igual ao que já havia
+
+#### CT-TU-7.12 - Deve excluir o post com o ID fornecido
 
 O objetivo deste teste é verificar se a MemoryPostRepository é capaz de excluir o post com o ID fornecido.
 
-#### CT-TU-7.10 - Deve lançar um erro se o post com o ID fornecido não existir
+#### CT-TU-7.13 - Deve lançar um erro se o post com o ID fornecido não existir
 
 O objetivo deste teste é verificar se a MemoryPostRepository lança um erro ao tentar excluir um post com um ID que não existe.
 
@@ -385,6 +397,18 @@ Este teste verifica se o método "updatePost" atualiza corretamente o post com b
 ##### 11.6.2 Deve lançar um erro ao tentar atualizar um post com um ID inexistente
 
 Este teste verifica se o método "updatePost" lança um erro ao tentar atualizar um post com um ID inexistente.
+
+##### 11.6.3 Deve ser capaz de atualizar um post com o mesmo subtítulo
+
+Este método verifica se o método "updatePost" consegue atualizar um post com um subtítulo igual ao que já havia
+
+##### 11.6.4 Deve ser capaz de atualizar um post com o mesmo ID de imagem
+
+Este método verifica se o método "updatePost" consegue atualizar um post com um ID de imagem igual ao que já havia
+
+##### 11.6.5 Deve ser capaz de atualizar um post com o mesmo ID de usuário
+
+Este método verifica se o método "updatePost" consegue atualizar um post com um ID de usuário igual ao que já havia
 
 #### 11.7 Método deletePost
 
@@ -815,6 +839,14 @@ Este teste verifica se o método "updatePost" é capaz de atualizar um post corr
 ##### 18.4.2 Não deve ser capaz de atualizar um post com um ID inválido
 
 Este teste verifica se o método "updatePost" não atualiza um post com um ID inválido.
+
+##### 18.4.3 Não deve ser capaz de atualizar um post com um ID de usuário inválido
+
+Este teste verifica se o método "updatePost" não atualiza um post com um ID de usuário inválido
+
+##### 18.4.3 Não deve ser capaz de atualizar um post com um ID de imagem inválido
+
+Este teste verifica se o método "updatePost" não atualiza um post com um ID de imagem inválido
 
 #### 18.5 Método delete
 
