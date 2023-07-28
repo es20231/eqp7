@@ -1,5 +1,5 @@
-import { api } from '@/services/axios';
-import { QueryFunctionContext, useQuery } from 'react-query';
+import { api } from '@/services/axios'
+import { QueryFunctionContext, useQuery } from 'react-query'
 
 type GetUserImagesQueryKey = ['images', { token: string; userId: string }]
 
@@ -50,5 +50,4 @@ const useGetUserPosts = (token: string, userId: string) => {
   return useQuery(['posts', { token, userId }], getUserPosts)
 }
 
-export { useGetUserImages, useGetUserPosts };
-
+export { useGetUserImages, useGetUserPosts }
