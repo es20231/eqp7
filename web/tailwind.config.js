@@ -12,6 +12,7 @@ module.exports = {
       colors: {
         'pacific-blue': {
           500: '#1DAABB',
+          600: '#157b87',
         },
         'rich-black': {
           500: '#093545',
