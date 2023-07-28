@@ -1,8 +1,10 @@
 'use client'
 
+import { queryClient } from '@/services/queryClient'
 import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { ReactNode } from 'react'
+import { QueryClientProvider } from 'react-query'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -14,7 +16,11 @@ interface AppProviderProps {
 const AppProvider = ({ children, NextAuthSession }: AppProviderProps) => {
   return (
     <SessionProvider session={NextAuthSession}>
-      <ThemeProvider attribute="class">{children}</ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          {children}
+        </ThemeProvider>
+      </QueryClientProvider>
       <ToastContainer
         autoClose={3000}
         closeButton

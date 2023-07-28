@@ -11,7 +11,10 @@ const roboto = RobotoMono({
 })
 
 export const metadata = {
-  title: 'Min IG',
+  title: {
+    template: '%s | MinIG',
+    default: 'MinIG',
+  },
   description: 'Aplicação para compartilhamento de fotos e momentos.',
 }
 
@@ -25,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={roboto.className}>
-        <main className="w-screen h-screen flex flex-col items-center justify-center">
+        <main className="w-screen h-screen flex flex-col items-center justify-center bg">
           <AppProvider NextAuthSession={session}>{children}</AppProvider>
         </main>
       </body>
