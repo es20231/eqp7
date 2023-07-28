@@ -3,7 +3,7 @@
 import { Button } from '@/components/Button'
 import { Form } from '@/components/Form/Parts'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Eye, EyeOff, LogIn } from 'lucide-react'
+import { Eye, EyeOff, Loader2, LogIn } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useState } from 'react'
@@ -33,15 +33,17 @@ const LoginFormProvider = ({ children }: LoginFormProviderProps) => {
 const LoginFormComponent = () => {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword((state) => !state)
   }, [])
 
-  const { handleSubmit } = useFormContext<createLoginFormData>()
+  const { handleSubmit, reset } = useFormContext<createLoginFormData>()
 
   const handleClickLoginButton = handleSubmit(
     async ({ username, password }) => {
+      setLoading(true)
       signIn('credentials', {
         username,
         password,
@@ -66,6 +68,10 @@ const LoginFormComponent = () => {
         })
         .catch((err) => {
           console.log('login err', err)
+        })
+        .finally(() => {
+          reset()
+          setLoading(false)
         })
     },
   )
@@ -105,8 +111,14 @@ const LoginFormComponent = () => {
         <Form.ErrorMessage field="password" />
       </Form.Field>
       <Button
-        rightIcon={<LogIn className="text-slate-50" />}
-        className="mt-4 py-4"
+        rightIcon={
+          !loading ? (
+            <LogIn className="text-slate-50" />
+          ) : (
+            <Loader2 className="animate-spin text-slate-50" />
+          )
+        }
+        className="mt-4 py-4 text-slate-50"
         onClick={handleClickLoginButton}
       >
         Entrar
