@@ -28,6 +28,13 @@ const UserRoutes = (
   fastify.put('/users/:id', optionsWithAuth, UserController.updateUser)
   fastify.delete('/users/:id', optionsWithAuth, UserController.deleteUser)
 
+  fastify.get(
+    '/users/:id/images',
+    optionsWithAuth,
+    UserController.getUserImages,
+  )
+  fastify.get('/users/:id/posts', optionsWithAuth, UserController.getUserPosts)
+
   done()
 }
 

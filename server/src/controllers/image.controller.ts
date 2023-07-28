@@ -56,9 +56,11 @@ const ImageController = {
       file: { filename: string; toBuffer: () => Promise<Buffer> }
     }
 
+    const file = await body.file.toBuffer()
+
     const bodyObject = {
       userId: body.userId.value,
-      file: await body.file.toBuffer(),
+      file,
       filename: body.file.filename,
     }
 

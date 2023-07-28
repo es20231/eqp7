@@ -13,7 +13,7 @@ async function bootstrap() {
   })
 
   fastify.register(fastifyCors, {
-    origin: ['http:localhost:3000', 'https://minigproject.vercel.app'],
+    origin: ['http://localhost:3000', 'https://minigproject.vercel.app'],
   })
 
   fastify.register(fastifyMultipart, {

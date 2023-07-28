@@ -1,3 +1,5 @@
+import { api } from '@/services/axios'
+import { UserInfo } from '@/stores/user.store'
 import { SessionStrategy } from 'next-auth'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -19,11 +21,35 @@ export const AuthOptions = {
 
         if (!username || !password) return null
 
-        return {
-          id: 'user-1',
-          name: 'John Doe',
-          email: 'johndoe@mail.com',
-          token: 'access-token',
+        let user = undefined as UserInfo | undefined
+
+        await api()
+          .post('/auth/login', {
+            username,
+            password,
+          })
+          .then((response) => {
+            console.log('response', response)
+
+            user = {
+              id: response.data.payload.user.id,
+              fullName: response.data.payload.user.fullName,
+              username: response.data.payload.user.username,
+              email: response.data.payload.user.email,
+              emailVerified: response.data.payload.user.emailVerified,
+              profilePicture: response.data.payload.user.profilePicture,
+              biography: response.data.payload.user.biography,
+              token: response.data.payload.token,
+            }
+          })
+          .catch((error) => {
+            console.log('error', error)
+          })
+
+        if (user) {
+          return user
+        } else {
+          return null
         }
       },
     }),
@@ -35,7 +61,7 @@ export const AuthOptions = {
     maxAge: 60 * 60 * 24 * 7, // 1 week
   },
   pages: {
-    // signIn: '/login',
+    signIn: '/auth/login',
   },
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
