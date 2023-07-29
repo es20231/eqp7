@@ -298,7 +298,7 @@ const AuthService = ({
 
     return {
       ok: true,
-      message: 'Activate token found successfully',
+      message: 'Activate token generated successfully, check your email',
       payload: undefined,
     }
   },
