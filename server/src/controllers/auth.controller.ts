@@ -137,7 +137,7 @@ const AuthController = {
   getActivateToken: async (request: FastifyRequest, reply: FastifyReply) => {
     const paramsSchema = z
       .object({
-        userId: z.string().nonempty('User id is required on url params'),
+        id: z.string().nonempty('User id is required on url params'),
       })
       .strict()
 
@@ -150,9 +150,9 @@ const AuthController = {
       return reply.status(400).send(payloadParse)
     }
 
-    const { userId } = payloadParse
+    const { id } = payloadParse
 
-    const { ok, message, payload } = await authService.getActivateToken(userId)
+    const { ok, message, payload } = await authService.getActivateToken(id)
 
     if (!ok) {
       return reply.status(400).send({ message })

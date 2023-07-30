@@ -1,5 +1,7 @@
 import fastifyCors from '@fastify/cors'
 import fastifyMultipart from '@fastify/multipart'
+import swagger from '@fastify/swagger'
+import swaggerUi from '@fastify/swagger-ui'
 import Fastify from 'fastify'
 import { AuthRoutes } from './routes/auth.routes'
 import { ImageRoutes } from './routes/image.routes'
@@ -24,6 +26,62 @@ async function bootstrap() {
     throwFileSizeLimit: true,
   })
 
+  fastify.register(swagger, {
+    swagger: {
+      info: {
+        title: 'Documentation for MinIG API',
+        description: 'MinIG API documentation',
+        version: '0.1.0',
+      },
+      externalDocs: {
+        url: 'https://swagger.io',
+        description: 'Find more info here',
+      },
+      tags: [
+        { name: 'default', description: 'Default end-points' },
+        { name: 'auth', description: 'Authentication related end-points' },
+        { name: 'user', description: 'User related end-points' },
+        { name: 'post', description: 'Post related end-points' },
+        { name: 'image', description: 'Image related end-points' },
+      ],
+      securityDefinitions: {
+        bearer: {
+          type: 'apiKey',
+          name: 'Authorization',
+          in: 'header',
+          description:
+            'Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".',
+        },
+      },
+      host: 'localhost:3333',
+      schemes: ['http'],
+      consumes: ['application/json', 'multipart/form-data'],
+      produces: ['application/json'],
+    },
+  })
+
+  await fastify.register(swaggerUi, {
+    routePrefix: '/docs',
+    uiConfig: {
+      docExpansion: 'list',
+      deepLinking: false,
+    },
+    uiHooks: {
+      onRequest: function (request, reply, next) {
+        next()
+      },
+      preHandler: function (request, reply, next) {
+        next()
+      },
+    },
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
+    transformSpecification: (swaggerObject, request, reply) => {
+      return swaggerObject
+    },
+    transformSpecificationClone: true,
+  })
+
   fastify.register(UserRoutes)
   fastify.register(PostRoutes)
   fastify.register(ImageRoutes)
@@ -36,11 +94,11 @@ async function bootstrap() {
     }
   })
 
-  fastify.get('/docs', async () => {
-    return {
-      message: 'Documentation is being built 🚧',
-    }
-  })
+  // fastify.get('/docs', async () => {
+  //   return {
+  //     message: 'Documentation is being built 🚧',
+  //   }
+  // })
 
   await fastify.listen({ port: 3333 })
 }

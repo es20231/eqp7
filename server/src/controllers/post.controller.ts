@@ -55,7 +55,7 @@ const PostController = {
   getPostsByUserId: async (request: FastifyRequest, reply: FastifyReply) => {
     const paramsSchema = z
       .object({
-        userId: z.string().nonempty('userId is required on url params'),
+        id: z.string().nonempty('User id is required on url params'),
       })
       .strict()
 
@@ -69,9 +69,9 @@ const PostController = {
       return
     }
 
-    const { userId } = payloadParse
+    const { id } = payloadParse
 
-    const { ok, message, payload } = await postService.getPostsByUserId(userId)
+    const { ok, message, payload } = await postService.getPostsByUserId(id)
 
     if (!ok) {
       reply.status(400).send({ message })

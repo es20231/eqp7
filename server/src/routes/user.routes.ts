@@ -1,5 +1,16 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 import { UserController } from '../controllers/user.controller'
+import {
+  createUserSchema,
+  deleteUserSchema,
+  getUserByEmailSchema,
+  getUserByIdSchema,
+  getUserByUsernameSchema,
+  getUserImagesSchema,
+  getUserPostsSchema,
+  getUsersSchema,
+  updateUserSchema,
+} from '../docs/swagger/schemas/user.schema'
 import { authenticate } from '../middlewares/auth.middleware'
 
 const UserRoutes = (
@@ -12,28 +23,80 @@ const UserRoutes = (
     preValidation: authenticate,
   }
 
-  fastify.get('/users', optionsWithAuth, UserController.getUsers)
-  fastify.get('/users/:id', optionsWithAuth, UserController.getUserById)
+  const optionsWithSchema = {
+    getUsers: {
+      ...optionsWithAuth,
+      schema: getUsersSchema,
+    },
+    getUserById: {
+      ...optionsWithAuth,
+      schema: getUserByIdSchema,
+    },
+    getUserByUsername: {
+      ...optionsWithAuth,
+      schema: getUserByUsernameSchema,
+    },
+    getUserByEmail: {
+      ...optionsWithAuth,
+      schema: getUserByEmailSchema,
+    },
+    create: {
+      ...optionsWithAuth,
+      schema: createUserSchema,
+    },
+    update: {
+      ...optionsWithAuth,
+      schema: updateUserSchema,
+    },
+    delete: {
+      ...optionsWithAuth,
+      schema: deleteUserSchema,
+    },
+    getUserImages: {
+      ...optionsWithAuth,
+      schema: getUserImagesSchema,
+    },
+    getUserPosts: {
+      ...optionsWithAuth,
+      schema: getUserPostsSchema,
+    },
+  }
+
+  fastify.get('/users', optionsWithSchema.getUsers, UserController.getUsers)
+  fastify.get(
+    '/users/:id',
+    optionsWithSchema.getUserById,
+    UserController.getUserById,
+  )
   fastify.get(
     '/users/username/:username',
-    optionsWithAuth,
+    optionsWithSchema.getUserByUsername,
     UserController.getUserByUsername,
   )
   fastify.get(
     '/users/email/:email',
-    optionsWithAuth,
+    optionsWithSchema.getUserByEmail,
     UserController.getUserByEmail,
   )
-  fastify.post('/users', optionsWithAuth, UserController.createUser)
-  fastify.put('/users/:id', optionsWithAuth, UserController.updateUser)
-  fastify.delete('/users/:id', optionsWithAuth, UserController.deleteUser)
 
   fastify.get(
     '/users/:id/images',
-    optionsWithAuth,
+    optionsWithSchema.getUserImages,
     UserController.getUserImages,
   )
-  fastify.get('/users/:id/posts', optionsWithAuth, UserController.getUserPosts)
+  fastify.get(
+    '/users/:id/posts',
+    optionsWithSchema.getUserPosts,
+    UserController.getUserPosts,
+  )
+
+  fastify.post('/users', optionsWithSchema.create, UserController.createUser)
+  fastify.put('/users/:id', optionsWithSchema.update, UserController.updateUser)
+  fastify.delete(
+    '/users/:id',
+    optionsWithSchema.delete,
+    UserController.deleteUser,
+  )
 
   done()
 }

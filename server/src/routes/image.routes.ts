@@ -1,5 +1,12 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 import { ImageController } from '../controllers/image.controller'
+import {
+  createImageSchema,
+  deleteImageSchema,
+  getImageByIdSchema,
+  getImagesByUserIdSchema,
+  getImagesSchema,
+} from '../docs/swagger/schemas/image.schema'
 import { authenticate } from '../middlewares/auth.middleware'
 
 const ImageRoutes = (
@@ -12,14 +19,45 @@ const ImageRoutes = (
     preValidation: authenticate,
   }
 
-  fastify.get('/images', optionsWithAuth, ImageController.getImages)
-  fastify.get('/images/:id', optionsWithAuth, ImageController.getImage)
-  fastify.post('/images', optionsWithAuth, ImageController.createImage)
-  fastify.delete('/images/:id', optionsWithAuth, ImageController.deleteImage)
+  const optionsWithSchema = {
+    getImages: {
+      ...optionsWithAuth,
+      schema: getImagesSchema,
+    },
+    getImageById: {
+      ...optionsWithAuth,
+      schema: getImageByIdSchema,
+    },
+    create: {
+      ...optionsWithAuth,
+      schema: createImageSchema,
+    },
+    delete: {
+      ...optionsWithAuth,
+      schema: deleteImageSchema,
+    },
+    getImagesByUserId: {
+      ...optionsWithAuth,
+      schema: getImagesByUserIdSchema,
+    },
+  }
+
+  fastify.get('/images', optionsWithSchema.getImages, ImageController.getImages)
+  fastify.get(
+    '/images/:id',
+    optionsWithSchema.getImageById,
+    ImageController.getImage,
+  )
+  fastify.post('/images', optionsWithSchema.create, ImageController.createImage)
+  fastify.delete(
+    '/images/:id',
+    optionsWithSchema.delete,
+    ImageController.deleteImage,
+  )
 
   fastify.get(
     '/images/user/:id',
-    optionsWithAuth,
+    optionsWithSchema.getImagesByUserId,
     ImageController.getUserImages,
   )
 
