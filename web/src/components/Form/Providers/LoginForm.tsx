@@ -79,7 +79,7 @@ const LoginFormComponent = () => {
   )
 
   return (
-    <form className="w-full mt-4 px-4 flex flex-col items-center justify-center gap-2 max-w-2xl">
+    <form className="z-10 w-full mt-4 px-4 flex flex-col items-center justify-center gap-2 max-w-2xl">
       <Form.Field>
         <Form.Input
           name="username" // macth with the error message field
