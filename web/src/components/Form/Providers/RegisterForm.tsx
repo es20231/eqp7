@@ -2,11 +2,14 @@
 
 import { Button } from '@/components/Button'
 import { Form } from '@/components/Form/Parts'
+import { api } from '@/services/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Loader2, LogIn } from 'lucide-react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 const createRegisterFormSchema = z
@@ -60,12 +63,49 @@ const RegisterFormComponent = () => {
 
   const { handleSubmit, reset } = useFormContext<createRegisterFormData>()
 
-  const handleClickLoginButton = handleSubmit((data) => {
-    console.log(data)
+  const handleClickLoginButton = handleSubmit(async (data) => {
+    setLoading(true)
+    await api()
+      .post('/auth/register', {
+        fullName: data.fullName,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      })
+      .then(async (response) => {
+        console.log('response', response)
+        toast.success('Usuário cadastrado com sucesso')
+        await signIn('credentials', {
+          username: data.username,
+          password: data.password,
+          redirect: false,
+        })
+          .then((res) => {
+            router.push('/dashboard')
+          })
+          .catch((error) => {
+            console.log('error', error)
+            toast.error('Erro ao realizar login')
+            router.push('/dashboard')
+          })
+      })
+      .catch((error) => {
+        const message = error.response.data.message
+        if (message.includes('Username')) {
+          toast.error('O nome de usuário já existe')
+          reset({ username: '' })
+        } else if (message.includes('Email')) {
+          reset({ email: '' })
+          toast.error('O email já existe. Tente outro')
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   })
 
   return (
-    <form className="w-full pt-4 px-4 flex flex-col items-center justify-center gap-2 max-w-2xl">
+    <form className="w-full pt-4 px-4 flex flex-col items-center justify-center gap-2 max-w-2xl z-10">
       <Form.Field>
         <Form.Input
           name="fullName" // macth with the error message field
@@ -147,7 +187,7 @@ const RegisterFormComponent = () => {
             <Loader2 className="animate-spin text-slate-50" />
           )
         }
-        className="pt-4 py-4 text-slate-50"
+        className="mt-4 py-4 text-slate-50"
         onClick={handleClickLoginButton}
       >
         Cadastrar
