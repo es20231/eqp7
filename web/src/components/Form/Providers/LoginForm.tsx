@@ -2,9 +2,11 @@
 
 import { Button } from '@/components/Button'
 import { Form } from '@/components/Form/Parts'
+import { Text } from '@/components/Text'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Loader2, LogIn } from 'lucide-react'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
@@ -84,6 +86,7 @@ const LoginFormComponent = () => {
           placeholder="Usuário"
           className="bg-dark-slate-gray-500 placeholder:text-gray-300"
           around="bg-dark-slate-gray-500"
+          autoComplete="off"
         />
         <Form.ErrorMessage field="username" />
       </Form.Field>
@@ -110,6 +113,15 @@ const LoginFormComponent = () => {
         />
         <Form.ErrorMessage field="password" />
       </Form.Field>
+      <div className="flex w-full items-center justify-end flex-row gap-2">
+        <Text className="text-sm w-fit">Não possui uma conta?</Text>
+        <Link href="/auth/register">
+          <Text className="group transition duration-300 w-fit hover:font-semibold">
+            Cadastre-se
+            <span className="block max-w-0 group-hover:max-w-full trasition-all duration-500 h-0.5 bg-pacific-blue-500" />
+          </Text>
+        </Link>
+      </div>
       <Button
         rightIcon={
           !loading ? (
