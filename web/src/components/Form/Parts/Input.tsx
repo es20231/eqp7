@@ -47,4 +47,3 @@ const Input = ({
 }
 
 export { Input }
-
