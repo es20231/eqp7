@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={roboto.className}>
-        <main className="w-screen h-screen flex flex-col items-center justify-center bg">
+        <main className="w-screen h-screen flex flex-col items-center justify-start">
           <AppProvider NextAuthSession={session}>{children}</AppProvider>
         </main>
       </body>
