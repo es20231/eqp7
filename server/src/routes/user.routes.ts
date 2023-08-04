@@ -91,7 +91,11 @@ const UserRoutes = (
   )
 
   fastify.post('/users', optionsWithSchema.create, UserController.createUser)
-  fastify.put('/users/:id', optionsWithSchema.update, UserController.updateUser)
+  fastify.patch(
+    '/users/:id',
+    optionsWithSchema.update,
+    UserController.updateUser,
+  )
   fastify.delete(
     '/users/:id',
     optionsWithSchema.delete,
