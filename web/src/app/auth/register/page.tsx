@@ -1,39 +1,38 @@
 'use client'
 
 import {
-  LoginFormComponent,
-  LoginFormProvider,
-} from '@/components/Form/Providers/LoginForm'
+  RegisterFormComponent,
+  RegisterFormProvider,
+} from '@/components/Form/Providers/RegisterForm'
 import { Logo } from '@/components/Logo'
 import { Text } from '@/components/Text'
 import { ThemeSwitch } from '@/components/ThemeSwitch'
 import { Title } from '@/components/Title'
 import { Waves } from '@/components/Waves'
 
-const Login = () => {
+const Register = () => {
   return (
-    <div className="bg-slate-200 relative dark:bg-rich-black-500 w-full h-full flex flex-col gap-4 items-center justify-center">
+    <div className="bg-slate-200 dark:bg-rich-black-500 mb-40 w-full h-full flex flex-col items-center justify-center">
       <ThemeSwitch />
-      <section className="flex flex-col gap-5 bg-red">
+      <section className="flex flex-col gap-5">
         <Logo width={300} height={300} />
-        <Title className="text-5xl">Entrar</Title>
+        <Title className="text-5xl">Cadastrar</Title>
         <div className="w-full text-center flex flex-col items-center justify-center">
           <Text className="text-xl font-medium">
-            Fa&ccedil;a <i>Login</i> e crie memórias
+            <i>Registre-se</i> e descubra no comum o que é
           </Text>
           <span className="text-pacific-blue-500 font-semibold italic text-2xl">
-            Inesquecíveis
+            Extraordinário
           </span>
         </div>
       </section>
+      <RegisterFormProvider>
+        <RegisterFormComponent />
+      </RegisterFormProvider>
 
-        <LoginFormProvider>
-          <LoginFormComponent />
-        </LoginFormProvider>
-      </div>
       <Waves />
-    </>
+    </div>
   )
 }
 
-export default Login
+export default Register
