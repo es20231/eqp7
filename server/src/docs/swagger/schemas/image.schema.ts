@@ -111,13 +111,13 @@ const createImageSchema = {
   tags: ['image'],
   type: 'object',
   security: [{ bearer: [] }],
-  body: {
-    type: 'object',
-    properties: {
-      userId: { type: 'string' },
-      file: { type: 'string', format: 'binary' },
-    },
-  },
+  // body: {
+  //   type: 'object',
+  //   properties: {
+  //     userId: { type: 'string' },
+  //     file: { type: 'string', format: 'binary' },
+  //   },
+  // },
   response: {
     200: {
       type: 'object',
@@ -184,5 +184,6 @@ export {
   deleteImageSchema,
   getImageByIdSchema,
   getImagesByUserIdSchema,
-  getImagesSchema,
+  getImagesSchema
 }
+

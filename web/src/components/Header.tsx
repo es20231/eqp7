@@ -3,15 +3,26 @@
 
 import { useUserStore } from '@/stores/user.store'
 import * as Avatar from '@radix-ui/react-avatar'
+import * as Dropdown from '@radix-ui/react-dropdown-menu'
+import { LogOut } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, useCallback } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { Button } from './Button'
 import { Logo } from './Logo'
+import { Text } from './Text'
 import { ThemeSwitch } from './ThemeSwitch'
 
 const Header = () => {
   const { userInfo } = useUserStore((state) => state)
+
+  const handleSignOut = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      signOut()
+    }
+  }, [])
 
   if (!userInfo) return null
 
@@ -43,18 +54,48 @@ const Header = () => {
         <NavOption name="Explorar" route="/dashboard/explore" />
       </div>
       <div className="w-full h-full relative flex flex-row px-12 items-center justify-between py-3 ">
-        <Avatar.Root className="border-[2px] rounded-full border-pacific-blue-500 overflow-hidden flex items-center justify-center h-10 w-10 bg-slate-600">
-          <Avatar.Image
-            alt="user image"
-            src={userInfo?.profilePicture || ''}
-            width={40}
-            height={40}
-            className=" h-10 w-10"
-          />
-          <Avatar.AvatarFallback className="text-slate-50">
-            {fallbackAvatar}
-          </Avatar.AvatarFallback>
-        </Avatar.Root>
+        <Dropdown.Root>
+          <Dropdown.Trigger asChild className="cursor-pointer">
+            <Avatar.Root className="border-[2px] rounded-full border-pacific-blue-500 overflow-hidden flex items-center justify-center h-10 w-10 bg-slate-600 hover:cursor-pointer">
+              <Avatar.Image
+                alt="user image"
+                src={userInfo?.profilePicture || ''}
+                width={40}
+                height={40}
+                className=" h-10 w-10"
+              />
+              <Avatar.AvatarFallback className="text-slate-50">
+                {fallbackAvatar}
+              </Avatar.AvatarFallback>
+            </Avatar.Root>
+          </Dropdown.Trigger>
+
+          <Dropdown.Portal>
+            <Dropdown.Content
+              sideOffset={5}
+              className="min-w-[220px] bg-gray-300 rounded-md shadow-lg p-4 dark:bg-slate-900/90 flex flex-col items-center justify-center gap-4 px-3 data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+            >
+              <Dropdown.Arrow className="fill-gray-300 dark:fill-slate-900" />
+              <Dropdown.Item className="w-full focus:outline-none">
+                <Link href="/dashboard/profile">
+                  <Text className="cursor-pointer text-center hover:bg-gray-400/30 dark:hover:bg-slate-700 transition-colors px-2 py-1 rounded-md">
+                    Visualizar perfil
+                  </Text>
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item className="focus:outline-none w-full">
+                <Button
+                  onClick={handleSignOut}
+                  rightIcon={<LogOut className="text-slate-50" size={20} />}
+                  className="text-base"
+                >
+                  Sair
+                </Button>
+              </Dropdown.Item>
+            </Dropdown.Content>
+          </Dropdown.Portal>
+        </Dropdown.Root>
+
         <ThemeSwitch className="relative inset-0" />
       </div>
     </nav>
