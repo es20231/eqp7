@@ -27,12 +27,12 @@ const Login = () => {
         </div>
       </section>
 
-        <LoginFormProvider>
-          <LoginFormComponent />
-        </LoginFormProvider>
-      </div>
+      <LoginFormProvider>
+        <LoginFormComponent />
+      </LoginFormProvider>
+
       <Waves />
-    </>
+    </div>
   )
 }
 
