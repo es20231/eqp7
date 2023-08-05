@@ -1,6 +1,5 @@
 'use client'
 
-import { UserImages } from '@/components/UserImages'
 import { useUserStore } from '@/stores/user.store'
 import { useSession } from 'next-auth/react'
 import { Suspense, useEffect } from 'react'
@@ -30,9 +29,6 @@ const Dashboard = () => {
           <h2>{userInfo?.email}</h2>
           <h2>{userInfo?.username}</h2>
           <h2>{userInfo?.emailVerified}</h2>
-        </div>
-        <div className="">
-          <UserImages token={userInfo.token} userId={userInfo.id} />
         </div>
       </Suspense>
     )

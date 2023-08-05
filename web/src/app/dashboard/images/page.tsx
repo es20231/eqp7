@@ -1,7 +1,27 @@
+'use client'
+
+import { Error } from '@/components/Error'
+import { Title } from '@/components/Title'
+import { UploadImage } from '@/components/UploadImage'
+import { UserImages } from '@/components/UserImages'
+import { useUserStore } from '@/stores/user.store'
+
 const Images = () => {
+  const { userInfo } = useUserStore((state) => state)
+
+  if (!userInfo) {
+    return (
+      <Error message="Ocorreu um erro ao carregar as informaçÕes do usuário" />
+    )
+  }
+
   return (
-    <div>
-      <h1>Images</h1>
+    <div className="h-full px-4">
+      <div className="flex flex-row items-center justify-between px-8 py-2 w-full">
+        <Title className="w-fit">Suas Imagens</Title>
+        <UploadImage token={userInfo.token} userId={userInfo.id} />
+      </div>
+      <UserImages token={userInfo.token} userId={userInfo.id} />
     </div>
   )
 }
