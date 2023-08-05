@@ -1,6 +1,7 @@
 'use client'
 
 import { Error } from '@/components/Error'
+import { useCreatePost } from '@/mutations/post.mutation'
 import { useDeleteImage } from '@/queries/image.query'
 import { UserImagesDTO, useGetUserImages } from '@/queries/user.query'
 import { queryClient } from '@/services/queryClient'
@@ -83,8 +84,22 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
 
   const { handleSubmit, reset } = useFormContext<CreateNewPostFormData>()
 
+  const { mutate: createPost } = useCreatePost()
+
   const handleCreateNewPost = handleSubmit(({ imageId, subtitle, userId }) => {
-    console.log({ imageId, subtitle, userId })
+    createPost(
+      { post: { imageId, subtitle, userId }, token },
+      {
+        onSuccess: (res) => {
+          console.log('post create success', res)
+          toast.success('Post criado com sucesso')
+        },
+        onError: (err) => {
+          console.log('post create error', err)
+          toast.error('Erro ao criar post')
+        },
+      },
+    )
     reset()
     setIsOpen(false)
   })
@@ -156,7 +171,10 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
                   </div>
                 </div>
               </div>
-              <Dialog.Close className="absolute top-8 right-8 p-2">
+              <Dialog.Close
+                onClick={() => setIsOpen(false)}
+                className="absolute top-8 right-8 p-2"
+              >
                 <X />
               </Dialog.Close>
             </Dialog.Content>
