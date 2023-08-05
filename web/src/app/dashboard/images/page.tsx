@@ -16,9 +16,9 @@ const Images = () => {
   }
 
   return (
-    <div className="h-full px-4">
-      <div className="flex flex-row items-center justify-between px-8 py-2 w-full">
-        <Title className="w-fit">Suas Imagens</Title>
+    <div className="h-full px-4 w-full max-w-[70%]">
+      <div className="flex flex-row items-center justify-between px-4 py-2 w-full">
+        <Title className="w-fit">Minhas imagens</Title>
         <UploadImage token={userInfo.token} userId={userInfo.id} />
       </div>
       <UserImages token={userInfo.token} userId={userInfo.id} />
