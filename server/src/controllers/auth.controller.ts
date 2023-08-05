@@ -3,19 +3,27 @@ import { z } from 'zod'
 import { CreateActivateTokenDTO } from '../dtos/activate-token/create-activate-token.dto'
 import { CreateUserDTO } from '../dtos/user/create-user.dto'
 import { instantiatedAuthService } from '../factories/auth.factory'
-import { MemoryActivateTokenRepository } from '../repositories/implementations/memory/activate-token.repository'
-import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
-import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { PrismaActivateTokenRepository } from '../repositories/implementations/prisma/activate-token.repository'
+import { PrismaImageRepository } from '../repositories/implementations/prisma/image.repository'
+import { PrismaPostRepository } from '../repositories/implementations/prisma/post.repository'
+import { PrismaUserRepository } from '../repositories/implementations/prisma/user.repository'
 import { NodemailerMailService } from '../services/outsourced/implementations/NodemailerMailService'
 import { handleZodParse } from '../utils'
 
+// const authService = instantiatedAuthService(
+//   MemoryActivateTokenRepository,
+//   NodemailerMailService,
+//   MemoryUserRepository,
+//   MemoryImageRepository,
+//   MemoryPostRepository,
+// )
+
 const authService = instantiatedAuthService(
-  MemoryActivateTokenRepository,
+  PrismaActivateTokenRepository,
   NodemailerMailService,
-  MemoryUserRepository,
-  MemoryImageRepository,
-  MemoryPostRepository,
+  PrismaUserRepository,
+  PrismaImageRepository,
+  PrismaPostRepository,
 )
 
 const AuthController = {
