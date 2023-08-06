@@ -33,6 +33,7 @@ const Input = ({
       {left && <div>{left}</div>}
       <input
         id={name}
+        autoComplete="off"
         className={twMerge([
           'flex-1 py-2 text-lg text-slate-50 focus:outline-none',
           className,
