@@ -9,7 +9,7 @@ const Waves = () => {
 
   return (
     <Suspense fallback={null}>
-      <div className="absolute bottom-0 left-0 w-full z-0">
+      <div className="absolute -bottom-4 w-full overflow-hidden">
         <Image
           src={theme === 'light' ? wavesLight : wavesDark}
           alt="Waves"
