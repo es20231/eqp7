@@ -29,6 +29,10 @@ describe('PrismaActivateTokenRepository', () => {
     userId = user.id
   })
 
+  afterAll(async () => {
+    await prisma.user.deleteMany()
+  })
+
   afterEach(async () => {
     await clearPrismaActivateToken()
   })

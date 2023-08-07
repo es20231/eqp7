@@ -4,7 +4,7 @@ import { delay, generateRandomId } from '../../../utils'
 import { ICommentRepository } from '../../icomment.repository'
 
 const comments = [] as Comment[]
-const MemoryImageRepository: ICommentRepository = {
+const MemoryCommentRepository: ICommentRepository = {
   getCommentById: async (id: string) => {
     await delay()
     const comment = comments.find((comment) => comment.id === id)
@@ -50,4 +50,4 @@ const clearCommentMemory = async () => {
   comments.splice(0, comments.length)
 }
 
-export { MemoryImageRepository, clearCommentMemory }
+export { MemoryCommentRepository, clearCommentMemory }
