@@ -3,11 +3,12 @@
 import * as Switch from '@radix-ui/react-switch'
 import { MoonStar, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { Suspense, useCallback } from 'react'
+import { HTMLAttributes, Suspense, useCallback } from 'react'
+import { twMerge } from 'tailwind-merge'
 
-// interface ThemeSwitchProps {}
+type ThemeSwitchProps = HTMLAttributes<'div'>
 
-const ThemeSwitch = () => {
+const ThemeSwitch = ({ className }: ThemeSwitchProps) => {
   const { theme, setTheme } = useTheme()
 
   const handleToggleTheme = useCallback(() => {
@@ -16,14 +17,19 @@ const ThemeSwitch = () => {
 
   return (
     <Suspense fallback={null}>
-      <div className="absolute top-8 right-8 flex flex-row gap-2">
+      <div
+        className={twMerge(
+          'absolute top-8 right-8 flex flex-row gap-2',
+          className,
+        )}
+      >
         <MoonStar
           className="text-zinc-700 dark:text-slate-200"
           size={24}
           strokeWidth={2}
         />
         <Switch.Root
-          className="w-[42px] h-[25px] bg-zinc-800 dark:bg-white rounded-full relative shadow-[0_2px_10px] shadow-zinc-800 focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-black outline-none cursor-default"
+          className="w-[42px] h-[26px] bg-zinc-800 dark:bg-white rounded-full relative shadow-[0_2px_10px] shadow-zinc-800 focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-black outline-none cursor-default"
           onCheckedChange={handleToggleTheme}
           data-state={theme && theme !== 'dark' ? 'checked' : 'unchecked'}
           defaultValue={theme && theme !== 'dark' ? 'on' : 'off'}
