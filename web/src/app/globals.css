@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 main {
-    @apply bg-slate-200 dark:bg-rich-black-500;
+  @apply bg-slate-200 dark:bg-rich-black-500
 }

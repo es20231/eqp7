@@ -3,10 +3,11 @@ import { QueryFunctionContext, useQuery } from 'react-query'
 
 type GetUserImagesQueryKey = ['images', { token: string; userId: string }]
 
-export type UserImages = {
+export type UserImagesDTO = {
   id: string
   url: string
   userId: string
+  createdAt: string
 }
 
 const getUserImages = async ({
@@ -18,10 +19,15 @@ const getUserImages = async ({
 
   console.log('getUserImagesData', data)
 
-  return data.payload as UserImages[]
+  return data.payload as UserImagesDTO[]
 }
 
-const useGetUserImages = (token: string, userId: string) => {
+interface UseGetUserImageProps {
+  token: string
+  userId: string
+}
+
+const useGetUserImages = ({ token, userId }: UseGetUserImageProps) => {
   return useQuery(['images', { token, userId }], getUserImages)
 }
 
@@ -46,7 +52,12 @@ const getUserPosts = async ({
   return data.payload as UserPosts[]
 }
 
-const useGetUserPosts = (token: string, userId: string) => {
+interface UseGetUserPostsProps {
+  token: string
+  userId: string
+}
+
+const useGetUserPosts = ({ token, userId }: UseGetUserPostsProps) => {
   return useQuery(['posts', { token, userId }], getUserPosts)
 }
 
