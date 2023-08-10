@@ -1,15 +1,21 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedPostService } from '../factories/post.factory'
-import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
-import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { PrismaImageRepository } from '../repositories/implementations/prisma/image.repository'
+import { PrismaPostRepository } from '../repositories/implementations/prisma/post.repository'
+import { PrismaUserRepository } from '../repositories/implementations/prisma/user.repository'
 import { handleZodParse } from '../utils'
 
+// const postService = instantiatedPostService(
+//   MemoryPostRepository,
+//   MemoryUserRepository,
+//   MemoryImageRepository,
+// )
+
 const postService = instantiatedPostService(
-  MemoryPostRepository,
-  MemoryUserRepository,
-  MemoryImageRepository,
+  PrismaPostRepository,
+  PrismaUserRepository,
+  PrismaImageRepository,
 )
 
 const PostController = {

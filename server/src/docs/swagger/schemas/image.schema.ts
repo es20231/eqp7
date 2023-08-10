@@ -191,5 +191,6 @@ export {
   deleteImageSchema,
   getImageByIdSchema,
   getImagesByUserIdSchema,
-  getImagesSchema,
+  getImagesSchema
 }
+
