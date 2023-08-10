@@ -11,19 +11,22 @@ const MemoryCommentRepository: ICommentRepository = {
 
     return comment || undefined
   },
-  getComments: async () => {
+  getComments: async (take: number, skip: number) => {
     await delay()
-    return comments
+    const commentsToReturn = comments.slice(skip, skip + take)
+    return commentsToReturn
   },
-  getCommentsByUserId: async (userId: string) => {
+  getCommentsByUserId: async (userId: string, take: number, skip: number) => {
     await delay()
     const userComments = comments.filter((comment) => comment.userId === userId)
-    return userComments
+    const commentsToReturn = userComments.slice(skip, skip + take)
+    return commentsToReturn
   },
-  getCommentsByPostId: async (postId: string) => {
+  getCommentsByPostId: async (postId: string, take: number, skip: number) => {
     await delay()
     const postComments = comments.filter((comment) => comment.postId === postId)
-    return postComments
+    const commentsToReturn = postComments.slice(skip, skip + take)
+    return commentsToReturn
   },
   createComment: async (comment: CreateCommentDTO) => {
     await delay()

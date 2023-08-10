@@ -4,6 +4,7 @@ import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
 import Fastify from 'fastify'
 import { AuthRoutes } from './routes/auth.routes'
+import { commentRoutes } from './routes/comment.routes'
 import { ImageRoutes } from './routes/image.routes'
 import { PostRoutes } from './routes/post.routes'
 import { UserRoutes } from './routes/user.routes'
@@ -86,6 +87,7 @@ async function bootstrap() {
   fastify.register(PostRoutes)
   fastify.register(ImageRoutes)
   fastify.register(AuthRoutes)
+  fastify.register(commentRoutes)
 
   fastify.get('/', async () => {
     return {

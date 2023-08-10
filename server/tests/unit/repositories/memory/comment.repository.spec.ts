@@ -55,24 +55,24 @@ describe('MemoryCommentRepository', () => {
   })
   it('should get all comments', async () => {
     const comment1 = {
-      content: 'Comment Content',
+      content: 'Comment Content 1',
       userId,
       postId,
     }
     const comment2 = {
-      content: 'Comment Content',
+      content: 'Comment Content 2',
       userId,
       postId,
     }
     const comment3 = {
-      content: 'Comment Content',
+      content: 'Comment Content 3',
       userId,
       postId,
     }
     await repository.createComment(comment1)
     await repository.createComment(comment2)
     await repository.createComment(comment3)
-    const comments = await repository.getComments()
+    const comments = await repository.getComments(10, 0)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(3)
     expect(comments[0]).toStrictEqual({
@@ -96,6 +96,96 @@ describe('MemoryCommentRepository', () => {
       content: comment3.content,
       userId: comment3.userId,
       postId: comment3.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should return two comments when try to get all comments with take 2', async () => {
+    const comment1 = {
+      content: 'Comment Content 1',
+      userId,
+      postId,
+    }
+    const comment2 = {
+      content: 'Comment Content 2',
+      userId,
+      postId,
+    }
+    const comment3 = {
+      content: 'Comment Content 3',
+      userId,
+      postId,
+    }
+    const comment4 = {
+      content: 'Comment Content 4',
+      userId,
+      postId,
+    }
+    await repository.createComment(comment1)
+    await repository.createComment(comment2)
+    await repository.createComment(comment3)
+    await repository.createComment(comment4)
+    const comments = await repository.getComments(2, 0)
+    expect(comments).toBeTruthy()
+    expect(comments.length).toBe(2)
+    expect(comments[0]).toStrictEqual({
+      id: expect.any(String),
+      content: comment1.content,
+      userId: comment1.userId,
+      postId: comment1.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+    expect(comments[1]).toStrictEqual({
+      id: expect.any(String),
+      content: comment2.content,
+      userId: comment2.userId,
+      postId: comment2.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should return two comments when try to get all comments with skip 2', async () => {
+    const comment1 = {
+      content: 'Comment Content 1',
+      userId,
+      postId,
+    }
+    const comment2 = {
+      content: 'Comment Content 2',
+      userId,
+      postId,
+    }
+    const comment3 = {
+      content: 'Comment Content 3',
+      userId,
+      postId,
+    }
+    const comment4 = {
+      content: 'Comment Content 4',
+      userId,
+      postId,
+    }
+    await repository.createComment(comment1)
+    await repository.createComment(comment2)
+    await repository.createComment(comment3)
+    await repository.createComment(comment4)
+    const comments = await repository.getComments(2, 2)
+    expect(comments).toBeTruthy()
+    expect(comments.length).toBe(2)
+    expect(comments[0]).toStrictEqual({
+      id: expect.any(String),
+      content: comment3.content,
+      userId: comment3.userId,
+      postId: comment3.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+    expect(comments[1]).toStrictEqual({
+      id: expect.any(String),
+      content: comment4.content,
+      userId: comment4.userId,
+      postId: comment4.postId,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -119,7 +209,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment1)
     await repository.createComment(comment2)
     await repository.createComment(comment3)
-    const comments = await repository.getCommentsByPostId(postId)
+    const comments = await repository.getCommentsByPostId(postId, 10, 0)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(3)
     expect(comments[0]).toStrictEqual({
@@ -147,6 +237,96 @@ describe('MemoryCommentRepository', () => {
       updatedAt: expect.any(Date),
     })
   })
+  it('should return two comments when try to get all comments from a post with take 2', async () => {
+    const comment1 = {
+      content: 'Comment Content 1',
+      userId,
+      postId,
+    }
+    const comment2 = {
+      content: 'Comment Content 2',
+      userId,
+      postId,
+    }
+    const comment3 = {
+      content: 'Comment Content 3',
+      userId,
+      postId,
+    }
+    const comment4 = {
+      content: 'Comment Content 4',
+      userId,
+      postId,
+    }
+    await repository.createComment(comment1)
+    await repository.createComment(comment2)
+    await repository.createComment(comment3)
+    await repository.createComment(comment4)
+    const comments = await repository.getCommentsByPostId(postId, 2, 0)
+    expect(comments).toBeTruthy()
+    expect(comments.length).toBe(2)
+    expect(comments[0]).toStrictEqual({
+      id: expect.any(String),
+      content: comment1.content,
+      userId: comment1.userId,
+      postId: comment1.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+    expect(comments[1]).toStrictEqual({
+      id: expect.any(String),
+      content: comment2.content,
+      userId: comment2.userId,
+      postId: comment2.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should return two comments when try to get all comments from a post with skip 2', async () => {
+    const comment1 = {
+      content: 'Comment Content 1',
+      userId,
+      postId,
+    }
+    const comment2 = {
+      content: 'Comment Content 2',
+      userId,
+      postId,
+    }
+    const comment3 = {
+      content: 'Comment Content 3',
+      userId,
+      postId,
+    }
+    const comment4 = {
+      content: 'Comment Content 4',
+      userId,
+      postId,
+    }
+    await repository.createComment(comment1)
+    await repository.createComment(comment2)
+    await repository.createComment(comment3)
+    await repository.createComment(comment4)
+    const comments = await repository.getCommentsByPostId(postId, 2, 2)
+    expect(comments).toBeTruthy()
+    expect(comments.length).toBe(2)
+    expect(comments[0]).toStrictEqual({
+      id: expect.any(String),
+      content: comment3.content,
+      userId: comment3.userId,
+      postId: comment3.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+    expect(comments[1]).toStrictEqual({
+      id: expect.any(String),
+      content: comment4.content,
+      userId: comment4.userId,
+      postId: comment4.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
   it('should get all comments from a user', async () => {
     const comment1 = {
       content: 'Comment Content',
@@ -166,7 +346,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment1)
     await repository.createComment(comment2)
     await repository.createComment(comment3)
-    const comments = await repository.getCommentsByUserId(userId)
+    const comments = await repository.getCommentsByUserId(userId, 10, 0)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(3)
     expect(comments[0]).toStrictEqual({
@@ -190,6 +370,96 @@ describe('MemoryCommentRepository', () => {
       content: comment3.content,
       userId: comment3.userId,
       postId: comment3.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should return two comments when try to get all comments from a user with take 2', async () => {
+    const comment1 = {
+      content: 'Comment Content 1',
+      userId,
+      postId,
+    }
+    const comment2 = {
+      content: 'Comment Content 2',
+      userId,
+      postId,
+    }
+    const comment3 = {
+      content: 'Comment Content 3',
+      userId,
+      postId,
+    }
+    const comment4 = {
+      content: 'Comment Content 4',
+      userId,
+      postId,
+    }
+    await repository.createComment(comment1)
+    await repository.createComment(comment2)
+    await repository.createComment(comment3)
+    await repository.createComment(comment4)
+    const comments = await repository.getCommentsByUserId(userId, 2, 0)
+    expect(comments).toBeTruthy()
+    expect(comments.length).toBe(2)
+    expect(comments[0]).toStrictEqual({
+      id: expect.any(String),
+      content: comment1.content,
+      userId: comment1.userId,
+      postId: comment1.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+    expect(comments[1]).toStrictEqual({
+      id: expect.any(String),
+      content: comment2.content,
+      userId: comment2.userId,
+      postId: comment2.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+  })
+  it('should return two comments when try to get all comments from a user with skip 2', async () => {
+    const comment1 = {
+      content: 'Comment Content 1',
+      userId,
+      postId,
+    }
+    const comment2 = {
+      content: 'Comment Content 2',
+      userId,
+      postId,
+    }
+    const comment3 = {
+      content: 'Comment Content 3',
+      userId,
+      postId,
+    }
+    const comment4 = {
+      content: 'Comment Content 4',
+      userId,
+      postId,
+    }
+    await repository.createComment(comment1)
+    await repository.createComment(comment2)
+    await repository.createComment(comment3)
+    await repository.createComment(comment4)
+    const comments = await repository.getCommentsByUserId(userId, 2, 2)
+    expect(comments).toBeTruthy()
+    expect(comments.length).toBe(2)
+    expect(comments[0]).toStrictEqual({
+      id: expect.any(String),
+      content: comment3.content,
+      userId: comment3.userId,
+      postId: comment3.postId,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+    expect(comments[1]).toStrictEqual({
+      id: expect.any(String),
+      content: comment4.content,
+      userId: comment4.userId,
+      postId: comment4.postId,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })

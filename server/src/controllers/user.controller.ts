@@ -19,6 +19,7 @@ const UserService = instantiatedUserService(
 
 const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
+    console.log(request.sentBy)
     const { ok, message, payload } = await UserService.getUsers()
 
     if (!ok || !payload) {

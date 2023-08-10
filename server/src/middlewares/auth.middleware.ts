@@ -43,6 +43,7 @@ const authenticate = (
         message: 'Invalid token',
       })
 
+    request.sentBy = jwt.decode(token).id
     return next()
   })
 }

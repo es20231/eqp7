@@ -11,24 +11,31 @@ const PrismaCommentRepository: ICommentRepository = {
     })
     return comment || undefined
   },
-  getCommentsByUserId: async (userId: string) => {
+  getCommentsByUserId: async (userId: string, take: number, skip: number) => {
     const comments = await prisma.comment.findMany({
       where: {
         userId,
       },
+      take,
+      skip,
     })
     return comments
   },
-  getCommentsByPostId: async (postId: string) => {
+  getCommentsByPostId: async (postId: string, take: number, skip: number) => {
     const comments = await prisma.comment.findMany({
       where: {
         postId,
       },
+      take,
+      skip,
     })
     return comments
   },
-  getComments: async () => {
-    const comments = await prisma.comment.findMany()
+  getComments: async (take: number, skip: number) => {
+    const comments = await prisma.comment.findMany({
+      take,
+      skip,
+    })
     return comments
   },
   createComment: async (comment: CreateCommentDTO) => {

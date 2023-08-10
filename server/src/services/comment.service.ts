@@ -6,12 +6,20 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface ICommentService {
-  getComments: () => Promise<ServiceResult<Comment[]>>
-  getCommentById: (id: string) => Promise<ServiceResult<Comment>>
-  getCommentsByPostId: (postId: string) => Promise<ServiceResult<Comment[]>>
-  getCommentsByUserId: (userId: string) => Promise<ServiceResult<Comment[]>>
-  createComment: (comment: CreateCommentDTO) => Promise<ServiceResult<Comment>>
-  deleteComment: (id: string) => Promise<ServiceResult<void>>
+  getComments(take: string, skip: string): Promise<ServiceResult<Comment[]>>
+  getCommentById(id: string): Promise<ServiceResult<Comment>>
+  getCommentsByPostId(
+    postId: string,
+    take: string,
+    skip: string,
+  ): Promise<ServiceResult<Comment[]>>
+  getCommentsByUserId(
+    userId: string,
+    take: string,
+    skip: string,
+  ): Promise<ServiceResult<Comment[]>>
+  createComment(comment: CreateCommentDTO): Promise<ServiceResult<Comment>>
+  deleteComment(id: string): Promise<ServiceResult<void>>
 }
 
 const CommentService = (
@@ -19,8 +27,14 @@ const CommentService = (
   userRepository: IUserRepository,
   postRepository: IPostRepository,
 ): ICommentService => ({
-  getComments: async (): Promise<ServiceResult<Comment[]>> => {
-    const comments = await commentRepository.getComments()
+  getComments: async (
+    take: string,
+    skip: string,
+  ): Promise<ServiceResult<Comment[]>> => {
+    const comments = await commentRepository.getComments(
+      parseInt(take),
+      parseInt(skip),
+    )
     return {
       ok: true,
       message: 'Comments found successfully',
@@ -44,6 +58,8 @@ const CommentService = (
   },
   getCommentsByPostId: async (
     postId: string,
+    take: string,
+    skip: string,
   ): Promise<ServiceResult<Comment[]>> => {
     const post = await postRepository.getPostById(postId)
     if (!post) {
@@ -53,7 +69,11 @@ const CommentService = (
         payload: undefined,
       }
     }
-    const comments = await commentRepository.getCommentsByPostId(postId)
+    const comments = await commentRepository.getCommentsByPostId(
+      postId,
+      parseInt(take),
+      parseInt(skip),
+    )
     return {
       ok: true,
       message: 'Comments found successfully',
@@ -62,6 +82,8 @@ const CommentService = (
   },
   getCommentsByUserId: async (
     userId: string,
+    take: string,
+    skip: string,
   ): Promise<ServiceResult<Comment[]>> => {
     const user = await userRepository.getUserById(userId)
     if (!user) {
@@ -71,7 +93,11 @@ const CommentService = (
         payload: undefined,
       }
     }
-    const comments = await commentRepository.getCommentsByUserId(userId)
+    const comments = await commentRepository.getCommentsByUserId(
+      userId,
+      parseInt(take),
+      parseInt(skip),
+    )
     return {
       ok: true,
       message: 'Comments found successfully',

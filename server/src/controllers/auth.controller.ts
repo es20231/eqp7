@@ -20,6 +20,7 @@ const authService = instantiatedAuthService(
 
 const AuthController = {
   login: async (request: FastifyRequest, reply: FastifyReply) => {
+    console.log(request.sentBy)
     const bodySchema = z
       .object({
         username: z.string().nonempty('Username is required'),
