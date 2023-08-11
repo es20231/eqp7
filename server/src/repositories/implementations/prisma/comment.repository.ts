@@ -11,7 +11,7 @@ const PrismaCommentRepository: ICommentRepository = {
     })
     return comment || undefined
   },
-  getCommentsByUserId: async (userId: string, take: number, skip: number) => {
+  getCommentsByUserId: async (userId: string, take?: number, skip?: number) => {
     const comments = await prisma.comment.findMany({
       where: {
         userId,
@@ -21,7 +21,7 @@ const PrismaCommentRepository: ICommentRepository = {
     })
     return comments
   },
-  getCommentsByPostId: async (postId: string, take: number, skip: number) => {
+  getCommentsByPostId: async (postId: string, take?: number, skip?: number) => {
     const comments = await prisma.comment.findMany({
       where: {
         postId,
@@ -31,7 +31,7 @@ const PrismaCommentRepository: ICommentRepository = {
     })
     return comments
   },
-  getComments: async (take: number, skip: number) => {
+  getComments: async (take?: number, skip?: number) => {
     const comments = await prisma.comment.findMany({
       take,
       skip,

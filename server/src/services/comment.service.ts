@@ -6,17 +6,17 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface ICommentService {
-  getComments(take: number, skip: number): Promise<ServiceResult<Comment[]>>
+  getComments(take?: number, skip?: number): Promise<ServiceResult<Comment[]>>
   getCommentById(id: string): Promise<ServiceResult<Comment>>
   getCommentsByPostId(
     postId: string,
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<ServiceResult<Comment[]>>
   getCommentsByUserId(
     userId: string,
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<ServiceResult<Comment[]>>
   createComment(comment: CreateCommentDTO): Promise<ServiceResult<Comment>>
   deleteComment(id: string): Promise<ServiceResult<void>>
@@ -28,8 +28,8 @@ const CommentService = (
   postRepository: IPostRepository,
 ): ICommentService => ({
   getComments: async (
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<ServiceResult<Comment[]>> => {
     const comments = await commentRepository.getComments(take, skip)
     return {
@@ -55,8 +55,8 @@ const CommentService = (
   },
   getCommentsByPostId: async (
     postId: string,
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<ServiceResult<Comment[]>> => {
     const post = await postRepository.getPostById(postId)
     if (!post) {
@@ -79,8 +79,8 @@ const CommentService = (
   },
   getCommentsByUserId: async (
     userId: string,
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<ServiceResult<Comment[]>> => {
     const user = await userRepository.getUserById(userId)
     if (!user) {

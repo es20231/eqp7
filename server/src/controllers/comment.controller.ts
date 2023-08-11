@@ -22,8 +22,8 @@ const CommentController = {
   getComments: async (request: FastifyRequest, reply: FastifyReply) => {
     const queryParamsSchema = z
       .object({
-        take: z.number().int().nonnegative(),
-        skip: z.number().int().nonnegative(),
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
       })
       .strict()
 
@@ -82,8 +82,8 @@ const CommentController = {
   getCommentsByUserId: async (request: FastifyRequest, reply: FastifyReply) => {
     const queryParamsSchema = z
       .object({
-        take: z.number().int().nonnegative(),
-        skip: z.number().int().nonnegative(),
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
       })
       .strict()
 
@@ -130,8 +130,8 @@ const CommentController = {
   getCommentsByPostId: async (request: FastifyRequest, reply: FastifyReply) => {
     const queryParamsSchema = z
       .object({
-        take: z.number().int().nonnegative(),
-        skip: z.number().int().nonnegative(),
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
       })
       .strict()
 

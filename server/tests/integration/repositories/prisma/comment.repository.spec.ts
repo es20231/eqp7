@@ -123,7 +123,7 @@ describe('PrismaCommentRepository', () => {
 
     await repository.createComment(comment2)
 
-    const comments = await repository.getComments(10, 0)
+    const comments = await repository.getComments()
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
@@ -170,7 +170,7 @@ describe('PrismaCommentRepository', () => {
 
     await repository.createComment(comment3)
 
-    const comments = await repository.getComments(2, 0)
+    const comments = await repository.getComments(2)
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
@@ -192,7 +192,7 @@ describe('PrismaCommentRepository', () => {
     })
   })
 
-  it('should return two comments when try to get all comments with skip 2', async () => {
+  it('should return two comments when try to get all comments with take 2 and skip 2', async () => {
     const comment1 = {
       content: 'Teste 1',
       userId,
@@ -264,7 +264,7 @@ describe('PrismaCommentRepository', () => {
 
     await repository.createComment(comment2)
 
-    const comments = await repository.getCommentsByPostId(postId, 10, 0)
+    const comments = await repository.getCommentsByPostId(postId)
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
@@ -312,7 +312,7 @@ describe('PrismaCommentRepository', () => {
 
     await repository.createComment(comment3)
 
-    const comments = await repository.getCommentsByPostId(postId, 2, 0)
+    const comments = await repository.getCommentsByPostId(postId, 2)
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
@@ -334,7 +334,7 @@ describe('PrismaCommentRepository', () => {
     })
   })
 
-  it('should return two comments from a post when try to get all comments with skip 2', async () => {
+  it('should return two comments from a post when try to get all comments with take 2 and skip 2', async () => {
     const comment1 = {
       content: 'Teste 1',
       userId,
@@ -392,8 +392,6 @@ describe('PrismaCommentRepository', () => {
   it('should return an empty array when try to get comments from a non existent post', async () => {
     const comments = await repository.getCommentsByPostId(
       'non-existent-post-id',
-      10,
-      0,
     )
 
     expect(comments).toBeTruthy()
@@ -403,8 +401,6 @@ describe('PrismaCommentRepository', () => {
   it('should return an empty array when try to get comments from a non existent user', async () => {
     const comments = await repository.getCommentsByUserId(
       'non-existent-user-id',
-      10,
-      0,
     )
 
     expect(comments).toBeTruthy()
@@ -428,7 +424,7 @@ describe('PrismaCommentRepository', () => {
 
     await repository.createComment(comment2)
 
-    const comments = await repository.getCommentsByUserId(userId, 10, 0)
+    const comments = await repository.getCommentsByUserId(userId)
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
@@ -476,7 +472,7 @@ describe('PrismaCommentRepository', () => {
 
     await repository.createComment(comment3)
 
-    const comments = await repository.getCommentsByUserId(userId, 2, 0)
+    const comments = await repository.getCommentsByUserId(userId, 2)
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
@@ -498,7 +494,7 @@ describe('PrismaCommentRepository', () => {
     })
   })
 
-  it('should return two comments from a user when try to get all comments with skip 2', async () => {
+  it('should return two comments from a user when try to get all comments with take 2 and skip 2', async () => {
     const comment1 = {
       content: 'Teste 1',
       userId,

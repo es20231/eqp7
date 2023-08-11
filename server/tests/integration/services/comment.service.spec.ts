@@ -162,7 +162,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment3)
 
-      const result = await service.getComments(2, 0)
+      const result = await service.getComments(2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -189,7 +189,7 @@ describe('MemoryCommentService', () => {
       )
     })
 
-    it('should get two comments when try to get all comments with skip 2', async () => {
+    it('should get two comments when try to get all comments with take 2 and skip 2', async () => {
       const comment1 = {
         content: 'Comment Test 1',
         userId,
@@ -297,7 +297,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByUserId(userId, 2, 0)
+      const result = await service.getCommentsByUserId(userId, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -323,7 +323,7 @@ describe('MemoryCommentService', () => {
         ]),
       )
     })
-    it('should get two comments when try to get all comments with skip 2 and user id', async () => {
+    it('should get two comments when try to get all comments with take 2, skip 2 and user id', async () => {
       const comment1 = {
         content: 'Comment Test 1',
         userId,
@@ -415,7 +415,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByPostId(postId, 2, 0)
+      const result = await service.getCommentsByPostId(postId, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -441,7 +441,7 @@ describe('MemoryCommentService', () => {
         ]),
       )
     })
-    it('should get two comments when try to get all comments with skip 2 and post id', async () => {
+    it('should get two comments when try to get all comments with take 2, skip 2 and post id', async () => {
       const comment1 = {
         content: 'Comment Test 1',
         userId,
@@ -690,7 +690,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment2)
 
-      const result = await service.getComments(10, 0)
+      const result = await service.getComments()
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -741,7 +741,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment3)
 
-      const result = await service.getCommentsByUserId(userId, 2, 0)
+      const result = await service.getCommentsByUserId(userId, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -792,7 +792,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment3)
 
-      const result = await service.getCommentsByPostId(postId, 2, 0)
+      const result = await service.getCommentsByPostId(postId, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -818,7 +818,7 @@ describe('PrismaCommentService', () => {
         ]),
       )
     })
-    it('should get two comments when try to get all comments with skip 2 and user id', async () => {
+    it('should get two comments when try to get all comments with take 2, skip 2 and user id', async () => {
       const comment1 = {
         content: 'Comment Test 1',
         userId,
@@ -877,7 +877,7 @@ describe('PrismaCommentService', () => {
         ]),
       )
     })
-    it('should get two comments when try to get all comments with skip 2 and post id', async () => {
+    it('should get two comments when try to get all comments with take 2, skip 2 and post id', async () => {
       const comment1 = {
         content: 'Comment Test 1',
         userId,
