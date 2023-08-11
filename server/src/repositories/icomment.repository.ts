@@ -6,15 +6,15 @@ interface ICommentRepository {
   getCommentById(id: string): Promise<Comment | undefined>
   getCommentsByUserId(
     userId: string,
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<Comment[]>
   getCommentsByPostId(
     postId: string,
-    take: number,
-    skip: number,
+    take?: number,
+    skip?: number,
   ): Promise<Comment[]>
-  getComments(take: number, skip: number): Promise<Comment[]>
+  getComments(take?: number, skip?: number): Promise<Comment[]>
   deleteComment(id: string): Promise<Comment>
 }
 

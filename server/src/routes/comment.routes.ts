@@ -10,7 +10,7 @@ import {
 } from '../docs/swagger/schemas/comment.schema'
 import { authenticate } from '../middlewares/auth.middleware'
 
-const commentRoutes = (
+const CommentRoutes = (
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
   done: any,
@@ -81,4 +81,4 @@ const commentRoutes = (
   done()
 }
 
-export { commentRoutes }
+export { CommentRoutes }

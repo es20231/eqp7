@@ -72,7 +72,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment1)
     await repository.createComment(comment2)
     await repository.createComment(comment3)
-    const comments = await repository.getComments(10, 0)
+    const comments = await repository.getComments()
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(3)
     expect(comments[0]).toStrictEqual({
@@ -125,7 +125,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment2)
     await repository.createComment(comment3)
     await repository.createComment(comment4)
-    const comments = await repository.getComments(2, 0)
+    const comments = await repository.getComments(2)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
     expect(comments[0]).toStrictEqual({
@@ -145,7 +145,7 @@ describe('MemoryCommentRepository', () => {
       updatedAt: expect.any(Date),
     })
   })
-  it('should return two comments when try to get all comments with skip 2', async () => {
+  it('should return two comments when try to get all comments with take 2 and skip 2', async () => {
     const comment1 = {
       content: 'Comment Content 1',
       userId,
@@ -209,7 +209,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment1)
     await repository.createComment(comment2)
     await repository.createComment(comment3)
-    const comments = await repository.getCommentsByPostId(postId, 10, 0)
+    const comments = await repository.getCommentsByPostId(postId)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(3)
     expect(comments[0]).toStrictEqual({
@@ -262,7 +262,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment2)
     await repository.createComment(comment3)
     await repository.createComment(comment4)
-    const comments = await repository.getCommentsByPostId(postId, 2, 0)
+    const comments = await repository.getCommentsByPostId(postId, 2)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
     expect(comments[0]).toStrictEqual({
@@ -282,7 +282,7 @@ describe('MemoryCommentRepository', () => {
       updatedAt: expect.any(Date),
     })
   })
-  it('should return two comments when try to get all comments from a post with skip 2', async () => {
+  it('should return two comments when try to get all comments from a post with take 2 skip 2', async () => {
     const comment1 = {
       content: 'Comment Content 1',
       userId,
@@ -346,7 +346,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment1)
     await repository.createComment(comment2)
     await repository.createComment(comment3)
-    const comments = await repository.getCommentsByUserId(userId, 10, 0)
+    const comments = await repository.getCommentsByUserId(userId)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(3)
     expect(comments[0]).toStrictEqual({
@@ -399,7 +399,7 @@ describe('MemoryCommentRepository', () => {
     await repository.createComment(comment2)
     await repository.createComment(comment3)
     await repository.createComment(comment4)
-    const comments = await repository.getCommentsByUserId(userId, 2, 0)
+    const comments = await repository.getCommentsByUserId(userId, 2)
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
     expect(comments[0]).toStrictEqual({
@@ -419,7 +419,7 @@ describe('MemoryCommentRepository', () => {
       updatedAt: expect.any(Date),
     })
   })
-  it('should return two comments when try to get all comments from a user with skip 2', async () => {
+  it('should return two comments when try to get all comments from a user with take 2 and skip 2', async () => {
     const comment1 = {
       content: 'Comment Content 1',
       userId,

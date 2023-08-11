@@ -11,22 +11,29 @@ const MemoryCommentRepository: ICommentRepository = {
 
     return comment || undefined
   },
-  getComments: async (take: number, skip: number) => {
+  getComments: async (take?: number, skip?: number) => {
     await delay()
-    const commentsToReturn = comments.slice(skip, skip + take)
-    return commentsToReturn
+
+    if (!take && skip) return comments.slice(skip)
+    if (take && !skip) return comments.slice(0, take)
+    if (take && skip) return comments.slice(skip, skip + take)
+    return comments
   },
-  getCommentsByUserId: async (userId: string, take: number, skip: number) => {
+  getCommentsByUserId: async (userId: string, take?: number, skip?: number) => {
     await delay()
     const userComments = comments.filter((comment) => comment.userId === userId)
-    const commentsToReturn = userComments.slice(skip, skip + take)
-    return commentsToReturn
+    if (!take && skip) return userComments.slice(skip)
+    if (take && !skip) return userComments.slice(0, take)
+    if (take && skip) return userComments.slice(skip, skip + take)
+    return userComments
   },
-  getCommentsByPostId: async (postId: string, take: number, skip: number) => {
+  getCommentsByPostId: async (postId: string, take?: number, skip?: number) => {
     await delay()
     const postComments = comments.filter((comment) => comment.postId === postId)
-    const commentsToReturn = postComments.slice(skip, skip + take)
-    return commentsToReturn
+    if (!take && skip) return postComments.slice(skip)
+    if (take && !skip) return postComments.slice(0, take)
+    if (take && skip) return postComments.slice(skip, skip + take)
+    return postComments
   },
   createComment: async (comment: CreateCommentDTO) => {
     await delay()
