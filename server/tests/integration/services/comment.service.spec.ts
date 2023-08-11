@@ -162,7 +162,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment3)
 
-      const result = await service.getComments('2', '0')
+      const result = await service.getComments(2, 0)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -222,7 +222,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getComments('2', '2')
+      const result = await service.getComments(2, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -249,11 +249,7 @@ describe('MemoryCommentService', () => {
       )
     })
     it('should not get comments with invalid user id', async () => {
-      const result = await service.getCommentsByUserId(
-        'invalid-user-id',
-        '10',
-        '0',
-      )
+      const result = await service.getCommentsByUserId('invalid-user-id', 10, 0)
 
       expect(result.ok).toBeFalsy()
       expect(result.message).toContain('User')
@@ -261,11 +257,7 @@ describe('MemoryCommentService', () => {
       expect(result.payload).toBeUndefined()
     })
     it('should not get comments with invalid post id', async () => {
-      const result = await service.getCommentsByPostId(
-        'invalid-post-id',
-        '10',
-        '0',
-      )
+      const result = await service.getCommentsByPostId('invalid-post-id', 10, 0)
 
       expect(result.ok).toBeFalsy()
       expect(result.message).toContain('Post')
@@ -305,7 +297,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByUserId(userId, '2', '0')
+      const result = await service.getCommentsByUserId(userId, 2, 0)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -364,7 +356,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByUserId(userId, '2', '2')
+      const result = await service.getCommentsByUserId(userId, 2, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -423,7 +415,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByPostId(postId, '2', '0')
+      const result = await service.getCommentsByPostId(postId, 2, 0)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -482,7 +474,7 @@ describe('MemoryCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByPostId(postId, '2', '2')
+      const result = await service.getCommentsByPostId(postId, 2, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -698,7 +690,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment2)
 
-      const result = await service.getComments('10', '0')
+      const result = await service.getComments(10, 0)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -749,7 +741,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment3)
 
-      const result = await service.getCommentsByUserId(userId, '2', '0')
+      const result = await service.getCommentsByUserId(userId, 2, 0)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -800,7 +792,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment3)
 
-      const result = await service.getCommentsByPostId(postId, '2', '0')
+      const result = await service.getCommentsByPostId(postId, 2, 0)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -859,7 +851,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByUserId(userId, '2', '2')
+      const result = await service.getCommentsByUserId(userId, 2, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')
@@ -918,7 +910,7 @@ describe('PrismaCommentService', () => {
 
       await service.createComment(comment4)
 
-      const result = await service.getCommentsByPostId(postId, '2', '2')
+      const result = await service.getCommentsByPostId(postId, 2, 2)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comments found successfully')

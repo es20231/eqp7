@@ -1,29 +1,35 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedCommentService } from '../factories/comment.factory'
-import { MemoryCommentRepository } from '../repositories/implementations/memory/comment.repository'
-import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { PrismaCommentRepository } from '../repositories/implementations/prisma/comment.repository'
+import { PrismaPostRepository } from '../repositories/implementations/prisma/post.repository'
+import { PrismaUserRepository } from '../repositories/implementations/prisma/user.repository'
 import { handleZodParse } from '../utils'
 
 const commentService = instantiatedCommentService(
-  MemoryCommentRepository,
-  MemoryUserRepository,
-  MemoryPostRepository,
+  PrismaCommentRepository,
+  PrismaUserRepository,
+  PrismaPostRepository,
 )
+
+// const commentService = instantiatedCommentService(
+//   MemoryCommentRepository,
+//   MemoryUserRepository,
+//   MemoryPostRepository,
+// )
 
 const CommentController = {
   getComments: async (request: FastifyRequest, reply: FastifyReply) => {
-    const paramsSchema = z
+    const queryParamsSchema = z
       .object({
-        take: z.string().optional(),
-        skip: z.string().optional(),
+        take: z.number().int().nonnegative(),
+        skip: z.number().int().nonnegative(),
       })
       .strict()
 
     const { ok: okParse, payload: payloadParse } = handleZodParse(
-      request.params as object,
-      paramsSchema,
+      request.query as object,
+      queryParamsSchema,
     )
 
     if (!okParse) {
@@ -74,25 +80,40 @@ const CommentController = {
     reply.status(200).send({ message, payload })
   },
   getCommentsByUserId: async (request: FastifyRequest, reply: FastifyReply) => {
-    const paramsSchema = z
+    const queryParamsSchema = z
       .object({
-        id: z.string().nonempty('User id is required on url params'),
-        take: z.string().nonempty('Take is required on url params'),
-        skip: z.string().nonempty('Skip is required on url params'),
+        take: z.number().int().nonnegative(),
+        skip: z.number().int().nonnegative(),
       })
       .strict()
 
-    const { ok: okParse, payload: payloadParse } = handleZodParse(
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('User id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParseQueryParams, payload: payloadParseQueryParams } =
+      handleZodParse(request.query as object, queryParamsSchema)
+
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
       request.params as object,
       paramsSchema,
     )
 
-    if (!okParse) {
-      reply.status(400).send(payloadParse)
+    if (!okParseQueryParams) {
+      reply.status(400).send(payloadParseQueryParams)
       return
     }
 
-    const { id, take, skip } = payloadParse
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
+
+    const { id } = payloadParseParams
+
+    const { take, skip } = payloadParseQueryParams
 
     const { ok, message, payload } = await commentService.getCommentsByUserId(
       id,
@@ -102,31 +123,45 @@ const CommentController = {
 
     if (!ok) {
       reply.status(400).send({ message })
-      return
     }
 
     reply.status(200).send({ message, payload })
   },
   getCommentsByPostId: async (request: FastifyRequest, reply: FastifyReply) => {
-    const paramsSchema = z
+    const queryParamsSchema = z
       .object({
-        id: z.string().nonempty('Post id is required on url params'),
-        take: z.string().nonempty('Take is required on url params'),
-        skip: z.string().nonempty('Skip is required on url params'),
+        take: z.number().int().nonnegative(),
+        skip: z.number().int().nonnegative(),
       })
       .strict()
 
-    const { ok: okParse, payload: payloadParse } = handleZodParse(
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Post id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParseQueryParams, payload: payloadParseQueryParams } =
+      handleZodParse(request.query as object, queryParamsSchema)
+
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
       request.params as object,
       paramsSchema,
     )
 
-    if (!okParse) {
-      reply.status(400).send(payloadParse)
+    if (!okParseQueryParams) {
+      reply.status(400).send(payloadParseQueryParams)
       return
     }
 
-    const { id, take, skip } = payloadParse
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
+
+    const { id } = payloadParseParams
+
+    const { take, skip } = payloadParseQueryParams
 
     const { ok, message, payload } = await commentService.getCommentsByPostId(
       id,
@@ -136,7 +171,6 @@ const CommentController = {
 
     if (!ok) {
       reply.status(400).send({ message })
-      return
     }
 
     reply.status(200).send({ message, payload })

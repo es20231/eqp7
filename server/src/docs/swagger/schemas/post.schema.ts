@@ -16,8 +16,15 @@ const getPostsSchema = {
   security: [{ bearer: [] }],
   response: {
     200: {
-      type: 'array',
-      items: PostSchema,
+      type: 'object',
+      description: 'Get posts successful',
+      properties: {
+        message: { type: 'string' },
+        payload: {
+          type: 'array',
+          items: PostSchema,
+        },
+      },
     },
     400: {
       type: 'object',
