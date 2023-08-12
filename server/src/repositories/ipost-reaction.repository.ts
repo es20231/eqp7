@@ -6,26 +6,20 @@ interface IPostReactionRepository {
   getPostReactionById(id: string): Promise<PostReaction | undefined>
   getPostReactionsByUserId(
     userId: string,
-    take: number,
-    skip: number,
+    type?: string,
+    take?: number,
+    skip?: number,
   ): Promise<PostReaction[]>
   getPostReactionsByPostId(
     postId: string,
-    take: number,
-    skip: number,
+    type?: string,
+    take?: number,
+    skip?: number,
   ): Promise<PostReaction[]>
-  getPostReactions(take: number, skip: number): Promise<PostReaction[]>
-  getPostsReactionByTypeAndUserId(
-    type: string,
-    userId: string,
-    take: number,
-    skip: number,
-  ): Promise<PostReaction[]>
-  getostsReactionByTypeAndPostId(
-    type: string,
-    postId: string,
-    take: number,
-    skip: number,
+  getPostReactions(
+    type?: string,
+    take?: number,
+    skip?: number,
   ): Promise<PostReaction[]>
   deletePostReaction(id: string): Promise<PostReaction>
 }

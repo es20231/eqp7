@@ -8,26 +8,20 @@ interface ICommentReactionRepository {
   getCommentReactionById(id: string): Promise<CommentReaction | undefined>
   getCommentReactionsByUserId(
     userId: string,
-    take: number,
-    skip: number,
+    type?: string,
+    take?: number,
+    skip?: number,
   ): Promise<CommentReaction[]>
   getCommentReactionsByCommentId(
     commentId: string,
-    take: number,
-    skip: number,
+    type?: string,
+    take?: number,
+    skip?: number,
   ): Promise<CommentReaction[]>
-  getCommentReactions(take: number, skip: number): Promise<CommentReaction[]>
-  getCommentsReactionByTypeAndUserId(
-    type: string,
-    userId: string,
-    take: number,
-    skip: number,
-  ): Promise<CommentReaction[]>
-  getCommentsReactionByTypeAndCommentId(
-    type: string,
-    commentId: string,
-    take: number,
-    skip: number,
+  getCommentReactions(
+    type?: string,
+    take?: number,
+    skip?: number,
   ): Promise<CommentReaction[]>
   deleteCommentReaction(id: string): Promise<CommentReaction>
 }
