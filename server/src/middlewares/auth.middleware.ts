@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import jwt from 'jsonwebtoken'
 
-const authenticate = async (
+const authenticate = (
   request: FastifyRequest,
   reply: FastifyReply,
   next: any,
@@ -43,6 +43,7 @@ const authenticate = async (
         message: 'Invalid token',
       })
 
+    // request.sentBy = jwt.decode(token).id
     return next()
   })
 }

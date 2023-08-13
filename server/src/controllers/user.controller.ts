@@ -1,24 +1,26 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedUserService } from '../factories/user.factory'
-import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
-import { MemoryPostRepository } from '../repositories/implementations/memory/post.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { PrismaImageRepository } from '../repositories/implementations/prisma/image.repository'
+import { PrismaPostRepository } from '../repositories/implementations/prisma/post.repository'
+import { PrismaUserRepository } from '../repositories/implementations/prisma/user.repository'
 import { handleZodParse } from '../utils'
 
-// const UserService = instantiatedUserService(
-//   PrismaUserRepository,
-//   PrismaImageRepository,
-// )
-
 const UserService = instantiatedUserService(
-  MemoryUserRepository,
-  MemoryImageRepository,
-  MemoryPostRepository,
+  PrismaUserRepository,
+  PrismaImageRepository,
+  PrismaPostRepository,
 )
+
+// const UserService = instantiatedUserService(
+//   MemoryUserRepository,
+//   MemoryImageRepository,
+//   MemoryPostRepository,
+// )
 
 const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
+    // console.log(request.sentBy)
     const { ok, message, payload } = await UserService.getUsers()
 
     if (!ok || !payload) {

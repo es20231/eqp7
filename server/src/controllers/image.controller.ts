@@ -1,14 +1,19 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedImageService } from '../factories/image.factory'
-import { MemoryImageRepository } from '../repositories/implementations/memory/image.repository'
-import { MemoryUserRepository } from '../repositories/implementations/memory/user.repository'
+import { PrismaImageRepository } from '../repositories/implementations/prisma/image.repository'
+import { PrismaUserRepository } from '../repositories/implementations/prisma/user.repository'
 import { DropboxUploadImageService } from '../services/upload-image.service'
 import { handleZodParse } from '../utils'
 
+// const ImageService = instantiatedImageService(
+//   MemoryImageRepository,
+//   MemoryUserRepository,
+// )
+
 const ImageService = instantiatedImageService(
-  MemoryImageRepository,
-  MemoryUserRepository,
+  PrismaImageRepository,
+  PrismaUserRepository,
 )
 
 const ImageController = {

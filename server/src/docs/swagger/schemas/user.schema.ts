@@ -219,6 +219,12 @@ const updateUserSchema = {
   tags: ['user'],
   type: 'object',
   security: [{ bearer: [] }],
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'string' },
+    },
+  },
   body: {
     type: 'object',
     properties: {

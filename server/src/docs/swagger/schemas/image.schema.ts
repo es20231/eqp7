@@ -15,8 +15,15 @@ const getImagesSchema = {
   security: [{ bearer: [] }],
   response: {
     200: {
-      type: 'array',
-      items: ImageSchema,
+      type: 'object',
+      description: 'Get images successful',
+      properties: {
+        message: { type: 'string' },
+        payload: {
+          type: 'array',
+          items: ImageSchema,
+        },
+      },
     },
     400: {
       type: 'object',
@@ -111,13 +118,13 @@ const createImageSchema = {
   tags: ['image'],
   type: 'object',
   security: [{ bearer: [] }],
-  body: {
-    type: 'object',
-    properties: {
-      userId: { type: 'string' },
-      file: { type: 'string', format: 'binary' },
-    },
-  },
+  // body: {
+  //   type: 'object',
+  //   properties: {
+  //     userId: { type: 'string' },
+  //     file: { type: 'string', format: 'binary' },
+  //   },
+  // },
   response: {
     200: {
       type: 'object',

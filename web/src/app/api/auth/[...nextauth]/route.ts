@@ -17,7 +17,6 @@ export const AuthOptions = {
           username: string
           password: string
         }
-        // TODO: Validate credentials on API
 
         if (!username || !password) return null
 
