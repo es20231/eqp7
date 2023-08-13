@@ -1,3 +1,5 @@
+import { ImageSchema } from './image.schema'
+
 const PostSchema = {
   type: 'object',
   properties: {
@@ -7,6 +9,15 @@ const PostSchema = {
     imageId: { type: 'string' },
     createdAt: { type: 'string' },
     updatedAt: { type: 'string' },
+    image: ImageSchema,
+    user: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        username: { type: 'string' },
+        fullName: { type: 'string' },
+      },
+    },
   },
 }
 
