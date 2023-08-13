@@ -25,12 +25,12 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
   const userPosts = preview ? data.slice(0, 5) : data
 
   return (
-    <ScrollArea.Root className="w-full h-[100%]">
-      <ScrollArea.Viewport className="h-full w-full">
+    <ScrollArea.Root className="w-full h-[85%]">
+      <ScrollArea.Viewport className="w-full h-full py-3 px-4">
         {userPosts.length > 0 ? (
-          <div className="flex flex-col items-center sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xs:grid-cols-2 gap-x-2 gap-y-4 w-full pt-10 pb-14 pl-[1%]">
+          <div className="flex flex-col items-center sm:grid sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
             {userPosts.map((post) => (
-              <PostCard image={post} key={post.id} token={post.userId} />
+              <PostCard post={post} key={post.id} token={post.userId} />
             ))}
           </div>
         ) : (
