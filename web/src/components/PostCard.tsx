@@ -6,11 +6,8 @@ interface PostCardProps {
   image: {
     id: string
     userId: string
-    url: string
-    likes: number
-    dislikes: number
     subtitle: string
-    createdAt: string
+    imageId: string
   }
   token: string
 }
@@ -19,7 +16,7 @@ const PostCard = ({ image, token }: PostCardProps) => {
   const userAvatar = ''
   return (
     <div className="flex flex-col bg-dark-slate-gray-500 bg-opacity-20 justify-center w-80 rounded-md">
-      <div className="h-fit pb-3 flex flex-row items-center">
+      <div className="h-fit py-2 flex flex-row items-center">
         {userAvatar ? (
           <Avatar.Root>
             <Avatar.Image
@@ -38,27 +35,35 @@ const PostCard = ({ image, token }: PostCardProps) => {
       </div>
       <div className="h-80">
         <Image
-          src={image.url}
+          src={image.imageId}
           alt="Picture of the author"
           width={360}
           height={360}
           className="w-full h-full"
         />
       </div>
-      <div className="h-1/6">
-        <div className="flex flex-row justify-between items-center px-4 py-2">
-          <div className="flex flex-row items-center gap-2">
-            <button className="text-zinc-600 dark:text-slate-50 h-24">
+      <div className="flex flex-col h-28">
+        <div className="flex flex-row justify-start items-center gap-x-3 px-4 h-[38%] ">
+          <div className="flex flex-row items-center gap-x-2 h-full ">
+            <button className="text-zinc-600 dark:text-slate-50 flex items-center h-full">
               <Heart />
             </button>
-            <p>{image.likes} </p>
+            <p className="text-sm mt-0.5 h-full flex items-center">{} </p>
           </div>
-          <div className="flex flex-row items-center gap-2">
-            <button className="text-zinc-600 dark:text-slate-50 h-24">
+          <div className="flex flex-row items-center gap-x-2 h-full ">
+            <button className="text-zinc-600 dark:text-slate-50 flex items-center h-full">
               <HeartOff />
             </button>
-            <p>{image.dislikes} </p>
+            <p className="text-sm mt-0.5 h-full flex items-center">{} </p>
           </div>
+        </div>
+        <div className="flex flex-row justify-between items-center px-3 h-[62%]">
+          <section className="flex flex-row items-start gap-x-2 w-full h-full">
+            <p className="text-xs line-clamp-3 leading-5 px-1">
+              <b className="pb-4 text-gray-200 ">{image.userId} </b>
+              {image.subtitle}
+            </p>
+          </section>
         </div>
       </div>
     </div>
