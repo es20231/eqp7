@@ -17,6 +17,18 @@ const PrismaPostRepository: IPostRepository = {
       where: {
         userId,
       },
+      include: {
+        image: {
+          select: {
+            url: true,
+          },
+        },
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
     })
     return posts
   },

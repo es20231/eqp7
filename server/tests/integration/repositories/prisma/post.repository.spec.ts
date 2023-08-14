@@ -147,16 +147,18 @@ describe('PrismaPostRepository', () => {
     const found = await repository.getPostsByUserId(userId)
 
     expect(found).toBeTruthy()
-    expect(found).toStrictEqual([
-      {
-        id,
-        subtitle: post.subtitle,
-        userId: post.userId,
-        imageId: post.imageId,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      },
-    ])
+    expect(found).toStrictEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id,
+          subtitle: post.subtitle,
+          userId: post.userId,
+          imageId: post.imageId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        }),
+      ]),
+    )
   })
 
   it('should return empty array when try to find all posts by non existent user id', async () => {
