@@ -12,5 +12,6 @@ export type UserPostDTO = {
     id: string
     username: string
     fullName: string
+    profilePicture: string
   }
 }

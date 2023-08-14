@@ -16,6 +16,7 @@ const PostSchema = {
         id: { type: 'string' },
         username: { type: 'string' },
         fullName: { type: 'string' },
+        profilePicture: { type: 'string' },
       },
     },
   },
@@ -249,5 +250,6 @@ export {
   getPostByIdSchema,
   getPostsByUserIdSchema,
   getPostsSchema,
-  updatePostSchema,
+  updatePostSchema
 }
+

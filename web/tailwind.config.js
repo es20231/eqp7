@@ -19,6 +19,7 @@ module.exports = {
         },
         'dark-slate-gray': {
           500: '#224957',
+          400: '#2e5a6e',
         },
       },
       keyframes: {

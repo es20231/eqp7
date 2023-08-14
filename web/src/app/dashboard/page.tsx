@@ -3,6 +3,7 @@
 import { ListUsers } from '@/components/ListUsers'
 import { Title } from '@/components/Title'
 import { UserImages } from '@/components/UserImages'
+import { UserPosts } from '@/components/UserPosts'
 import { useUserStore } from '@/stores/user.store'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import { useSession } from 'next-auth/react'
@@ -44,7 +45,7 @@ const Dashboard = () => {
                 <div className="flex flex-col items-center justify-between px-4 py-2 w-full">
                   <Title className="text-start text-xl">Últimos posts</Title>
                 </div>
-                <UserImages
+                <UserPosts
                   token={userInfo.token}
                   userId={userInfo.id}
                   preview
