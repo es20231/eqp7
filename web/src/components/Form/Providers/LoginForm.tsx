@@ -52,7 +52,6 @@ const LoginFormComponent = () => {
         redirect: false,
       })
         .then((res) => {
-          console.log('login res', res)
           if (res && res.error && res.error === 'CredentialsSignin') {
             toast.error('Usuário ou senha inválidos')
             return

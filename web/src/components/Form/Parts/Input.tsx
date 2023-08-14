@@ -25,7 +25,7 @@ const Input = ({
     <div
       className={twMerge(
         [
-          'flex flex-row items-center justify-center gap-2 rounded-md px-4 py-2 shadow-sm',
+          'flex flex-row items-center justify-center gap-2 rounded-md px-4 py-1 2xl:py-2 shadow-sm',
         ],
         around,
       )}
@@ -35,7 +35,7 @@ const Input = ({
         id={name}
         autoComplete="off"
         className={twMerge([
-          'flex-1 py-2 text-lg text-slate-50 focus:outline-none',
+          'flex-1 py-1 2xl:py-2 text-sm 2xl:text-lg text-slate-50 focus:outline-none',
           className,
         ])}
         {...register(name)}

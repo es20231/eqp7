@@ -2,9 +2,8 @@
 'use client'
 
 import { useUserStore } from '@/stores/user.store'
-import * as Avatar from '@radix-ui/react-avatar'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
-import { LogOut } from 'lucide-react'
+import { ChevronDown, LogOut } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -14,6 +13,7 @@ import { Button } from './Button'
 import { Logo } from './Logo'
 import { Text } from './Text'
 import { ThemeSwitch } from './ThemeSwitch'
+import { UserPresentation } from './UserPresentation'
 
 const Header = () => {
   const { userInfo } = useUserStore((state) => state)
@@ -26,24 +26,8 @@ const Header = () => {
 
   if (!userInfo) return null
 
-  const fallbackAvatar =
-    userInfo.fullName.split(' ').length >= 2
-      ? userInfo.fullName
-          .split(' ')
-          .map((name, index) => {
-            if (
-              index === 0 ||
-              index === userInfo.fullName.split(' ').length - 1
-            )
-              return name[0].toUpperCase()
-
-            return ''
-          })
-          .join('')
-      : userInfo.fullName.slice(0, 2).toUpperCase()
-
   return (
-    <nav className="relative bg-transparent min-w-full grid grid-cols-[20%_1fr_20%] items-center justify-evenly py-3">
+    <nav className="relative bg-transparent min-w-full grid grid-cols-[20%_1fr_35%] 2xl:grid-cols-[20%_1fr_25%] items-center justify-evenly py-3">
       <div className="w-full items-center justify-end px-4 flex">
         <Logo mode="collapsed" width={50} height={50} />
       </div>
@@ -53,21 +37,15 @@ const Header = () => {
         <NavOption name="Posts" route="/dashboard/posts" />
         <NavOption name="Explorar" route="/dashboard/explore" />
       </div>
-      <div className="w-full h-full relative flex flex-row px-12 items-center justify-between py-3 ">
+      <div className="w-full h-full relative flex flex-row px-12 items-center justify-between py-3">
+        <UserPresentation
+          name={userInfo.fullName}
+          username={userInfo.username}
+          userImage={userInfo.profilePicture || ''}
+        />
         <Dropdown.Root>
-          <Dropdown.Trigger asChild className="cursor-pointer">
-            <Avatar.Root className="border-[2px] rounded-full border-pacific-blue-500 overflow-hidden flex items-center justify-center h-10 w-10 bg-slate-600 hover:cursor-pointer">
-              <Avatar.Image
-                alt="user image"
-                src={userInfo?.profilePicture || ''}
-                width={40}
-                height={40}
-                className=" h-10 w-10"
-              />
-              <Avatar.AvatarFallback className="text-slate-50">
-                {fallbackAvatar}
-              </Avatar.AvatarFallback>
-            </Avatar.Root>
+          <Dropdown.Trigger>
+            <ChevronDown />
           </Dropdown.Trigger>
 
           <Dropdown.Portal>
@@ -110,7 +88,8 @@ interface NavOptionProps extends HTMLAttributes<HTMLAnchorElement> {
 const NavOption = ({ name, route, ...rest }: NavOptionProps) => {
   const path = usePathname()
 
-  const isSelected = path === route
+  const isSelected =
+    path === route || (route === '/dashboard/explore' && path.includes('/user'))
 
   return (
     <Link
