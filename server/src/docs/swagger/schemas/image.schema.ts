@@ -15,8 +15,15 @@ const getImagesSchema = {
   security: [{ bearer: [] }],
   response: {
     200: {
-      type: 'array',
-      items: ImageSchema,
+      type: 'object',
+      description: 'Get images successful',
+      properties: {
+        message: { type: 'string' },
+        payload: {
+          type: 'array',
+          items: ImageSchema,
+        },
+      },
     },
     400: {
       type: 'object',
@@ -184,6 +191,5 @@ export {
   deleteImageSchema,
   getImageByIdSchema,
   getImagesByUserIdSchema,
-  getImagesSchema
+  getImagesSchema,
 }
-

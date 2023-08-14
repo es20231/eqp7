@@ -1,3 +1,4 @@
+import { Comment } from './comment.entity'
 import { Image } from './image.entity'
 import { Post } from './post.entity'
 
@@ -13,7 +14,7 @@ interface User {
 
   images?: Image[]
   posts?: Post[]
-  comments?: any[]
+  comments?: Comment[]
   postReactions?: any[]
   commentReactions?: any[]
 }

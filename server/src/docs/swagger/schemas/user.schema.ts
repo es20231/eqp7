@@ -388,6 +388,5 @@ export {
   getUserImagesSchema,
   getUserPostsSchema,
   getUsersSchema,
-  updateUserSchema
+  updateUserSchema,
 }
-

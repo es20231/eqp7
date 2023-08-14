@@ -1,3 +1,5 @@
+import { Comment } from './comment.entity'
+
 interface Post {
   id: string
   subtitle: string
@@ -5,7 +7,7 @@ interface Post {
   imageId: string
 
   // FIXME: change any to the correct type
-  comments?: any[]
+  comments?: Comment[]
   reactions?: any[]
 }
 
