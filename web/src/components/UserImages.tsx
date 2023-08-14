@@ -8,7 +8,7 @@ import { queryClient } from '@/services/queryClient'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
-import { Check, FileX, Trash2, X } from 'lucide-react'
+import { Check, ImageOff, Trash2, X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -44,7 +44,7 @@ const UserImages = ({ userId, token, preview = false }: UserImagesProps) => {
     <ScrollArea.Root className="w-full h-[85%]">
       <ScrollArea.Viewport className="w-full h-full py-3 px-4">
         {userImages.length ? (
-          <div className="grid grid-cols-3 xl:grid-cols-5 gap-4 w-full">
+          <div className="grid grid-cols-3 2xl:grid-cols-5 gap-4 w-full">
             {userImages.map((image) => (
               <NewPostFormProvider
                 key={image.id}
@@ -57,7 +57,11 @@ const UserImages = ({ userId, token, preview = false }: UserImagesProps) => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full gap-4 pt-10">
-            <FileX className="text-zinc-600 dark:text-slate-50" size={64} />
+            <ImageOff
+              className="text-zinc-600 dark:text-slate-50"
+              size={64}
+              strokeWidth={1.5}
+            />
             <Text className="text-center">
               Você ainda não possui imagens, que tal enviar uma?
             </Text>
@@ -90,30 +94,30 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
     createPost(
       { post: { imageId, subtitle, userId }, token },
       {
-        onSuccess: (res) => {
-          console.log('post create success', res)
+        onSuccess: () => {
           toast.success('Post criado com sucesso')
+          setIsOpen(false)
         },
-        onError: (err) => {
+        onError: (err: any) => {
           console.log('post create error', err)
-          toast.error('Erro ao criar post')
+          toast.error(err.response.data.message || 'Erro ao criar post')
         },
       },
     )
     reset()
-    setIsOpen(false)
   })
 
   const { refetch: deleteImage } = useDeleteImage({ imageId: image.id, token })
 
   const handleDeleteImage = async () => {
-    await deleteImage()
-    toast.success('Imagem deletada com sucesso!')
+    const { error } = await deleteImage()
+    if (!error) toast.success('Imagem deletada com sucesso!')
+    else toast.error('Erro ao deletar imagem')
     queryClient.invalidateQueries(['images', { userId: image.userId, token }])
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 max-w-[15rem]">
       <div className="overflow-hidden rounded-lg shadow-lg">
         <Image
           alt="user image"
