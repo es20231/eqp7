@@ -47,7 +47,7 @@ const PostReactionService = (
     )
     return {
       ok: true,
-      message: 'PostReactions found successfully',
+      message: 'Post reactions found successfully',
       payload: postReactions,
     }
   },
@@ -58,13 +58,13 @@ const PostReactionService = (
     if (!postReaction) {
       return {
         ok: false,
-        message: `PostReaction #${id} not found`,
+        message: `Post reaction #${id} not found`,
         payload: undefined,
       }
     }
     return {
       ok: true,
-      message: 'PostReaction found successfully',
+      message: 'Post reaction found successfully',
       payload: postReaction,
     }
   },
@@ -82,7 +82,7 @@ const PostReactionService = (
     )
     return {
       ok: true,
-      message: 'PostReactions found successfully',
+      message: 'Post reactions found successfully',
       payload: postReactions,
     }
   },
@@ -100,7 +100,7 @@ const PostReactionService = (
     )
     return {
       ok: true,
-      message: 'PostReactions found successfully',
+      message: 'Post reactions found successfully',
       payload: postReactions,
     }
   },
@@ -128,7 +128,7 @@ const PostReactionService = (
     )
     return {
       ok: true,
-      message: 'PostReaction created successfully',
+      message: 'Post reaction created successfully',
       payload: newPostReaction,
     }
   },
@@ -137,14 +137,14 @@ const PostReactionService = (
     if (!postReaction) {
       return {
         ok: false,
-        message: `PostReaction #${id} not found`,
+        message: `Post reaction #${id} not found`,
         payload: undefined,
       }
     }
     await postReactionRepository.deletePostReaction(id)
     return {
       ok: true,
-      message: 'PostReaction deleted successfully',
+      message: 'Post reaction deleted successfully',
       payload: undefined,
     }
   },

@@ -44,7 +44,7 @@ const CommentReactionService = (
       await commentReactionRepository.getCommentReactions(type, take, skip)
     return {
       ok: true,
-      message: 'CommentReactions found successfully',
+      message: 'Comment reactions found successfully',
       payload: commentReactions,
     }
   },
@@ -56,13 +56,13 @@ const CommentReactionService = (
     if (!commentReaction) {
       return {
         ok: false,
-        message: `CommentReaction #${id} not found`,
+        message: `Comment reaction #${id} not found`,
         payload: undefined,
       }
     }
     return {
       ok: true,
-      message: 'CommentReaction found successfully',
+      message: 'Comment reaction found successfully',
       payload: commentReaction,
     }
   },
@@ -81,7 +81,7 @@ const CommentReactionService = (
       )
     return {
       ok: true,
-      message: 'CommentReactions found successfully',
+      message: 'Comment reactions found successfully',
       payload: commentReactions,
     }
   },
@@ -100,7 +100,7 @@ const CommentReactionService = (
       )
     return {
       ok: true,
-      message: 'CommentReactions found successfully',
+      message: 'Comment reactions found successfully',
       payload: commentReactions,
     }
   },
@@ -129,7 +129,7 @@ const CommentReactionService = (
       await commentReactionRepository.createCommentReaction(commentReaction)
     return {
       ok: true,
-      message: 'CommentReaction created successfully',
+      message: 'Comment reaction created successfully',
       payload: createdCommentReaction,
     }
   },
@@ -139,14 +139,14 @@ const CommentReactionService = (
     if (!commentReaction) {
       return {
         ok: false,
-        message: `CommentReaction #${id} not found`,
+        message: `Comment reaction #${id} not found`,
         payload: undefined,
       }
     }
     await commentReactionRepository.deleteCommentReaction(id)
     return {
       ok: true,
-      message: 'CommentReaction deleted successfully',
+      message: 'Comment reaction deleted successfully',
       payload: undefined,
     }
   },
