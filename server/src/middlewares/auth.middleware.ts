@@ -44,6 +44,7 @@ const authenticate = (
       })
 
     // request.sentBy = jwt.decode(token).id
+
     return next()
   })
 }
