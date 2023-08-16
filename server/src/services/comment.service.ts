@@ -139,14 +139,26 @@ const CommentService = (
         payload: undefined,
       }
     }
-    if (comment.userId !== userId) {
+
+    const post = await postRepository.getPostById(comment.postId)
+    if (!post) {
+      return {
+        ok: false,
+        message: `Post #${comment.postId} not found`,
+        payload: undefined,
+      }
+    }
+
+    if (post.userId !== userId) {
       return {
         ok: false,
         message: 'Invalid user id',
         payload: undefined,
       }
     }
+
     await commentRepository.deleteComment(id)
+
     return {
       ok: true,
       message: 'Comment deleted successfully',

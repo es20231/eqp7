@@ -513,7 +513,11 @@ describe('MemoryCommentService', () => {
 
       if (!payload) throw new Error('Comment not created')
 
-      const result = await service.deleteComment(payload.id, userId)
+      const post = await MemoryPostRepository.getPostById(postId)
+
+      if (!post) throw new Error('Post not found')
+
+      const result = await service.deleteComment(payload.id, post.userId)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comment deleted successfully')
@@ -966,7 +970,11 @@ describe('PrismaCommentService', () => {
 
       if (!payload) throw new Error('Comment not created')
 
-      const result = await service.deleteComment(payload.id, userId)
+      const post = await PrismaPostRepository.getPostById(postId)
+
+      if (!post) throw new Error('Post not found')
+
+      const result = await service.deleteComment(payload.id, post.userId)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comment deleted successfully')
@@ -980,7 +988,7 @@ describe('PrismaCommentService', () => {
       expect(result.message).toContain('not found')
       expect(result.payload).toBeUndefined()
     })
-    it('should not delete a comment when user id is different from comment user id', async () => {
+    it('should not delete a comment when user id is different from post user id', async () => {
       const comment = {
         content: 'Comment Test',
         userId,
