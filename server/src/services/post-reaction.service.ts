@@ -123,6 +123,23 @@ const PostReactionService = (
         payload: undefined,
       }
     }
+
+    const postReactionsUser =
+      await postReactionRepository.getPostReactionsByUserId(postReaction.userId)
+
+    if (postReactionsUser.length > 0) {
+      const postReactionAlreadyExists = postReactionsUser.find(
+        (postReactionUser) => postReactionUser.postId === postReaction.postId,
+      )
+      if (postReactionAlreadyExists) {
+        return {
+          ok: false,
+          message: 'Post reaction of user already exists for this post',
+          payload: undefined,
+        }
+      }
+    }
+
     const newPostReaction = await postReactionRepository.createPostReaction(
       postReaction,
     )

@@ -7,6 +7,10 @@ describe('MemoryPostReactionRepository', () => {
   const repository = MemoryPostReactionRepository
   const userId = 'user-test-id'
   const postId = 'post-test-id'
+  const userId2 = 'user-test-id-2'
+  const postId2 = 'post-test-id-2'
+  const userId3 = 'user-test-id-3'
+  const postId3 = 'post-test-id-3'
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
@@ -65,14 +69,14 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -121,14 +125,14 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -169,14 +173,14 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -217,14 +221,14 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -258,13 +262,13 @@ describe('MemoryPostReactionRepository', () => {
     const postReaction2 = {
       type: 'dislike',
       userId,
-      postId,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
       userId,
-      postId,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -314,13 +318,13 @@ describe('MemoryPostReactionRepository', () => {
     const postReaction2 = {
       type: 'dislike',
       userId,
-      postId,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
       userId,
-      postId,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -362,13 +366,13 @@ describe('MemoryPostReactionRepository', () => {
     const postReaction2 = {
       type: 'dislike',
       userId,
-      postId,
+      postId: postId2,
     }
 
     const postReaction3 = {
       type: 'like',
       userId,
-      postId,
+      postId: postId3,
     }
 
     await repository.createPostReaction(postReaction)
@@ -413,13 +417,13 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       postId,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
+      userId: userId3,
       postId,
     }
 
@@ -469,13 +473,13 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       postId,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
+      userId: userId3,
       postId,
     }
 
@@ -517,13 +521,13 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       postId,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
+      userId: userId3,
       postId,
     }
 
@@ -569,13 +573,13 @@ describe('MemoryPostReactionRepository', () => {
 
     const postReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       postId,
     }
 
     const postReaction3 = {
       type: 'like',
-      userId,
+      userId: userId3,
       postId,
     }
 

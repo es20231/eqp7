@@ -7,6 +7,12 @@ describe('MemoryCommentReactionRepository', () => {
   const repository = MemoryCommentReactionRepository
   const userId = 'user-test-id'
   const commentId = 'comment-test-id'
+  const userId2 = 'user-test-id-2'
+  const commentId2 = 'comment-test-id-2'
+  const userId3 = 'user-test-id-3'
+  const commentId3 = 'comment-test-id-3'
+  const userId4 = 'user-test-id-4'
+  const commentId4 = 'comment-test-id-4'
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
@@ -65,14 +71,14 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId2,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId3,
+      commentId: commentId3,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -120,14 +126,14 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId2,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId3,
+      commentId: commentId3,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -157,20 +163,20 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId2,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId3,
+      commentId: commentId3,
     }
 
     const commentReaction4 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId4,
+      commentId: commentId4,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -210,20 +216,20 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId2,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId3,
+      commentId: commentId3,
     }
 
     const commentReaction4 = {
       type: 'dislike',
-      userId,
-      commentId,
+      userId: userId4,
+      commentId: commentId4,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -264,13 +270,13 @@ describe('MemoryCommentReactionRepository', () => {
     const commentReaction2 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId3,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -319,13 +325,13 @@ describe('MemoryCommentReactionRepository', () => {
     const commentReaction2 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId3,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -368,19 +374,19 @@ describe('MemoryCommentReactionRepository', () => {
     const commentReaction2 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId2,
     }
 
     const commentReaction3 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId3,
     }
 
     const commentReaction4 = {
       type: 'dislike',
       userId,
-      commentId,
+      commentId: commentId4,
     }
 
     await repository.createCommentReaction(commentReaction)
@@ -424,13 +430,13 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       commentId,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
+      userId: userId3,
       commentId,
     }
 
@@ -479,13 +485,13 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       commentId,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
+      userId: userId3,
       commentId,
     }
 
@@ -528,19 +534,19 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       commentId,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
+      userId: userId3,
       commentId,
     }
 
     const commentReaction4 = {
       type: 'dislike',
-      userId,
+      userId: userId4,
       commentId,
     }
 
@@ -585,19 +591,19 @@ describe('MemoryCommentReactionRepository', () => {
 
     const commentReaction2 = {
       type: 'dislike',
-      userId,
+      userId: userId2,
       commentId,
     }
 
     const commentReaction3 = {
       type: 'dislike',
-      userId,
+      userId: userId3,
       commentId,
     }
 
     const commentReaction4 = {
       type: 'dislike',
-      userId,
+      userId: userId4,
       commentId,
     }
 

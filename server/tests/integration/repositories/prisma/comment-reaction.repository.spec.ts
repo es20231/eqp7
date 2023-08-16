@@ -11,6 +11,16 @@ describe('PrismaCommentReactionRepository', () => {
   let postId: string
   let commentId: string
 
+  let userId2: string
+  let imageId2: string
+  let postId2: string
+  let commentId2: string
+
+  let userId3: string
+  let imageId3: string
+  let postId3: string
+  let commentId3: string
+
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
@@ -51,6 +61,78 @@ describe('PrismaCommentReactionRepository', () => {
       },
     })
     commentId = comment.id
+
+    const user2 = await prisma.user.create({
+      data: {
+        username: 'jose2',
+        email: 'jose2@mail.com',
+        fullName: 'Jose Junior',
+        password: 'test',
+      },
+    })
+    userId2 = user2.id
+
+    const image2 = await prisma.image.create({
+      data: {
+        url: 'https://github.com/JoseeAugusto.png',
+        userId: userId2,
+      },
+    })
+    imageId2 = image2.id
+
+    const post2 = await prisma.post.create({
+      data: {
+        subtitle: 'post test2',
+        userId: userId2,
+        imageId: imageId2,
+      },
+    })
+    postId2 = post2.id
+
+    const comment2 = await prisma.comment.create({
+      data: {
+        content: 'comment test 2',
+        userId: userId2,
+        postId,
+      },
+    })
+    commentId2 = comment2.id
+
+    const user3 = await prisma.user.create({
+      data: {
+        username: 'jose3',
+        email: 'jose3@mail.com',
+        fullName: 'Jose Juninho',
+        password: 'test',
+      },
+    })
+    userId3 = user3.id
+
+    const image3 = await prisma.image.create({
+      data: {
+        url: 'https://github.com/JoseeAugusto.png',
+        userId: userId3,
+      },
+    })
+    imageId3 = image3.id
+
+    const post3 = await prisma.post.create({
+      data: {
+        subtitle: 'post test3',
+        userId: userId3,
+        imageId: imageId3,
+      },
+    })
+    postId3 = post3.id
+
+    const comment3 = await prisma.comment.create({
+      data: {
+        content: 'comment test 3',
+        userId: userId3,
+        postId,
+      },
+    })
+    commentId3 = comment3.id
   })
 
   afterAll(async () => {
@@ -106,14 +188,14 @@ describe('PrismaCommentReactionRepository', () => {
 
     await repository.createCommentReaction({
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
     })
 
     await repository.createCommentReaction({
       type: 'dislike',
-      commentId,
-      userId,
+      commentId: commentId3,
+      userId: userId3,
     })
 
     const commentReactions = await repository.getCommentReactions()
@@ -131,16 +213,16 @@ describe('PrismaCommentReactionRepository', () => {
     expect(commentReactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
     expect(commentReactions[2]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      commentId,
-      userId,
+      commentId: commentId3,
+      userId: userId3,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -155,14 +237,14 @@ describe('PrismaCommentReactionRepository', () => {
 
     await repository.createCommentReaction({
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
     })
 
     await repository.createCommentReaction({
       type: 'dislike',
-      commentId,
-      userId,
+      commentId: commentId3,
+      userId: userId3,
     })
 
     const commentReactions = await repository.getCommentReactions('like')
@@ -180,8 +262,8 @@ describe('PrismaCommentReactionRepository', () => {
     expect(commentReactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -196,14 +278,14 @@ describe('PrismaCommentReactionRepository', () => {
 
     await repository.createCommentReaction({
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
     })
 
     await repository.createCommentReaction({
       type: 'dislike',
-      commentId,
-      userId,
+      commentId: commentId3,
+      userId: userId3,
     })
 
     const commentReactions = await repository.getCommentReactions(undefined, 2)
@@ -221,8 +303,8 @@ describe('PrismaCommentReactionRepository', () => {
     expect(commentReactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -237,14 +319,14 @@ describe('PrismaCommentReactionRepository', () => {
 
     await repository.createCommentReaction({
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
     })
 
     await repository.createCommentReaction({
       type: 'dislike',
-      commentId,
-      userId,
+      commentId: commentId3,
+      userId: userId3,
     })
 
     const commentReactions = await repository.getCommentReactions(
@@ -258,16 +340,16 @@ describe('PrismaCommentReactionRepository', () => {
     expect(commentReactions[0]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      commentId,
-      userId,
+      commentId: commentId2,
+      userId: userId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
     expect(commentReactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      commentId,
-      userId,
+      commentId: commentId3,
+      userId: userId3,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -319,7 +401,7 @@ describe('PrismaCommentReactionRepository', () => {
     })
   })
 
-  it('should get an empty array when try to get all comments reactions from a comment that does not exists', async () => {
+  it('should get an empty array when try to get all comments reactions from a comment that does not have any comment reaction', async () => {
     const commentReactions = await repository.getCommentReactionsByCommentId(
       commentId,
     )
@@ -328,7 +410,7 @@ describe('PrismaCommentReactionRepository', () => {
     expect(commentReactions.length).toBe(0)
   })
 
-  it('should get an empty array when try to get all comments reactions from a user that does not exists', async () => {
+  it('should get an empty array when try to get all comments reactions from a user that does not have any comment reaction', async () => {
     const commentReactions = await repository.getCommentReactionsByUserId(
       userId,
     )

@@ -130,6 +130,26 @@ const CommentReactionService = (
         payload: undefined,
       }
     }
+
+    const commentReactionsUser =
+      await commentReactionRepository.getCommentReactionsByUserId(
+        commentReaction.userId,
+      )
+
+    if (commentReactionsUser.length > 0) {
+      const commentReactionAlreadyExists = commentReactionsUser.find(
+        (commentReactionUser) =>
+          commentReactionUser.commentId === commentReaction.commentId,
+      )
+      if (commentReactionAlreadyExists) {
+        return {
+          ok: false,
+          message: 'Comment reaction of user already exists for this comment',
+          payload: undefined,
+        }
+      }
+    }
+
     const createdCommentReaction =
       await commentReactionRepository.createCommentReaction(commentReaction)
     return {

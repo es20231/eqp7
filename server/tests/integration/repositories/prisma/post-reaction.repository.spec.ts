@@ -10,6 +10,14 @@ describe('PrismaPostReactionRepository', () => {
   let imageId: string
   let postId: string
 
+  let userId2: string
+  let imageId2: string
+  let postId2: string
+
+  let userId3: string
+  let imageId3: string
+  let postId3: string
+
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
@@ -41,6 +49,60 @@ describe('PrismaPostReactionRepository', () => {
       },
     })
     postId = post.id
+
+    const user2 = await prisma.user.create({
+      data: {
+        username: 'jose2',
+        email: 'jose2@mail.com',
+        fullName: 'Jose Junior',
+        password: 'test',
+      },
+    })
+    userId2 = user2.id
+
+    const image2 = await prisma.image.create({
+      data: {
+        url: 'https://github.com/JoseeAugusto.png',
+        userId: userId2,
+      },
+    })
+    imageId2 = image2.id
+
+    const post2 = await prisma.post.create({
+      data: {
+        subtitle: 'post test2',
+        userId: userId2,
+        imageId: imageId2,
+      },
+    })
+    postId2 = post2.id
+
+    const user3 = await prisma.user.create({
+      data: {
+        username: 'jose3',
+        email: 'jose3@mail.com',
+        fullName: 'Jose Juninho',
+        password: 'test',
+      },
+    })
+    userId3 = user3.id
+
+    const image3 = await prisma.image.create({
+      data: {
+        url: 'https://github.com/JoseeAugusto.png',
+        userId: userId3,
+      },
+    })
+    imageId3 = image3.id
+
+    const post3 = await prisma.post.create({
+      data: {
+        subtitle: 'post test3',
+        userId: userId3,
+        imageId: imageId3,
+      },
+    })
+    postId3 = post3.id
   })
 
   afterAll(async () => {
@@ -99,14 +161,14 @@ describe('PrismaPostReactionRepository', () => {
 
     await repository.createPostReaction({
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     })
 
     await repository.createPostReaction({
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     })
 
     const reactions = await repository.getPostReactions()
@@ -124,16 +186,16 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
     expect(reactions[2]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -148,14 +210,14 @@ describe('PrismaPostReactionRepository', () => {
 
     await repository.createPostReaction({
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     })
 
     await repository.createPostReaction({
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     })
 
     const reactions = await repository.getPostReactions('like')
@@ -173,8 +235,8 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -189,14 +251,14 @@ describe('PrismaPostReactionRepository', () => {
 
     await repository.createPostReaction({
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     })
 
     await repository.createPostReaction({
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     })
 
     const reactions = await repository.getPostReactions(undefined, 2)
@@ -214,8 +276,8 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -230,14 +292,14 @@ describe('PrismaPostReactionRepository', () => {
 
     await repository.createPostReaction({
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
     })
 
     await repository.createPostReaction({
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
     })
 
     const reactions = await repository.getPostReactions(undefined, 2, 1)
@@ -247,16 +309,16 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[0]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      userId,
-      postId,
+      userId: userId2,
+      postId: postId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
     expect(reactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      userId,
-      postId,
+      userId: userId3,
+      postId: postId3,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
@@ -271,13 +333,13 @@ describe('PrismaPostReactionRepository', () => {
 
     await repository.createPostReaction({
       type: 'dislike',
-      userId,
+      userId: userId2,
       postId,
     })
 
     await repository.createPostReaction({
       type: 'like',
-      userId,
+      userId: userId3,
       postId,
     })
 
@@ -296,7 +358,7 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      userId,
+      userId: userId2,
       postId,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
@@ -304,7 +366,7 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[2]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
-      userId,
+      userId: userId3,
       postId,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
@@ -321,7 +383,7 @@ describe('PrismaPostReactionRepository', () => {
     await repository.createPostReaction({
       type: 'dislike',
       userId,
-      postId,
+      postId: postId2,
     })
 
     const reactions = await repository.getPostReactionsByUserId(userId)
@@ -340,7 +402,7 @@ describe('PrismaPostReactionRepository', () => {
       id: expect.any(String),
       type: 'dislike',
       userId,
-      postId,
+      postId: postId2,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })

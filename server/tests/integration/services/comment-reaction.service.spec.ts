@@ -34,6 +34,16 @@ describe('MemoryCommentReactionService', () => {
   let postId: string
   let commentId: string
 
+  let userId2: string
+  let imageId2: string
+  let postId2: string
+  let commentId2: string
+
+  let userId3: string
+  let imageId3: string
+  let postId3: string
+  let commentId3: string
+
   beforeAll(async () => {
     const user = await MemoryUserRepository.createUser({
       username: 'test',
@@ -66,6 +76,70 @@ describe('MemoryCommentReactionService', () => {
     })
 
     commentId = comment.id
+
+    const user2 = await MemoryUserRepository.createUser({
+      username: 'test2',
+      email: 'test2@mail.com',
+      fullName: 'User Test Two',
+      password: '123456',
+    })
+
+    userId2 = user2.id
+
+    const image2 = await MemoryImageRepository.createImage({
+      url: 'https://github.com/JoseeAugusto.png',
+      userId: userId2,
+    })
+
+    imageId2 = image2.id
+
+    const post2 = await MemoryPostRepository.createPost({
+      subtitle: 'Post Test2',
+      userId: userId2,
+      imageId: imageId2,
+    })
+
+    postId2 = post2.id
+
+    const comment2 = await MemoryCommentRepository.createComment({
+      content: 'Comment Test2',
+      userId: userId2,
+      postId: postId2,
+    })
+
+    commentId2 = comment2.id
+
+    const user3 = await MemoryUserRepository.createUser({
+      username: 'test3',
+      email: 'test3@mail.com',
+      fullName: 'User Test Three',
+      password: '123456',
+    })
+
+    userId3 = user3.id
+
+    const image3 = await MemoryImageRepository.createImage({
+      url: 'https://github.com/JoseeAugusto.png',
+      userId: userId3,
+    })
+
+    imageId3 = image3.id
+
+    const post3 = await MemoryPostRepository.createPost({
+      subtitle: 'Post Test3',
+      userId: userId3,
+      imageId: imageId3,
+    })
+
+    postId3 = post3.id
+
+    const comment3 = await MemoryCommentRepository.createComment({
+      content: 'Comment Test3',
+      userId: userId3,
+      postId: postId3,
+    })
+
+    commentId3 = comment3.id
   })
 
   afterEach(async () => {
@@ -168,14 +242,14 @@ describe('MemoryCommentReactionService', () => {
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions()
@@ -197,16 +271,16 @@ describe('MemoryCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
-          userId,
+          commentId: commentId2,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
         {
           id: expect.any(String),
           type: 'like',
-          commentId,
-          userId,
+          commentId: commentId3,
+          userId: userId3,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -222,14 +296,14 @@ describe('MemoryCommentReactionService', () => {
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions('dislike')
@@ -243,8 +317,8 @@ describe('MemoryCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
-          userId,
+          commentId: commentId2,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -260,14 +334,14 @@ describe('MemoryCommentReactionService', () => {
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions(
@@ -292,8 +366,8 @@ describe('MemoryCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
-          userId,
+          commentId: commentId2,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -309,14 +383,14 @@ describe('MemoryCommentReactionService', () => {
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions(
@@ -334,8 +408,8 @@ describe('MemoryCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
-          userId,
+          commentId: commentId2,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -343,7 +417,7 @@ describe('MemoryCommentReactionService', () => {
     })
 
     it('should get all comment reactions from a comment', async () => {
-      const commentId2 = 'comment-id-2'
+      const commentId4 = 'comment-id-4'
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
@@ -354,12 +428,12 @@ describe('MemoryCommentReactionService', () => {
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'dislike',
         commentId,
-        userId,
+        userId: userId2,
       })
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId: commentId2,
+        commentId: commentId4,
         userId,
       })
 
@@ -385,7 +459,7 @@ describe('MemoryCommentReactionService', () => {
           id: expect.any(String),
           type: 'dislike',
           commentId,
-          userId,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -393,7 +467,7 @@ describe('MemoryCommentReactionService', () => {
     })
 
     it('should get all comment reactions from a user', async () => {
-      const userId2 = 'user-id-2'
+      const userId4 = 'user-id-4'
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
@@ -403,14 +477,14 @@ describe('MemoryCommentReactionService', () => {
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
+        commentId: commentId2,
         userId,
       })
 
       await MemoryCommentReactionRepository.createCommentReaction({
         type: 'like',
         commentId,
-        userId: userId2,
+        userId: userId4,
       })
 
       const getCommentReactions = await service.getCommentReactionsByUserId(
@@ -434,7 +508,7 @@ describe('MemoryCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
+          commentId: commentId2,
           userId,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -525,6 +599,16 @@ describe('PrismaCommentReactionService', () => {
   let postId: string
   let commentId: string
 
+  let userId2: string
+  let imageId2: string
+  let postId2: string
+  let commentId2: string
+
+  let userId3: string
+  let imageId3: string
+  let postId3: string
+  let commentId3: string
+
   beforeAll(async () => {
     await prisma.comment.deleteMany()
     await prisma.post.deleteMany()
@@ -563,6 +647,72 @@ describe('PrismaCommentReactionService', () => {
       })
 
     commentId = commentIdCreated
+
+    const { id: userIdCreated2 } = await PrismaUserRepository.createUser({
+      username: 'test2',
+      email: 'test2@mail.com',
+      fullName: 'Test User Two',
+      password: '123456',
+    })
+
+    userId2 = userIdCreated2
+
+    const { id: imageIdCreated2 } = await PrismaImageRepository.createImage({
+      url: 'https://github.com/JoseeAugusto.png',
+      userId: userId2,
+    })
+
+    imageId2 = imageIdCreated2
+
+    const { id: postIdCreated2 } = await PrismaPostRepository.createPost({
+      subtitle: 'Post subtitle2',
+      userId: userId2,
+      imageId: imageId2,
+    })
+
+    postId2 = postIdCreated2
+
+    const { id: commentIdCreated2 } =
+      await PrismaCommentRepository.createComment({
+        content: 'Comment content2',
+        postId: postId2,
+        userId: userId2,
+      })
+
+    commentId2 = commentIdCreated2
+
+    const { id: userIdCreated3 } = await PrismaUserRepository.createUser({
+      username: 'test3',
+      email: 'test3@mail.com',
+      fullName: 'Test User Three',
+      password: '123456',
+    })
+
+    userId3 = userIdCreated3
+
+    const { id: imageIdCreated3 } = await PrismaImageRepository.createImage({
+      url: 'https://github.com/JoseeAugusto.png',
+      userId: userId3,
+    })
+
+    imageId3 = imageIdCreated3
+
+    const { id: postIdCreated3 } = await PrismaPostRepository.createPost({
+      subtitle: 'Post subtitle3',
+      userId: userId3,
+      imageId: imageId3,
+    })
+
+    postId3 = postIdCreated3
+
+    const { id: commentIdCreated3 } =
+      await PrismaCommentRepository.createComment({
+        content: 'Comment content3',
+        postId: postId3,
+        userId: userId3,
+      })
+
+    commentId3 = commentIdCreated3
   })
 
   afterAll(async () => {
@@ -673,13 +823,13 @@ describe('PrismaCommentReactionService', () => {
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'dislike',
         commentId,
-        userId,
+        userId: userId2,
       })
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'like',
         commentId,
-        userId,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactionsByCommentId(
@@ -704,7 +854,7 @@ describe('PrismaCommentReactionService', () => {
           id: expect.any(String),
           type: 'dislike',
           commentId,
-          userId,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -712,7 +862,7 @@ describe('PrismaCommentReactionService', () => {
           id: expect.any(String),
           type: 'like',
           commentId,
-          userId,
+          userId: userId3,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -728,14 +878,14 @@ describe('PrismaCommentReactionService', () => {
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions('like')
@@ -757,8 +907,8 @@ describe('PrismaCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'like',
-          commentId,
-          userId,
+          commentId: commentId3,
+          userId: userId3,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -774,14 +924,14 @@ describe('PrismaCommentReactionService', () => {
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions(
@@ -806,8 +956,8 @@ describe('PrismaCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
-          userId,
+          commentId: commentId2,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -823,14 +973,14 @@ describe('PrismaCommentReactionService', () => {
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
-        userId,
+        commentId: commentId2,
+        userId: userId2,
       })
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
-        userId,
+        commentId: commentId3,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactions(
@@ -848,8 +998,8 @@ describe('PrismaCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
-          userId,
+          commentId: commentId2,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -865,13 +1015,13 @@ describe('PrismaCommentReactionService', () => {
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'dislike',
-        commentId,
+        commentId: commentId2,
         userId,
       })
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'like',
-        commentId,
+        commentId: commentId3,
         userId,
       })
 
@@ -896,7 +1046,7 @@ describe('PrismaCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'dislike',
-          commentId,
+          commentId: commentId2,
           userId,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -904,7 +1054,7 @@ describe('PrismaCommentReactionService', () => {
         {
           id: expect.any(String),
           type: 'like',
-          commentId,
+          commentId: commentId3,
           userId,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
@@ -922,13 +1072,13 @@ describe('PrismaCommentReactionService', () => {
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'dislike',
         commentId,
-        userId,
+        userId: userId2,
       })
 
       await PrismaCommentReactionRepository.createCommentReaction({
         type: 'like',
         commentId,
-        userId,
+        userId: userId3,
       })
 
       const getCommentReactions = await service.getCommentReactionsByCommentId(
@@ -953,7 +1103,7 @@ describe('PrismaCommentReactionService', () => {
           id: expect.any(String),
           type: 'dislike',
           commentId,
-          userId,
+          userId: userId2,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
@@ -961,7 +1111,7 @@ describe('PrismaCommentReactionService', () => {
           id: expect.any(String),
           type: 'like',
           commentId,
-          userId,
+          userId: userId3,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         },
