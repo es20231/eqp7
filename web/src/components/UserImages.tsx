@@ -93,6 +93,7 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
         onSuccess: (res) => {
           console.log('post create success', res)
           toast.success('Post criado com sucesso')
+          queryClient.invalidateQueries(['posts', { userId, token }])
         },
         onError: (err) => {
           console.log('post create error', err)
