@@ -45,8 +45,28 @@ const MemoryUserRepository: IUserRepository = {
       profilePicture: user.profilePicture || undefined,
     }
   },
-  getUsers: async () => {
+  getUsers: async (take?: number, skip?: number) => {
     await delay()
+
+    if (!take && skip)
+      return users.slice(skip).map((user) => ({
+        ...user,
+        biography: user.biography || undefined,
+        profilePicture: user.profilePicture || undefined,
+      }))
+
+    if (take && !skip)
+      return users.slice(0, take).map((user) => ({
+        ...user,
+        biography: user.biography || undefined,
+        profilePicture: user.profilePicture || undefined,
+      }))
+    if (take && skip)
+      return users.slice(skip, skip + take).map((user) => ({
+        ...user,
+        biography: user.biography || undefined,
+        profilePicture: user.profilePicture || undefined,
+      }))
     return users.map((user) => ({
       ...user,
       biography: user.biography || undefined,

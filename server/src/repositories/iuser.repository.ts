@@ -6,7 +6,7 @@ interface IUserRepository {
   getUserById(id: string): Promise<User | undefined>
   getUserByUsername(username: string): Promise<User | undefined>
   getUserByEmail(email: string): Promise<User | undefined>
-  getUsers(): Promise<User[]>
+  getUsers(take?: number, skip?: number): Promise<User[]>
   createUser(user: CreateUserDTO): Promise<User>
   updateUser(id: string, user: UpdateUserDTO): Promise<User>
   deleteUser(id: string): Promise<User>

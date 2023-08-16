@@ -50,8 +50,11 @@ const PrismaUserRepository: IUserRepository = {
       profilePicture: user.profilePicture || undefined,
     }
   },
-  getUsers: async () => {
-    const users = await prisma.user.findMany()
+  getUsers: async (take?: number, skip?: number) => {
+    const users = await prisma.user.findMany({
+      take,
+      skip,
+    })
 
     return users.map((user) => ({
       ...user,
