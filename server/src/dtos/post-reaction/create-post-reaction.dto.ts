@@ -1,7 +1,7 @@
 type CreatePostReactionDTO = {
   userId: string
   postId: string
-  type: 'like' | 'dislike'
+  type: string
 }
 
 export { CreatePostReactionDTO }
