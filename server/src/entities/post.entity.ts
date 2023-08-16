@@ -1,4 +1,5 @@
 import { Comment } from './comment.entity'
+import { PostReaction } from './post-reaction.entity'
 
 interface Post {
   id: string
@@ -6,9 +7,8 @@ interface Post {
   userId: string
   imageId: string
 
-  // FIXME: change any to the correct type
   comments?: Comment[]
-  reactions?: any[]
+  reactions?: PostReaction[]
 }
 
 export { Post }
