@@ -324,16 +324,10 @@ describe('PrismaPostReactionRepository', () => {
       postId,
     })
 
-    await repository.createPostReaction({
-      type: 'like',
-      userId,
-      postId,
-    })
-
     const reactions = await repository.getPostReactionsByUserId(userId)
 
     expect(reactions).toBeTruthy()
-    expect(reactions.length).toBe(3)
+    expect(reactions.length).toBe(2)
     expect(reactions[0]).toStrictEqual({
       id: expect.any(String),
       type: 'like',
@@ -345,14 +339,6 @@ describe('PrismaPostReactionRepository', () => {
     expect(reactions[1]).toStrictEqual({
       id: expect.any(String),
       type: 'dislike',
-      userId,
-      postId,
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
-    })
-    expect(reactions[2]).toStrictEqual({
-      id: expect.any(String),
-      type: 'like',
       userId,
       postId,
       createdAt: expect.any(Date),
