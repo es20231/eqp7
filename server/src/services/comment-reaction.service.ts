@@ -2,6 +2,7 @@ import { CreateCommentReactionDTO } from '../dtos/comment-reaction/create-commen
 import { CommentReaction } from '../entities/comment-reaction.entity'
 import { ICommentReactionRepository } from '../repositories/icomment-reaction.repository'
 import { ICommentRepository } from '../repositories/icomment.repository'
+import { IPostRepository } from '../repositories/ipost.repository'
 import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
@@ -27,12 +28,16 @@ interface ICommentReactionService {
   createCommentReaction(
     commentReaction: CreateCommentReactionDTO,
   ): Promise<ServiceResult<CommentReaction>>
-  deleteCommentReaction(id: string): Promise<ServiceResult<void>>
+  deleteCommentReaction(
+    id: string,
+    userId?: string,
+  ): Promise<ServiceResult<void>>
 }
 
 const CommentReactionService = (
   commentReactionRepository: ICommentReactionRepository,
   userRepository: IUserRepository,
+  postRepository: IPostRepository,
   commentRepository: ICommentRepository,
 ): ICommentReactionService => ({
   getCommentReactions: async (
@@ -133,7 +138,10 @@ const CommentReactionService = (
       payload: createdCommentReaction,
     }
   },
-  deleteCommentReaction: async (id: string): Promise<ServiceResult<void>> => {
+  deleteCommentReaction: async (
+    id: string,
+    userId?: string,
+  ): Promise<ServiceResult<void>> => {
     const commentReaction =
       await commentReactionRepository.getCommentReactionById(id)
     if (!commentReaction) {
@@ -143,6 +151,35 @@ const CommentReactionService = (
         payload: undefined,
       }
     }
+
+    const comment = await commentRepository.getCommentById(
+      commentReaction.commentId,
+    )
+    if (!comment) {
+      return {
+        ok: false,
+        message: `Comment #${commentReaction.commentId} not found`,
+        payload: undefined,
+      }
+    }
+
+    const post = await postRepository.getPostById(comment.postId)
+    if (!post) {
+      return {
+        ok: false,
+        message: `Post #${comment.postId} not found`,
+        payload: undefined,
+      }
+    }
+
+    if (post.userId !== userId) {
+      return {
+        ok: false,
+        message: 'Invalid user id',
+        payload: undefined,
+      }
+    }
+
     await commentReactionRepository.deleteCommentReaction(id)
     return {
       ok: true,

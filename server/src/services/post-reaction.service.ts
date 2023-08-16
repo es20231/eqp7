@@ -27,7 +27,7 @@ interface IPostReactionService {
   createPostReaction(
     postReaction: CreatePostReactionDTO,
   ): Promise<ServiceResult<PostReaction>>
-  deletePostReaction(id: string): Promise<ServiceResult<void>>
+  deletePostReaction(id: string, userId?: string): Promise<ServiceResult<void>>
 }
 
 const PostReactionService = (
@@ -132,7 +132,10 @@ const PostReactionService = (
       payload: newPostReaction,
     }
   },
-  deletePostReaction: async (id: string): Promise<ServiceResult<void>> => {
+  deletePostReaction: async (
+    id: string,
+    userId?: string,
+  ): Promise<ServiceResult<void>> => {
     const postReaction = await postReactionRepository.getPostReactionById(id)
     if (!postReaction) {
       return {
@@ -141,6 +144,24 @@ const PostReactionService = (
         payload: undefined,
       }
     }
+
+    const post = await postRepository.getPostById(postReaction.postId)
+    if (!post) {
+      return {
+        ok: false,
+        message: `Post #${postReaction.postId} not found`,
+        payload: undefined,
+      }
+    }
+
+    if (post.userId !== userId) {
+      return {
+        ok: false,
+        message: 'Invalid user id',
+        payload: undefined,
+      }
+    }
+
     await postReactionRepository.deletePostReaction(id)
     return {
       ok: true,

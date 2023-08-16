@@ -21,6 +21,7 @@ describe('MemoryCommentReactionService', () => {
   const service = instantiatedCommentReactionService(
     MemoryCommentReactionRepository,
     MemoryUserRepository,
+    MemoryPostRepository,
     MemoryCommentRepository,
   )
 
@@ -466,6 +467,7 @@ describe('MemoryCommentReactionService', () => {
 
       const deleteCommentReaction = await service.deleteCommentReaction(
         commentReaction.id,
+        userId,
       )
 
       expect(deleteCommentReaction.ok).toBeTruthy()
@@ -478,11 +480,30 @@ describe('MemoryCommentReactionService', () => {
     it('should return an error when try to delete a comment reaction that does not exist', async () => {
       const deleteCommentReaction = await service.deleteCommentReaction(
         'comment-reaction-id',
+        userId,
       )
 
       expect(deleteCommentReaction.ok).toBeFalsy()
       expect(deleteCommentReaction.message).toContain('Comment reaction')
       expect(deleteCommentReaction.message).toContain('not found')
+      expect(deleteCommentReaction.payload).toBeUndefined()
+    })
+
+    it('should not delete a comment reaction when user id is invalid', async () => {
+      const commentReaction =
+        await MemoryCommentReactionRepository.createCommentReaction({
+          type: 'like',
+          commentId,
+          userId,
+        })
+
+      const deleteCommentReaction = await service.deleteCommentReaction(
+        commentReaction.id,
+        'user-id',
+      )
+
+      expect(deleteCommentReaction.ok).toBeFalsy()
+      expect(deleteCommentReaction.message).toBe('Invalid user id')
       expect(deleteCommentReaction.payload).toBeUndefined()
     })
   })
@@ -492,6 +513,7 @@ describe('PrismaCommentReactionService', () => {
   const service = instantiatedCommentReactionService(
     PrismaCommentReactionRepository,
     PrismaUserRepository,
+    PrismaPostRepository,
     PrismaCommentRepository,
   )
   it('should be defined', () => {
@@ -971,6 +993,7 @@ describe('PrismaCommentReactionService', () => {
 
       const deleteCommentReaction = await service.deleteCommentReaction(
         commentReaction.id,
+        userId,
       )
 
       expect(deleteCommentReaction.ok).toBeTruthy()
@@ -983,11 +1006,30 @@ describe('PrismaCommentReactionService', () => {
     it('should return an error when try to delete a comment reaction that does not exist', async () => {
       const deleteCommentReaction = await service.deleteCommentReaction(
         'non-existent-comment-reaction-id',
+        userId,
       )
 
       expect(deleteCommentReaction.ok).toBeFalsy()
       expect(deleteCommentReaction.message).toContain('Comment reaction')
       expect(deleteCommentReaction.message).toContain('not found')
+      expect(deleteCommentReaction.payload).toBeUndefined()
+    })
+
+    it('should not delete a comment reaction when user id is invalid', async () => {
+      const commentReaction =
+        await PrismaCommentReactionRepository.createCommentReaction({
+          type: 'like',
+          commentId,
+          userId,
+        })
+
+      const deleteCommentReaction = await service.deleteCommentReaction(
+        commentReaction.id,
+        'another-user-id',
+      )
+
+      expect(deleteCommentReaction.ok).toBeFalsy()
+      expect(deleteCommentReaction.message).toBe('Invalid user id')
       expect(deleteCommentReaction.payload).toBeUndefined()
     })
   })

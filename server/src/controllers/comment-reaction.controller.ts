@@ -3,12 +3,14 @@ import { z } from 'zod'
 import { instantiatedCommentReactionService } from '../factories/comment-reaction.factory'
 import { PrismaCommentReactionRepository } from '../repositories/implementations/prisma/comment-reaction.repository'
 import { PrismaCommentRepository } from '../repositories/implementations/prisma/comment.repository'
+import { PrismaPostRepository } from '../repositories/implementations/prisma/post.repository'
 import { PrismaUserRepository } from '../repositories/implementations/prisma/user.repository'
 import { handleZodParse } from '../utils'
 
 const commentReactionService = instantiatedCommentReactionService(
   PrismaCommentReactionRepository,
   PrismaUserRepository,
+  PrismaPostRepository,
   PrismaCommentRepository,
 )
 
@@ -256,7 +258,7 @@ const CommentReactionController = {
     const { id } = payloadParse
 
     const { ok, message, payload } =
-      await commentReactionService.deleteCommentReaction(id)
+      await commentReactionService.deleteCommentReaction(id, request.user?.id)
 
     if (!ok) {
       reply.status(400).send({ message })

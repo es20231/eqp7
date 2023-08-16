@@ -458,6 +458,7 @@ describe('MemoryPostReactionService', () => {
 
       const deletedPostReaction = await service.deletePostReaction(
         createdPostReaction.id,
+        userId,
       )
 
       expect(deletedPostReaction.ok).toBeTruthy()
@@ -470,11 +471,30 @@ describe('MemoryPostReactionService', () => {
     it('should return an error when try to delete a post reaction that does not exist', async () => {
       const deletedPostReaction = await service.deletePostReaction(
         'non-existing-post-reaction-id',
+        userId,
       )
 
       expect(deletedPostReaction.ok).toBeFalsy()
       expect(deletedPostReaction.message).toContain('Post reaction')
       expect(deletedPostReaction.message).toContain('not found')
+      expect(deletedPostReaction.payload).toBeUndefined()
+    })
+
+    it('should not delete a post reaction with invalid user id', async () => {
+      const createdPostReaction =
+        await MemoryPostReactionRepository.createPostReaction({
+          type: 'like',
+          userId,
+          postId,
+        })
+
+      const deletedPostReaction = await service.deletePostReaction(
+        createdPostReaction.id,
+        'invalid-user-id',
+      )
+
+      expect(deletedPostReaction.ok).toBeFalsy()
+      expect(deletedPostReaction.message).toBe('Invalid user id')
       expect(deletedPostReaction.payload).toBeUndefined()
     })
   })
@@ -934,6 +954,7 @@ describe('PrismaPostReactionService', () => {
 
       const deletedPostReaction = await service.deletePostReaction(
         createdPostReaction.id,
+        userId,
       )
 
       expect(deletedPostReaction.ok).toBeTruthy()
@@ -946,11 +967,30 @@ describe('PrismaPostReactionService', () => {
     it('should return an error when try to delete a post reaction that does not exist', async () => {
       const deletedPostReaction = await service.deletePostReaction(
         'non-existing-post-reaction-id',
+        userId,
       )
 
       expect(deletedPostReaction.ok).toBeFalsy()
       expect(deletedPostReaction.message).toContain('Post reaction')
       expect(deletedPostReaction.message).toContain('not found')
+      expect(deletedPostReaction.payload).toBeUndefined()
+    })
+
+    it('should not delete a post reaction with invalid user id', async () => {
+      const createdPostReaction =
+        await PrismaPostReactionRepository.createPostReaction({
+          type: 'like',
+          userId,
+          postId,
+        })
+
+      const deletedPostReaction = await service.deletePostReaction(
+        createdPostReaction.id,
+        'invalid-user-id',
+      )
+
+      expect(deletedPostReaction.ok).toBeFalsy()
+      expect(deletedPostReaction.message).toBe('Invalid user id')
       expect(deletedPostReaction.payload).toBeUndefined()
     })
   })

@@ -1,12 +1,14 @@
 import { instantiatedCommentReactionService } from '../../../src/factories/comment-reaction.factory'
 import { MemoryCommentReactionRepository } from '../../../src/repositories/implementations/memory/comment-reaction.repository'
 import { MemoryCommentRepository } from '../../../src/repositories/implementations/memory/comment.repository'
+import { MemoryPostRepository } from '../../../src/repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 
 describe('Comment Reaction Factory', () => {
   const service = instantiatedCommentReactionService(
     MemoryCommentReactionRepository,
     MemoryUserRepository,
+    MemoryPostRepository,
     MemoryCommentRepository,
   )
   it('should to be defined', () => {

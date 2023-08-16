@@ -234,7 +234,7 @@ const PostReactionController = {
     const { id } = payloadParse
 
     const { ok, message, payload } =
-      await postReactionService.deletePostReaction(id)
+      await postReactionService.deletePostReaction(id, request.user?.id)
 
     if (!ok) {
       reply.status(400).send({ message })
