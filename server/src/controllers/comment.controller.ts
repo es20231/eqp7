@@ -228,7 +228,10 @@ const CommentController = {
 
     const { id } = payloadParse
 
-    const { ok, message, payload } = await commentService.deleteComment(id)
+    const { ok, message, payload } = await commentService.deleteComment(
+      id,
+      request.user?.id,
+    )
 
     if (!ok) {
       reply.status(400).send({ message })

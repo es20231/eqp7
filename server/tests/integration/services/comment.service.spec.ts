@@ -513,18 +513,39 @@ describe('MemoryCommentService', () => {
 
       if (!payload) throw new Error('Comment not created')
 
-      const result = await service.deleteComment(payload.id)
+      const post = await MemoryPostRepository.getPostById(postId)
+
+      if (!post) throw new Error('Post not found')
+
+      const result = await service.deleteComment(payload.id, post.userId)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comment deleted successfully')
       expect(result.payload).toBeUndefined()
     })
     it('should not delete a comment when comment id is invalid', async () => {
-      const result = await service.deleteComment('invalidId')
+      const result = await service.deleteComment('invalidId', userId)
 
       expect(result.ok).toBeFalsy()
       expect(result.message).toContain('Comment')
       expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+    it('should not delete a comment when user id is invalid', async () => {
+      const comment = {
+        content: 'Comment Test',
+        userId,
+        postId,
+      }
+
+      const { payload } = await service.createComment(comment)
+
+      if (!payload) throw new Error('Comment not created')
+
+      const result = await service.deleteComment(payload.id, 'invalidId')
+
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toBe('Invalid user id')
       expect(result.payload).toBeUndefined()
     })
   })
@@ -949,18 +970,39 @@ describe('PrismaCommentService', () => {
 
       if (!payload) throw new Error('Comment not created')
 
-      const result = await service.deleteComment(payload.id)
+      const post = await PrismaPostRepository.getPostById(postId)
+
+      if (!post) throw new Error('Post not found')
+
+      const result = await service.deleteComment(payload.id, post.userId)
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Comment deleted successfully')
       expect(result.payload).toBeUndefined()
     })
     it('should not delete a comment when try to delete a comment with invalid id', async () => {
-      const result = await service.deleteComment('invalid_id')
+      const result = await service.deleteComment('invalid_id', userId)
 
       expect(result.ok).toBeFalsy()
       expect(result.message).toContain('Comment')
       expect(result.message).toContain('not found')
+      expect(result.payload).toBeUndefined()
+    })
+    it('should not delete a comment when user id is different from post user id', async () => {
+      const comment = {
+        content: 'Comment Test',
+        userId,
+        postId,
+      }
+
+      const { payload } = await service.createComment(comment)
+
+      if (!payload) throw new Error('Comment not created')
+
+      const result = await service.deleteComment(payload.id, 'invalid_id')
+
+      expect(result.ok).toBeFalsy()
+      expect(result.message).toBe('Invalid user id')
       expect(result.payload).toBeUndefined()
     })
   })
