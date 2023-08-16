@@ -150,6 +150,88 @@ describe('Memory User Service', () => {
       )
     })
 
+    it('should find two users when try to get all users with take 2', async () => {
+      await service.createUser(defaultUser)
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent',
+        email: 'diferent@mail.com',
+      })
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent2',
+        email: 'diferent2@mail.com',
+      })
+
+      const { ok, message, payload } = await service.getUsers(2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Users found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            ...defaultUser,
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            ...defaultUser,
+            username: 'diferent',
+            email: 'diferent@mail.com',
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should find one user when try to get all users with take 1 and skip 2', async () => {
+      await service.createUser(defaultUser)
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent',
+        email: 'diferent@mail.com',
+      })
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent2',
+        email: 'diferent2@mail.com',
+      })
+
+      const { ok, message, payload } = await service.getUsers(1, 2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Users found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            ...defaultUser,
+            username: 'diferent2',
+            email: 'diferent2@mail.com',
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should find a user by id', async () => {
       const { payload: created } = await service.createUser(defaultUser)
 
@@ -630,6 +712,88 @@ describe('Prisma User Service', () => {
             ...defaultUser,
             username: 'diferent',
             email: 'diferent@mail.com',
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should find two users when try to get all users with take 2', async () => {
+      await service.createUser(defaultUser)
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent',
+        email: 'diferent@mail.com',
+      })
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent2',
+        email: 'diferent2@mail.com',
+      })
+
+      const { ok, message, payload } = await service.getUsers(2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Users found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            ...defaultUser,
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            ...defaultUser,
+            username: 'diferent',
+            email: 'diferent@mail.com',
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should find one user when try to get all users with take 1 and skip 2', async () => {
+      await service.createUser(defaultUser)
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent',
+        email: 'diferent@mail.com',
+      })
+      await service.createUser({
+        ...defaultUser,
+        username: 'diferent2',
+        email: 'diferent2@mail.com',
+      })
+
+      const { ok, message, payload } = await service.getUsers(1, 2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Users found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            ...defaultUser,
+            username: 'diferent2',
+            email: 'diferent2@mail.com',
             password: expect.any(String),
             profilePicture: undefined,
             biography: undefined,

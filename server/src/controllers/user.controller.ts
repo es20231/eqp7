@@ -20,8 +20,26 @@ const UserService = instantiatedUserService(
 
 const UserController = {
   getUsers: async (request: FastifyRequest, reply: FastifyReply) => {
-    // console.log(request.sentBy)
-    const { ok, message, payload } = await UserService.getUsers()
+    const queryParamsSchema = z
+      .object({
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.query as object,
+      queryParamsSchema,
+    )
+
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { take, skip } = payloadParse
+
+    const { ok, message, payload } = await UserService.getUsers(take, skip)
 
     if (!ok || !payload) {
       reply.status(400).send({ message })

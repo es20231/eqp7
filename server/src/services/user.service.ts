@@ -9,7 +9,7 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface IUserService {
-  getUsers: () => Promise<ServiceResult<User[]>>
+  getUsers: (take?: number, skip?: number) => Promise<ServiceResult<User[]>>
   getUserById: (id: string) => Promise<ServiceResult<User>>
   getUserByUsername: (username: string) => Promise<ServiceResult<User>>
   getUserByEmail: (email: string) => Promise<ServiceResult<User>>
@@ -25,8 +25,8 @@ const UserService = (
   imageRepository: IImageRepository,
   postRepository: IPostRepository,
 ): IUserService => ({
-  getUsers: async () => {
-    const users = await userRepository.getUsers()
+  getUsers: async (take?: number, skip?: number) => {
+    const users = await userRepository.getUsers(take, skip)
 
     return {
       ok: true,
