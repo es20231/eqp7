@@ -408,6 +408,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(0)
+    expect(commentReactions).toStrictEqual([])
   })
 
   it('should get an empty array when try to get all comments reactions from a user that does not have any comment reaction', async () => {
@@ -417,6 +418,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(0)
+    expect(commentReactions).toStrictEqual([])
   })
 
   it('should get a comment reaction by id', async () => {
