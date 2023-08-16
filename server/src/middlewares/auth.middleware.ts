@@ -2,6 +2,14 @@ import 'dotenv/config'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import jwt from 'jsonwebtoken'
 
+interface UserPayload {
+  id: string
+  username: string
+  email: string
+  iat: number
+  exp: number
+}
+
 const authenticate = (
   request: FastifyRequest,
   reply: FastifyReply,
@@ -37,14 +45,13 @@ const authenticate = (
     return
   }
 
-  jwt.verify(token, secret, (err) => {
+  jwt.verify(token, secret, (err: any, decoded) => {
     if (err)
       return reply.status(401).send({
         message: 'Invalid token',
       })
 
-    // request.sentBy = jwt.decode(token).id
-
+    request.user = (decoded as unknown as UserPayload) || undefined
     return next()
   })
 }

@@ -19,7 +19,7 @@ interface ICommentService {
     skip?: number,
   ): Promise<ServiceResult<Comment[]>>
   createComment(comment: CreateCommentDTO): Promise<ServiceResult<Comment>>
-  deleteComment(id: string): Promise<ServiceResult<void>>
+  deleteComment(id: string, userId?: string): Promise<ServiceResult<void>>
 }
 
 const CommentService = (
@@ -127,7 +127,10 @@ const CommentService = (
       payload: newComment,
     }
   },
-  deleteComment: async (id: string): Promise<ServiceResult<void>> => {
+  deleteComment: async (
+    id: string,
+    userId?: string,
+  ): Promise<ServiceResult<void>> => {
     const comment = await commentRepository.getCommentById(id)
     if (!comment) {
       return {
@@ -136,7 +139,26 @@ const CommentService = (
         payload: undefined,
       }
     }
+
+    const post = await postRepository.getPostById(comment.postId)
+    if (!post) {
+      return {
+        ok: false,
+        message: `Post #${comment.postId} not found`,
+        payload: undefined,
+      }
+    }
+
+    if (post.userId !== userId) {
+      return {
+        ok: false,
+        message: 'Invalid user id',
+        payload: undefined,
+      }
+    }
+
     await commentRepository.deleteComment(id)
+
     return {
       ok: true,
       message: 'Comment deleted successfully',
