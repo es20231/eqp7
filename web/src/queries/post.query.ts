@@ -5,4 +5,12 @@ export type UserPostDTO = {
   userId: string
   createdAt: string
   updatedAt: string
+  image: {
+    url: string
+  }
+  user: {
+    id: string
+    username: string
+    fullName: string
+  }
 }

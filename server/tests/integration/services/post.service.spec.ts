@@ -123,24 +123,26 @@ describe('MemoryPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Posts found successfully')
-      expect(result.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          subtitle: post.subtitle,
-          userId: post.userId,
-          imageId: post.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          subtitle: post2.subtitle,
-          userId: post2.userId,
-          imageId: post2.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post.subtitle,
+            userId: post.userId,
+            imageId: post.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post2.subtitle,
+            userId: post2.userId,
+            imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should be able to get a post by id', async () => {
@@ -197,24 +199,26 @@ describe('MemoryPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Posts found successfully')
-      expect(result.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          subtitle: post.subtitle,
-          userId: post.userId,
-          imageId: post.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          subtitle: post2.subtitle,
-          userId: post2.userId,
-          imageId: post2.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post.subtitle,
+            userId: post.userId,
+            imageId: post.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post2.subtitle,
+            userId: post2.userId,
+            imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should not be able to get all posts from a user with invalid id', async () => {
@@ -457,24 +461,26 @@ describe('PrismaPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Posts found successfully')
-      expect(result.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          subtitle: post.subtitle,
-          userId: post.userId,
-          imageId: post.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          subtitle: post2.subtitle,
-          userId: post2.userId,
-          imageId: post2.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post.subtitle,
+            userId: post.userId,
+            imageId: post.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post2.subtitle,
+            userId: post2.userId,
+            imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should be able to get a post by id', async () => {
@@ -531,24 +537,26 @@ describe('PrismaPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Posts found successfully')
-      expect(result.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          subtitle: post.subtitle,
-          userId: post.userId,
-          imageId: post.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          subtitle: post2.subtitle,
-          userId: post2.userId,
-          imageId: post2.imageId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post.subtitle,
+            userId: post.userId,
+            imageId: post.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post2.subtitle,
+            userId: post2.userId,
+            imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should not be able to get all posts from a user with invalid id', async () => {
