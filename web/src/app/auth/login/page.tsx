@@ -13,7 +13,7 @@ import { Waves } from '@/components/Waves'
 const Login = () => {
   return (
     <>
-      <div className="bg-slate-200 relative dark:bg-rich-black-500 w-full h-full flex flex-col gap-4 items-center justify-center">
+      <div className="bg-slate-200 relative dark:bg-rich-black-500 w-full h-full flex flex-col gap-4 items-center justify-center overflow-hidden">
         <ThemeSwitch />
         <section className="flex flex-col gap-5 bg-red">
           <Logo width={300} height={300} />

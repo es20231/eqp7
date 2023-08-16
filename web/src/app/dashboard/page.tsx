@@ -25,7 +25,7 @@ const Dashboard = () => {
   return (
     userInfo && (
       <Suspense fallback={<div>Carregando...</div>}>
-        <div className="h-full px-4 w-full max-w-[70%] mx-auto">
+        <div className="h-full px-4 w-full max-w-[70%] mx-auto overflow-hidden">
           <div className="flex flex-row items-center justify-between px-4 py-2 w-full">
             <Title className="w-fit">Dashboard</Title>
           </div>

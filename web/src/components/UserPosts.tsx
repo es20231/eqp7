@@ -5,6 +5,7 @@ import { ImageOff } from 'lucide-react'
 
 import { Error } from '@/components/Error'
 import { useGetUserPosts } from '@/queries/user.query'
+import { useUserStore } from '@/stores/user.store'
 
 interface UserPostsProps {
   userId: string
@@ -15,14 +16,16 @@ interface UserPostsProps {
 const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
   const { data, isLoading, isError } = useGetUserPosts({ token, userId })
 
+  const { userInfo } = useUserStore((state) => state)
+
   if (isLoading) {
     return <p>Loading...</p>
   }
 
-  if (isError || !data)
+  if (isError || !data || !userInfo)
     return <Error message="Ocorreu um erro ao carregar as imagens do usuário" />
 
-  const userPosts = preview ? data.slice(0, 5) : data
+  const userPosts = preview ? data.slice(0, 3) : data
 
   return (
     <ScrollArea.Root className="w-full h-[85%]">
@@ -37,7 +40,9 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
           <div className="flex flex-col items-center justify-center w-full h-full gap-4 pt-10">
             <ImageOff className="text-zinc-600 dark:text-slate-50" size={64} />
             <Text className="text-center">
-              Você ainda não possui nenhum post, que tal criar um novo?
+              {userId === userInfo.id
+                ? 'Você ainda não possui nenhum post, que tal criar um novo?'
+                : 'Este usuário ainda não possui nenhum post'}
             </Text>
           </div>
         )}
@@ -51,7 +56,6 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
       >
         <ScrollArea.Thumb className="flex-1 dark:bg-slate-100 bg-zinc-700/80 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
       </ScrollArea.Scrollbar>
-      <ScrollArea.Corner />
     </ScrollArea.Root>
   )
 }

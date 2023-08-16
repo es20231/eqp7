@@ -1,6 +1,6 @@
 import { Text } from '@/components/Text'
 import { UserPostDTO } from '@/queries/post.query'
-import { Heart, HeartOff, MoreHorizontal } from 'lucide-react'
+import { MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from './Button'
 import { UserAvatar } from './UserAvatar'
@@ -12,8 +12,8 @@ interface PostCardProps {
 
 const PostCard = ({ post, token }: PostCardProps) => {
   return (
-    <div className="flex flex-col dark:bg-dark-slate-gray-500 bg-slate-400 bg-opacity-50 justify-center w-full max-w-sm rounded-lg">
-      <div className="px-4 py-2 grid grid-cols-[15%_1fr_10%] items-center gap-2">
+    <div className="flex flex-col dark:bg-dark-slate-gray-500 bg-gray-400/30 bg-opacity-50 justify-center w-full max-w-sm rounded-lg">
+      <div className="px-4 py-2 grid grid-cols-[15%_1fr_10%] items-center">
         <div className="h-10 w-10">
           <UserAvatar
             userImage={post.user.profilePicture || ''}
@@ -22,7 +22,7 @@ const PostCard = ({ post, token }: PostCardProps) => {
             width={36}
           />
         </div>
-        <Text className="text-start">@{post.user.username}</Text>
+        <Text className="text-start ">@{post.user.username}</Text>
         <Button className="text-zinc-600 dark:text-slate-50 flex items-center h-full bg-transparent cursor-pointer px-1 dark:hover:bg-dark-slate-gray-400 hover:bg-slate-200">
           <MoreHorizontal />
         </Button>
@@ -36,19 +36,25 @@ const PostCard = ({ post, token }: PostCardProps) => {
           className="object-cover rounded-lg w-full h-full"
         />
       </div>
-      <div className="flex flex-col h-28">
-        <div className="flex flex-row justify-start items-center gap-x-3 px-4 h-[38%] ">
-          <div className="flex flex-row items-center gap-x-2 h-full py-1">
+      <div className="flex flex-col h-full pb-4">
+        <div className="flex flex-row justify-end items-center gap-3 px-4 h-fit">
+          <div className="flex flex-row items-center justify-center gap-1 py-1">
             <Button className="text-zinc-600 dark:text-slate-50 flex items-center h-full bg-transparent cursor-pointer px-1 dark:hover:bg-dark-slate-gray-400 hover:bg-slate-200">
-              <Heart />
+              <ThumbsUp
+                strokeWidth={1.2}
+                // fill="#1DAABB" stroke="#1DAABB"
+              />
             </Button>
-            <Text className="text-sm mt-0.5 h-full flex items-center">{} </Text>
+            <Text className="text-sm mt-0.5 h-full flex items-center">{5}</Text>
           </div>
-          <div className="flex flex-row items-center gap-x-2 h-full py-1">
+          <div className="flex flex-row items-center justify-center gap-1 h-full py-1">
             <Button className="text-zinc-600 dark:text-slate-50 flex items-center h-full bg-transparent cursor-pointer px-1 dark:hover:bg-dark-slate-gray-400 hover:bg-slate-200">
-              <HeartOff />
+              <ThumbsDown
+                strokeWidth={1.2}
+                // fill="#f60000" stroke="#f60000"
+              />
             </Button>
-            <Text className="text-sm mt-0.5 h-full flex items-center">{} </Text>
+            <Text className="text-sm h-full flex items-center">{20}</Text>
           </div>
         </div>
         <div className="flex flex-col items-start px-3 h-[62%]">

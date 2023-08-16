@@ -187,7 +187,7 @@ const RegisterFormComponent = () => {
             <Loader2 className="animate-spin text-slate-50" />
           )
         }
-        className="mt-4 py-4 text-slate-50"
+        className="mt-4 py-2 2xl:py-4 text-slate-50"
         onClick={handleClickLoginButton}
       >
         Cadastrar
