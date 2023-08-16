@@ -1,7 +1,5 @@
-import { CommentReaction } from './comment-reaction.entity'
 import { Comment } from './comment.entity'
 import { Image } from './image.entity'
-import { PostReaction } from './post-reaction.entity'
 import { Post } from './post.entity'
 
 interface User {
@@ -17,8 +15,8 @@ interface User {
   images?: Image[]
   posts?: Post[]
   comments?: Comment[]
-  postReactions?: PostReaction[]
-  commentReactions?: CommentReaction[]
+  postReactions?: any[]
+  commentReactions?: any[]
 }
 
 export { User }
