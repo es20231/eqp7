@@ -1,3 +1,5 @@
+import { commentReactionSchema } from './comment-reaction.schema'
+
 const commentSchema = {
   type: 'object',
   properties: {
@@ -5,6 +7,17 @@ const commentSchema = {
     content: { type: 'string' },
     userId: { type: 'string' },
     postId: { type: 'string' },
+    user: {
+      type: 'object',
+      properties: {
+        username: { type: 'string' },
+        profilePicture: { type: 'string' },
+      },
+    },
+    reactions: {
+      type: 'array',
+      items: commentReactionSchema,
+    },
   },
 }
 
@@ -251,11 +264,12 @@ const deleteCommentSchema = {
 }
 
 export {
-  getCommentsByPostIdSchema,
-  getCommentsByUserIdSchema,
+  commentSchema,
   createCommentSchema,
   deleteCommentSchema,
   getCommentByIdSchema,
-  commentSchema,
-  getCommentsSchema,
+  getCommentsByPostIdSchema,
+  getCommentsByUserIdSchema,
+  getCommentsSchema
 }
+

@@ -26,6 +26,29 @@ const PrismaCommentRepository: ICommentRepository = {
       where: {
         postId,
       },
+      include: {
+        user: {
+          select: {
+            profilePicture: true,
+            username: true,
+          },
+        },
+        commentReactions: {
+          select: {
+            user: {
+              select: {
+                profilePicture: true,
+                username: true,
+              },
+            },
+            type: true,
+            createdAt: true,
+            id: true,
+            userId: true,
+            commentId: true,
+          },
+        },
+      },
       take,
       skip,
     })
