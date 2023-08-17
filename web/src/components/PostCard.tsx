@@ -1,8 +1,14 @@
 import { Text } from '@/components/Text'
 import { UserPostDTO } from '@/queries/post.query'
+import { useUserStore } from '@/stores/user.store'
 import { MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from './Button'
+import {
+  NewCommentFormComponent,
+  NewCommentFormProvider,
+} from './Form/Providers/NewCommentForm'
+import { PostComments } from './PostComments'
 import { UserAvatar } from './UserAvatar'
 
 interface PostCardProps {
@@ -11,8 +17,10 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, token }: PostCardProps) => {
+  const { userInfo } = useUserStore((state) => state)
+
   return (
-    <div className="flex flex-col dark:bg-dark-slate-gray-500 bg-gray-400/30 bg-opacity-50 justify-center w-full max-w-sm rounded-lg">
+    <div className="flex flex-col dark:bg-dark-slate-gray-500 bg-gray-400/30 bg-opacity-50 justify-center py-1 w-full max-w-sm rounded-lg">
       <div className="px-4 py-2 grid grid-cols-[15%_1fr_10%] items-center">
         <div className="h-10 w-10">
           <UserAvatar
@@ -36,21 +44,23 @@ const PostCard = ({ post, token }: PostCardProps) => {
           className="object-cover rounded-lg w-full h-full"
         />
       </div>
-      <div className="flex flex-col h-full pb-4">
-        <div className="flex flex-row justify-end items-center gap-3 px-4 h-fit">
-          <div className="flex flex-row items-center justify-center gap-1 py-1">
-            <Button className="text-zinc-600 dark:text-slate-50 flex items-center h-full bg-transparent cursor-pointer px-1 dark:hover:bg-dark-slate-gray-400 hover:bg-slate-200">
+      <div className="flex flex-col h-full">
+        <div className="flex flex-row justify-start items-center gap-1 px-3 h-fit">
+          <div className="flex flex-row items-center justify-center -gap-1 py-1">
+            <Button className="text-zinc-600 dark:text-slate-50 flex items-center h-full bg-transparent cursor-pointer p-1 dark:hover:bg-dark-slate-gray-400 hover:bg-slate-200">
               <ThumbsUp
                 strokeWidth={1.2}
+                size={20}
                 // fill="#1DAABB" stroke="#1DAABB"
               />
             </Button>
             <Text className="text-sm mt-0.5 h-full flex items-center">{5}</Text>
           </div>
-          <div className="flex flex-row items-center justify-center gap-1 h-full py-1">
+          <div className="flex flex-row items-center justify-center -gap-1 h-full py-1">
             <Button className="text-zinc-600 dark:text-slate-50 flex items-center h-full bg-transparent cursor-pointer px-1 dark:hover:bg-dark-slate-gray-400 hover:bg-slate-200">
               <ThumbsDown
                 strokeWidth={1.2}
+                size={20}
                 // fill="#f60000" stroke="#f60000"
               />
             </Button>
@@ -65,6 +75,18 @@ const PostCard = ({ post, token }: PostCardProps) => {
             {post.subtitle}
           </Text>
         </div>
+      </div>
+      <div>
+        <div className="w-full h-32 max-h-32">
+          <PostComments postId={post.id} token={token} preview />
+        </div>
+        <NewCommentFormProvider postId={post.id} userId={userInfo?.id || ''}>
+          <NewCommentFormComponent
+            fullName={userInfo?.fullName || ''}
+            userImage={userInfo?.profilePicture || ''}
+            token={token}
+          />
+        </NewCommentFormProvider>
       </div>
     </div>
   )

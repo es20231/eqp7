@@ -1,15 +1,22 @@
 'use client'
 
-import { TextareaHTMLAttributes } from 'react'
+import { ReactNode, TextareaHTMLAttributes } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string
   around?: string
+  right?: ReactNode
 }
 
-const TextArea = ({ name, around, className, ...rest }: TextAreaProps) => {
+const TextArea = ({
+  name,
+  around,
+  right,
+  className,
+  ...rest
+}: TextAreaProps) => {
   const { register } = useFormContext()
 
   return (
@@ -31,6 +38,7 @@ const TextArea = ({ name, around, className, ...rest }: TextAreaProps) => {
         {...register(name)}
         {...rest}
       />
+      {right && <div>{right}</div>}
     </div>
   )
 }

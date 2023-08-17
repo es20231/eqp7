@@ -33,7 +33,7 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
         {userPosts.length > 0 ? (
           <div className="flex flex-col items-center sm:grid sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
             {userPosts.map((post) => (
-              <PostCard post={post} key={post.id} token={post.userId} />
+              <PostCard post={post} key={post.id} token={token} />
             ))}
           </div>
         ) : (

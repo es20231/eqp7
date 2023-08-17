@@ -44,7 +44,7 @@ const UserDetails = ({ params }: UserDetailsProps) => {
       <ScrollArea.Viewport className="w-full h-full px-4">
         <div className="h-full px-4 w-full max-w-[70%] flex flex-col gap-8 relative mx-auto">
           <Button
-            className="w-fit bg-transparent absolute top-2 left-2 dark:hover:bg-dark-slate-gray-500 hover:bg-slate-200 "
+            className="w-fit bg-transparent absolute top-2 left-2 dark:hover:bg-dark-slate-gray-500 hover:bg-slate-200 text-zinc-800 dark:text-slate-50"
             onClick={() => window.history.back()}
             leftIcon={
               <ChevronLeft
@@ -55,7 +55,7 @@ const UserDetails = ({ params }: UserDetailsProps) => {
           >
             {fetchedUser.username}
           </Button>
-          <div className="w-full grid grid-cols-[20%_1fr] gap-4 items-center justify-center mt-16">
+          <div className="w-full flex flex-row gap-4 items-center justify-between mt-16">
             <div className="h-56 w-56">
               <UserAvatar
                 userImage={fetchedUser.profilePicture}
@@ -64,7 +64,7 @@ const UserDetails = ({ params }: UserDetailsProps) => {
                 height={120}
               />
             </div>
-            <div className="flex flex-col gap-1 items-center justify-center">
+            <div className="flex flex-col flex-1 gap-1 items-center justify-center">
               <Text className="font-bold text-start">
                 {fetchedUser.fullName}
               </Text>
