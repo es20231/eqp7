@@ -13,7 +13,6 @@ const PostSchema = {
     user: {
       type: 'object',
       properties: {
-        id: { type: 'string' },
         username: { type: 'string' },
         fullName: { type: 'string' },
         profilePicture: { type: 'string' },

@@ -30,7 +30,6 @@ const PrismaPostRepository: IPostRepository = {
             fullName: true,
           },
         },
-        postReactions: true,
       },
     })
     return posts
