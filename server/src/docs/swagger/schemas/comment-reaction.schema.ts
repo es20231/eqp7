@@ -5,6 +5,13 @@ const commentReactionSchema = {
     userId: { type: 'string' },
     commentId: { type: 'string' },
     type: { type: 'string' },
+    user: {
+      type: 'object',
+      properties: {
+        profilePicture: { type: 'string' },
+        username: { type: 'string' },
+      },
+    },
   },
 }
 
@@ -254,11 +261,8 @@ const deleteCommentReactionSchema = {
 }
 
 export {
-  getCommentReactionsByCommentIdSchema,
-  getCommentReactionsByUserIdSchema,
-  getCommentReactionByIdSchema,
-  getCommentReactionsSchema,
-  createCommentReactionSchema,
-  deleteCommentReactionSchema,
-  commentReactionSchema,
+  commentReactionSchema, createCommentReactionSchema,
+  deleteCommentReactionSchema, getCommentReactionByIdSchema, getCommentReactionsByCommentIdSchema,
+  getCommentReactionsByUserIdSchema, getCommentReactionsSchema
 }
+

@@ -48,6 +48,14 @@ const PrismaCommentReactionRepository: ICommentReactionRepository = {
         commentId,
         type,
       },
+      include: {
+        user: {
+          select: {
+            profilePicture: true,
+            username: true,
+          },
+        },
+      },
       take,
       skip,
     })
