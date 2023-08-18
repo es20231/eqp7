@@ -3,8 +3,12 @@ import { Image } from '../entities/image.entity'
 
 interface IImageRepository {
   getImage: (id: string) => Promise<Image | undefined>
-  getImages: () => Promise<Image[]>
-  getUserImages: (userId: string) => Promise<Image[]>
+  getImages: (take?: number, skip?: number) => Promise<Image[]>
+  getUserImages: (
+    userId: string,
+    take?: number,
+    skip?: number,
+  ) => Promise<Image[]>
   createImage: (image: CreateImageDTO) => Promise<Image>
   deleteImage: (id: string) => Promise<Image>
 }

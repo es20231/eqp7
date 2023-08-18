@@ -5,19 +5,26 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface IImageService {
-  getImages: () => Promise<ServiceResult<Image[]>>
+  getImages: (take?: number, skip?: number) => Promise<ServiceResult<Image[]>>
   getImage: (id: string) => Promise<ServiceResult<Image>>
   createImage: (image: CreateImageDTO) => Promise<ServiceResult<Image>>
   deleteImage: (id: string) => Promise<ServiceResult<void>>
-  getUserImages: (userId: string) => Promise<ServiceResult<Image[]>>
+  getUserImages: (
+    userId: string,
+    take?: number,
+    skip?: number,
+  ) => Promise<ServiceResult<Image[]>>
 }
 
 const ImageService = (
   imageRepository: IImageRepository,
   userRepository: IUserRepository,
 ): IImageService => ({
-  getImages: async (): Promise<ServiceResult<Image[]>> => {
-    const images = await imageRepository.getImages()
+  getImages: async (
+    take?: number,
+    skip?: number,
+  ): Promise<ServiceResult<Image[]>> => {
+    const images = await imageRepository.getImages(take, skip)
     return {
       ok: true,
       message: 'Images found successfully',
@@ -79,7 +86,7 @@ const ImageService = (
       payload: undefined,
     }
   },
-  getUserImages: async (userId: string) => {
+  getUserImages: async (userId: string, take?: number, skip?: number) => {
     const user = await userRepository.getUserById(userId)
 
     if (!user) {
@@ -90,7 +97,7 @@ const ImageService = (
       }
     }
 
-    const images = await imageRepository.getUserImages(userId)
+    const images = await imageRepository.getUserImages(userId, take, skip)
 
     return {
       ok: true,

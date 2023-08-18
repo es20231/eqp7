@@ -13,6 +13,13 @@ const getImagesSchema = {
   tags: ['image'],
   type: 'object',
   security: [{ bearer: [] }],
+  querystring: {
+    type: 'object',
+    properties: {
+      take: { type: 'number' },
+      skip: { type: 'number' },
+    },
+  },
   response: {
     200: {
       type: 'object',
@@ -84,6 +91,13 @@ const getImagesByUserIdSchema = {
     type: 'object',
     properties: {
       id: { type: 'string' },
+    },
+  },
+  querystring: {
+    type: 'object',
+    properties: {
+      take: { type: 'number' },
+      skip: { type: 'number' },
     },
   },
   response: {

@@ -13,13 +13,19 @@ const MemoryPostRepository: IPostRepository = {
 
     return post || undefined
   },
-  getPosts: async () => {
+  getPosts: async (take?: number, skip?: number) => {
     await delay()
+    if (!take && skip) return posts.slice(skip)
+    if (take && !skip) return posts.slice(0, take)
+    if (take && skip) return posts.slice(skip, skip + take)
     return posts
   },
-  getPostsByUserId: async (userId: string) => {
+  getPostsByUserId: async (userId: string, take?: number, skip?: number) => {
     await delay()
     const userPosts = posts.filter((post) => post.userId === userId)
+    if (!take && skip) return userPosts.slice(skip)
+    if (take && !skip) return userPosts.slice(0, take)
+    if (take && skip) return userPosts.slice(skip, skip + take)
     return userPosts
   },
   createPost: async (post: CreatePostDTO) => {

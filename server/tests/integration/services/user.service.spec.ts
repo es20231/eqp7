@@ -537,6 +537,36 @@ describe('Memory User Service', () => {
       )
     })
 
+    it('should get two images from a user when try to get all images from a user with take 2', async () => {
+      const { payload: created } = await service.createUser(defaultUser)
+
+      if (!created) throw new Error('User not created')
+
+      const { id } = created
+
+      await imageService.createImage({
+        userId: id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      await imageService.createImage({
+        userId: id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      await imageService.createImage({
+        userId: id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      const { ok, message, payload } = await service.getUserImages(id, 2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Images found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toHaveLength(2)
+    })
+
     it('should not get user images from non existent user', async () => {
       const { ok, message, payload } = await service.getUserImages(
         'non-existent',
@@ -579,6 +609,59 @@ describe('Memory User Service', () => {
             id: expect.any(String),
             imageId: imageCreated.id,
             subtitle: 'test',
+            userId: created.id,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+    it('should get one post from a user when try to get all posts from a user with take 1 and skip 2', async () => {
+      const { payload: created } = await service.createUser(defaultUser)
+
+      if (!created) throw new Error('User not created')
+
+      const { payload: imageCreated } = await imageService.createImage({
+        userId: created.id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      if (!imageCreated) throw new Error('Image not created')
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test',
+        userId: created.id,
+      })
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test2',
+        userId: created.id,
+      })
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test3',
+        userId: created.id,
+      })
+
+      const { ok, message, payload } = await service.getUserPosts(
+        created.id,
+        1,
+        2,
+      )
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Posts found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toHaveLength(1)
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            imageId: imageCreated.id,
+            subtitle: 'test3',
             userId: created.id,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
@@ -1110,6 +1193,36 @@ describe('Prisma User Service', () => {
       )
     })
 
+    it('should get two images from a user when try to get all images from a user with take 2', async () => {
+      const { payload: created } = await service.createUser(defaultUser)
+
+      if (!created) throw new Error('User not created')
+
+      const { id } = created
+
+      await imageService.createImage({
+        userId: id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      await imageService.createImage({
+        userId: id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      await imageService.createImage({
+        userId: id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      const { ok, message, payload } = await service.getUserImages(id, 2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Images found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toHaveLength(2)
+    })
+
     it('should not get user images from non existent user', async () => {
       const { ok, message, payload } = await service.getUserImages(
         'non-existent',
@@ -1159,6 +1272,60 @@ describe('Prisma User Service', () => {
         ]),
       )
     })
+    it('should get one post from a user when try to get all posts from a user with take 1 and skip 2', async () => {
+      const { payload: created } = await service.createUser(defaultUser)
+
+      if (!created) throw new Error('User not created')
+
+      const { payload: imageCreated } = await imageService.createImage({
+        userId: created.id,
+        url: 'https://github.com/CassianoJunior.png',
+      })
+
+      if (!imageCreated) throw new Error('Image not created')
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test',
+        userId: created.id,
+      })
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test2',
+        userId: created.id,
+      })
+
+      await postService.createPost({
+        imageId: imageCreated.id,
+        subtitle: 'test3',
+        userId: created.id,
+      })
+
+      const { ok, message, payload } = await service.getUserPosts(
+        created.id,
+        1,
+        2,
+      )
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Posts found successfully')
+      expect(payload).toBeDefined()
+      expect(payload).toHaveLength(1)
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            imageId: imageCreated.id,
+            subtitle: 'test3',
+            userId: created.id,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should not get user posts from non existent user', async () => {
       const { ok, message, payload } = await service.getUserPosts(
         'non-existent',

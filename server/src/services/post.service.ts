@@ -7,9 +7,13 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface IPostService {
-  getPosts(): Promise<ServiceResult<Post[]>>
+  getPosts(take?: number, skip?: number): Promise<ServiceResult<Post[]>>
   getPostById(id: string): Promise<ServiceResult<Post>>
-  getPostsByUserId(userId: string): Promise<ServiceResult<Post[]>>
+  getPostsByUserId(
+    userId: string,
+    take?: number,
+    skip?: number,
+  ): Promise<ServiceResult<Post[]>>
   createPost(post: CreatePostDTO): Promise<ServiceResult<Post>>
   updatePost(id: string, post: UpdatePostDTO): Promise<ServiceResult<Post>>
   deletePost(id: string): Promise<ServiceResult<void>>
@@ -20,8 +24,11 @@ const PostService = (
   postRepository: IPostRepository,
   userRepository: IUserRepository,
 ): IPostService => ({
-  getPosts: async (): Promise<ServiceResult<Post[]>> => {
-    const posts = await postRepository.getPosts()
+  getPosts: async (
+    take?: number,
+    skip?: number,
+  ): Promise<ServiceResult<Post[]>> => {
+    const posts = await postRepository.getPosts(take, skip)
     return {
       ok: true,
       message: 'Posts found successfully',
@@ -43,7 +50,11 @@ const PostService = (
       payload: post,
     }
   },
-  getPostsByUserId: async (userId: string): Promise<ServiceResult<Post[]>> => {
+  getPostsByUserId: async (
+    userId: string,
+    take?: number,
+    skip?: number,
+  ): Promise<ServiceResult<Post[]>> => {
     const user = await userRepository.getUserById(userId)
     if (!user) {
       return {
@@ -52,7 +63,7 @@ const PostService = (
         payload: undefined,
       }
     }
-    const posts = await postRepository.getPostsByUserId(userId)
+    const posts = await postRepository.getPostsByUserId(userId, take, skip)
     return {
       ok: true,
       message: 'Posts found successfully',

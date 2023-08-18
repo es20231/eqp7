@@ -314,6 +314,13 @@ const getUserImagesSchema = {
       id: { type: 'string' },
     },
   },
+  querystring: {
+    type: 'object',
+    properties: {
+      take: { type: 'number' },
+      skip: { type: 'number' },
+    },
+  },
   response: {
     200: {
       type: 'object',
@@ -351,6 +358,13 @@ const getUserPostsSchema = {
     type: 'object',
     properties: {
       id: { type: 'string' },
+    },
+  },
+  querystring: {
+    type: 'object',
+    properties: {
+      take: { type: 'number' },
+      skip: { type: 'number' },
     },
   },
   response: {
