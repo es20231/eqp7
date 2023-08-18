@@ -1,12 +1,10 @@
-import { CommentReaction } from './comment-reaction.entity'
-
 interface Comment {
   id: string
   content: string
   userId: string
   postId: string
 
-  commentReactions?: CommentReaction[]
+  commentReactions?: any[]
 }
 
 export { Comment }
