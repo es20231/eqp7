@@ -16,9 +16,9 @@ interface CreatePostProps {
 const createPost = async ({ post, token }: CreatePostProps) => {
   const { data } = await api(token).post('/posts', post)
 
-  const posts: UserPostDTO = data.payload
+  const postCreated: UserPostDTO = data.payload
 
-  return posts
+  return postCreated
 }
 
 const useCreatePost = () => {
@@ -32,4 +32,30 @@ const useCreatePost = () => {
   )
 }
 
-export { useCreatePost }
+export type UpdatePostDTO = {
+  subtitle: string
+  id: string
+}
+
+interface UpdatePostProps {
+  post: UpdatePostDTO
+  token: string
+}
+
+const updatePost = async ({ post, token }: UpdatePostProps) => {
+  const { data } = await api(token).patch(`/posts/${post.id}`, {
+    subtitle: post.subtitle,
+  })
+
+  const postUpdated: UserPostDTO = data.payload
+
+  return postUpdated
+}
+
+const useUpdatePost = () => {
+  return useMutation(({ post, token }: UpdatePostProps) =>
+    updatePost({ post, token }),
+  )
+}
+
+export { useCreatePost, useUpdatePost }
