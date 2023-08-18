@@ -94,10 +94,10 @@ const NavOption = ({ name, route, ...rest }: NavOptionProps) => {
   return (
     <Link
       className={twMerge(
-        'text-zinc-900 dark:text-slate-50 py-2 px-4 dark:hover:bg-slate-900/80 transition-colors rounded-md hover:bg-gray-300',
-        isSelected ? 'dark:bg-slate-900/80 bg-gray-300' : '',
+        'text-zinc-900 dark:text-slate-50 py-2 px-4 dark:hover:bg-slate-900/80 transition-colors rounded-md hover:bg-gray-300 data-[selected=true]:bg-gray-300 dark:data-[selected=true]:bg-slate-900/80',
       )}
       href={route}
+      data-selected={isSelected}
       {...rest}
     >
       {name}
