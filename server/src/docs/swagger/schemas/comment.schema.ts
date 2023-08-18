@@ -1,4 +1,3 @@
-import { commentReactionSchema } from './comment-reaction.schema'
 
 const commentSchema = {
   type: 'object',
@@ -14,9 +13,11 @@ const commentSchema = {
         profilePicture: { type: 'string' },
       },
     },
-    reactions: {
-      type: 'array',
-      items: commentReactionSchema,
+    post: {
+      type: 'object',
+      properties: {
+        userId: { type: 'string' },
+      },
     },
   },
 }

@@ -33,19 +33,9 @@ const PrismaCommentRepository: ICommentRepository = {
             username: true,
           },
         },
-        commentReactions: {
+        post: {
           select: {
-            user: {
-              select: {
-                profilePicture: true,
-                username: true,
-              },
-            },
-            type: true,
-            createdAt: true,
-            id: true,
             userId: true,
-            commentId: true,
           },
         },
       },
