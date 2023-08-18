@@ -27,7 +27,7 @@ const Header = () => {
   if (!userInfo) return null
 
   return (
-    <nav className="relative bg-transparent min-w-full grid grid-cols-[20%_1fr_35%] 2xl:grid-cols-[20%_1fr_25%] items-center justify-evenly py-3">
+    <nav className="relative bg-transparent min-w-full grid grid-cols-[20%_1fr_35%] 2xl:grid-cols-[20%_1fr_30%] items-center justify-evenly py-3">
       <div className="w-full items-center justify-end px-4 flex">
         <Logo mode="collapsed" width={50} height={50} />
       </div>
