@@ -90,10 +90,10 @@ const NewCommentFormComponent = ({
           width={8}
         />
       </div>
-      <Form.Field className="dark:bg-dark-slate-gray-400 bg-slate-100">
+      <Form.Field className="dark:bg-dark-slate-gray-400 bg-slate-100 flex-1">
         <Form.TextArea
-          className="resize-none text-sm bg-slate-100 dark:bg-dark-slate-gray-400 shadow-none text-zinc-800 dark:text-slate-50 max-h-7"
-          around="dark:bg-dark-slate-gray-400 bg-slate-100"
+          className="overflow-y-hidden resize-none text-sm 2xl:text-sm 2xl:py-1 bg-slate-100 dark:bg-dark-slate-gray-400 shadow-none text-zinc-800 dark:text-slate-50 max-h-7"
+          around="dark:bg-dark-slate-gray-400 bg-slate-100 2xl:py-1"
           name="content"
           placeholder="Digite seu comentário"
           right={
