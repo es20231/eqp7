@@ -5,6 +5,13 @@ const postReactionSchema = {
     userId: { type: 'string' },
     postId: { type: 'string' },
     type: { type: 'string' },
+    user: {
+      type: 'object',
+      properties: {
+        username: { type: 'string' },
+        profilePicture: { type: 'string' },
+      },
+    },
   },
 }
 
@@ -254,11 +261,8 @@ const deletePostReactionSchema = {
 }
 
 export {
-  getPostReactionsByPostIdSchema,
-  getPostReactionsByUserIdSchema,
-  getPostReactionByIdSchema,
-  getPostReactionsSchema,
   createPostReactionSchema,
-  deletePostReactionSchema,
-  postReactionSchema,
+  deletePostReactionSchema, getPostReactionByIdSchema, getPostReactionsByPostIdSchema,
+  getPostReactionsByUserIdSchema, getPostReactionsSchema, postReactionSchema
 }
+

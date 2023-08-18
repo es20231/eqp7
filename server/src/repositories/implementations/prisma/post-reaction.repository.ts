@@ -48,6 +48,14 @@ const PrismaPostReactionRepository: IPostReactionRepository = {
         postId,
         type,
       },
+      include: {
+        user: {
+          select: {
+            username: true,
+            profilePicture: true,
+          },
+        },
+      },
       take,
       skip,
     })
