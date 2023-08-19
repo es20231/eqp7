@@ -1,5 +1,5 @@
-import { api } from '@/services/axios';
-import { QueryFunctionContext, useQuery } from 'react-query';
+import { api } from '@/services/axios'
+import { QueryFunctionContext, useQuery } from 'react-query'
 
 type GetPostCommentsQueryKey = ['comments', { token: string; postId: string }]
 
@@ -147,6 +147,5 @@ export {
   useDeleteComment,
   useDeleteCommentReaction,
   useGetCommentReactions,
-  useGetPostComments
-};
-
+  useGetPostComments,
+}
