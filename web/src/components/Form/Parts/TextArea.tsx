@@ -32,7 +32,7 @@ const TextArea = ({
         id={name}
         autoComplete="off"
         className={twMerge([
-          'py-1 2xl:py-2 text-sm 2xl:text-lg text-slate-50 focus:outline-none',
+          'flex-1 py-1 2xl:py-2 text-sm 2xl:text-lg text-slate-50 focus:outline-none',
           className,
         ])}
         {...register(name)}
