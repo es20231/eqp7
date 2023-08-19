@@ -20,7 +20,26 @@ const postService = instantiatedPostService(
 
 const PostController = {
   getPosts: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { ok, message, payload } = await postService.getPosts()
+    const queryParamsSchema = z
+      .object({
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.query as object,
+      queryParamsSchema,
+    )
+
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { take, skip } = payloadParse
+
+    const { ok, message, payload } = await postService.getPosts(take, skip)
 
     if (!ok) {
       reply.status(400).send({ message })
@@ -59,25 +78,45 @@ const PostController = {
   },
 
   getPostsByUserId: async (request: FastifyRequest, reply: FastifyReply) => {
+    const queryParamsSchema = z
+      .object({
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
+      })
+      .strict()
+
     const paramsSchema = z
       .object({
         id: z.string().nonempty('User id is required on url params'),
       })
       .strict()
 
-    const { ok: okParse, payload: payloadParse } = handleZodParse(
+    const { ok: okParseQueryParams, payload: payloadParseQueryParams } =
+      handleZodParse(request.query as object, queryParamsSchema)
+
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
       request.params as object,
       paramsSchema,
     )
 
-    if (!okParse) {
-      reply.status(400).send(payloadParse)
+    if (!okParseQueryParams) {
+      reply.status(400).send(payloadParseQueryParams)
       return
     }
 
-    const { id } = payloadParse
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
 
-    const { ok, message, payload } = await postService.getPostsByUserId(id)
+    const { take, skip } = payloadParseQueryParams
+    const { id } = payloadParseParams
+
+    const { ok, message, payload } = await postService.getPostsByUserId(
+      id,
+      take,
+      skip,
+    )
 
     if (!ok) {
       reply.status(400).send({ message })

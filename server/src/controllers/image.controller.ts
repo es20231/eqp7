@@ -18,14 +18,33 @@ const ImageService = instantiatedImageService(
 
 const ImageController = {
   getImages: async (request: FastifyRequest, reply: FastifyReply) => {
-    const { ok, message, payload } = await ImageService.getImages()
+    const queryParamsSchema = z
+      .object({
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
+      })
+      .strict()
+
+    const { ok: okParse, payload: payloadParse } = handleZodParse(
+      request.query as object,
+      queryParamsSchema,
+    )
+
+    if (!okParse) {
+      reply.status(400).send(payloadParse)
+      return
+    }
+
+    const { take, skip } = payloadParse
+
+    const { ok, message, payload } = await ImageService.getImages(take, skip)
 
     if (!ok) {
       reply.status(400).send({ message })
       return
     }
 
-    reply.status(200).send({ message, payload })
+    return reply.status(200).send({ message, payload })
   },
   getImage: async (request: FastifyRequest, reply: FastifyReply) => {
     const paramsSchema = z
@@ -146,32 +165,52 @@ const ImageController = {
     reply.status(200).send({ message })
   },
   getUserImages: async (request: FastifyRequest, reply: FastifyReply) => {
-    const paramsSchema = z
+    const queryParamsSchema = z
       .object({
-        id: z.string().nonempty('Id is required on url params'),
+        take: z.number().int().nonnegative().optional(),
+        skip: z.number().int().nonnegative().optional(),
       })
       .strict()
 
-    const { ok: okParse, payload: payloadParse } = handleZodParse(
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('User id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParseQueryParams, payload: payloadParseQueryParams } =
+      handleZodParse(request.query as object, queryParamsSchema)
+
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
       request.params as object,
       paramsSchema,
     )
 
-    if (!okParse) {
-      reply.status(400).send(payloadParse)
+    if (!okParseQueryParams) {
+      reply.status(400).send(payloadParseQueryParams)
       return
     }
 
-    const { id } = payloadParse
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
 
-    const { ok, message, payload } = await ImageService.getUserImages(id)
+    const { take, skip } = payloadParseQueryParams
+    const { id } = payloadParseParams
+
+    const { ok, message, payload } = await ImageService.getUserImages(
+      id,
+      take,
+      skip,
+    )
 
     if (!ok) {
       reply.status(400).send({ message })
       return
     }
 
-    reply.status(200).send({ message, payload })
+    return reply.status(200).send({ message, payload })
   },
 }
 

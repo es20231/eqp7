@@ -93,6 +93,87 @@ describe('MemoryImageRepository', () => {
     )
   })
 
+  it('should get two images when try to get all images with take 2', async () => {
+    const image1 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const image2 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const image3 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    await repository.createImage(image1)
+    await repository.createImage(image2)
+    await repository.createImage(image3)
+
+    const images = await repository.getImages(2)
+
+    expect(images).toBeTruthy()
+    expect(images).toHaveLength(2)
+    expect(images).toStrictEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          url: image1.url,
+          userId: image1.userId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        }),
+        expect.objectContaining({
+          id: expect.any(String),
+          url: image2.url,
+          userId: image2.userId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        }),
+      ]),
+    )
+  })
+
+  it('should get one image when try to get all images with take 1 and skip 1', async () => {
+    const image1 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const image2 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const image3 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    await repository.createImage(image1)
+    await repository.createImage(image2)
+    await repository.createImage(image3)
+
+    const images = await repository.getImages(1, 1)
+
+    expect(images).toBeTruthy()
+    expect(images).toHaveLength(1)
+    expect(images).toStrictEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          url: image2.url,
+          userId: image2.userId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        }),
+      ]),
+    )
+  })
+
   it('should delete an image by id', async () => {
     const image = {
       url: 'https://github.com/CassianoJunior.png',

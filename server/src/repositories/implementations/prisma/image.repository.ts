@@ -12,16 +12,21 @@ const PrismaImageRepository: IImageRepository = {
 
     return image || undefined
   },
-  getImages: async () => {
-    const images = await prisma.image.findMany()
+  getImages: async (take?: number, skip?: number) => {
+    const images = await prisma.image.findMany({
+      take,
+      skip,
+    })
 
     return images
   },
-  getUserImages: async (userId: string) => {
+  getUserImages: async (userId: string, take?: number, skip?: number) => {
     const userImages = await prisma.image.findMany({
       where: {
         userId,
       },
+      take,
+      skip,
     })
 
     return userImages

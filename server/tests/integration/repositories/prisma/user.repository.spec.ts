@@ -115,6 +115,90 @@ describe('UserPrismaRepository', () => {
       )
     })
 
+    it('should get two users when try to get all users with take 2', async () => {
+      await repository.createUser(defaultUser)
+      await repository.createUser({
+        username: 'test2',
+        email: 'test2@test.com',
+        fullName: 'Test2 tested',
+        password: 'test2',
+      })
+      await repository.createUser({
+        username: 'test3',
+        email: 'test3@test.com',
+        fullName: 'Test3 tested',
+        password: 'test3',
+      })
+
+      const users = await repository.getUsers(2)
+
+      expect(users).toBeDefined()
+      expect(users).toHaveLength(2)
+      expect(users).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            ...defaultUser,
+            password: expect.any(String),
+            id: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            username: 'test2',
+            email: 'test2@test.com',
+            fullName: 'Test2 tested',
+            id: expect.any(String),
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should get one user when try to get all users with take 1 and skip 2', async () => {
+      await repository.createUser(defaultUser)
+      await repository.createUser({
+        username: 'test2',
+        email: 'test2@test.com',
+        fullName: 'Test2 tested',
+        password: 'test2',
+      })
+      await repository.createUser({
+        username: 'test3',
+        email: 'test3@test.com',
+        fullName: 'Test3 tested',
+        password: 'test3',
+      })
+
+      const users = await repository.getUsers(1, 2)
+
+      expect(users).toBeDefined()
+      expect(users).toHaveLength(1)
+      expect(users).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            username: 'test3',
+            email: 'test3@test.com',
+            fullName: 'Test3 tested',
+            id: expect.any(String),
+            password: expect.any(String),
+            profilePicture: undefined,
+            biography: undefined,
+            emailVerified: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should get a user by id', async () => {
       const created = await repository.createUser(defaultUser)
       const user = await repository.getUserById(created.id)

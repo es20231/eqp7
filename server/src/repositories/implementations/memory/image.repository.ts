@@ -11,14 +11,20 @@ const MemoryImageRepository: IImageRepository = {
 
     return image || undefined
   },
-  getImages: async () => {
+  getImages: async (take?: number, skip?: number) => {
     await delay()
+
+    if (!take && skip) return images.slice(skip)
+    if (take && !skip) return images.slice(0, take)
+    if (take && skip) return images.slice(skip, skip + take)
     return images
   },
-  getUserImages: async (userId: string) => {
+  getUserImages: async (userId: string, take?: number, skip?: number) => {
     await delay()
     const userImages = images.filter((image) => image.userId === userId)
-
+    if (!take && skip) return userImages.slice(skip)
+    if (take && !skip) return userImages.slice(0, take)
+    if (take && skip) return userImages.slice(skip, skip + take)
     return userImages
   },
   createImage: async (image: CreateImageDTO) => {

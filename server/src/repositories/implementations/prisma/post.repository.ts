@@ -12,11 +12,13 @@ const PrismaPostRepository: IPostRepository = {
     })
     return post || undefined
   },
-  getPostsByUserId: async (userId: string) => {
+  getPostsByUserId: async (userId: string, take?: number, skip?: number) => {
     const posts = await prisma.post.findMany({
       where: {
         userId,
       },
+      take,
+      skip,
       include: {
         image: {
           select: {
@@ -32,8 +34,11 @@ const PrismaPostRepository: IPostRepository = {
     })
     return posts
   },
-  getPosts: async () => {
-    const posts = await prisma.post.findMany()
+  getPosts: async (take?: number, skip?: number) => {
+    const posts = await prisma.post.findMany({
+      take,
+      skip,
+    })
     return posts
   },
   createPost: async (post: CreatePostDTO) => {
