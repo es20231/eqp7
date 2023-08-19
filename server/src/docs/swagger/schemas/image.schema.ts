@@ -4,6 +4,7 @@ const ImageSchema = {
     id: { type: 'string' },
     userId: { type: 'string' },
     url: { type: 'string' },
+    filter: { type: 'string', nullable: true },
     createdAt: { type: 'string' },
     updatedAt: { type: 'string' },
   },
@@ -164,6 +165,49 @@ const createImageSchema = {
     },
   },
 }
+
+const updateImageSchema = {
+  tags: ['image'],
+  type: 'object',
+  security: [{ bearer: [] }],
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'string' },
+    },
+  },
+  body: {
+    type: 'object',
+    properties: {
+      filter: { type: 'string' },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      description: 'Update image successful',
+      properties: {
+        message: { type: 'string' },
+        payload: ImageSchema,
+      },
+    },
+    400: {
+      type: 'object',
+      description: 'Update image failed',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    401: {
+      type: 'object',
+      description: 'Unauthorized',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+  },
+}
+
 const deleteImageSchema = {
   tags: ['image'],
   type: 'object',
@@ -206,4 +250,6 @@ export {
   getImageByIdSchema,
   getImagesByUserIdSchema,
   getImagesSchema,
+  updateImageSchema
 }
+

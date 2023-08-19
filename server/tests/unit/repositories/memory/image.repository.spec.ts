@@ -20,7 +20,7 @@ describe('MemoryImageRepository', () => {
     const created = await repository.createImage(image)
 
     expect(created).toBeTruthy()
-    expect(created).toStrictEqual({
+    expect(created).toMatchObject({
       id: expect.any(String),
       url: image.url,
       userId: image.userId,
@@ -38,7 +38,7 @@ describe('MemoryImageRepository', () => {
     const { id } = created
     const finded = await repository.getImage(id)
     expect(finded).toBeTruthy()
-    expect(finded).toStrictEqual({
+    expect(finded).toMatchObject({
       id,
       url: image.url,
       userId: image.userId,
@@ -71,7 +71,7 @@ describe('MemoryImageRepository', () => {
 
     expect(images).toBeTruthy()
     expect(images).toHaveLength(2)
-    expect(images).toStrictEqual(
+    expect(images).toMatchObject(
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(String),
@@ -115,7 +115,7 @@ describe('MemoryImageRepository', () => {
 
     expect(images).toBeTruthy()
     expect(images).toHaveLength(2)
-    expect(images).toStrictEqual(
+    expect(images).toMatchObject(
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(String),
@@ -159,7 +159,7 @@ describe('MemoryImageRepository', () => {
 
     expect(images).toBeTruthy()
     expect(images).toHaveLength(1)
-    expect(images).toStrictEqual(
+    expect(images).toMatchObject(
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(String),
@@ -183,7 +183,7 @@ describe('MemoryImageRepository', () => {
     const deleted = await repository.deleteImage(id)
 
     expect(deleted).toBeTruthy()
-    expect(deleted).toStrictEqual({
+    expect(deleted).toMatchObject({
       id,
       url: image.url,
       userId: image.userId,

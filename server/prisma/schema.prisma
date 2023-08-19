@@ -34,10 +34,12 @@ model User {
 }
 
 model Image {
-  id     String @id @default(cuid())
-  url    String
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id      String  @id @default(cuid())
+  url     String
+  userId  String
+  filter  String?
+  deleted Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   posts Post[]
 

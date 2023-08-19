@@ -37,17 +37,7 @@ describe('PrismaPostRepository', () => {
   })
 
   afterAll(async () => {
-    await prisma.image.delete({
-      where: {
-        id: imageId,
-      },
-    })
-
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    })
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => await clearPostsPrisma())
@@ -271,7 +261,7 @@ describe('PrismaPostRepository', () => {
     const deleted = await repository.deletePost(id)
 
     expect(deleted).toBeTruthy()
-    expect(deleted).toStrictEqual({
+    expect(deleted).toMatchObject({
       id,
       subtitle: post.subtitle,
       userId: post.userId,

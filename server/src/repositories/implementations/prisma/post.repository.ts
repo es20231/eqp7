@@ -23,6 +23,7 @@ const PrismaPostRepository: IPostRepository = {
         image: {
           select: {
             url: true,
+            filter: true,
           },
         },
         user: {
@@ -69,7 +70,36 @@ const PrismaPostRepository: IPostRepository = {
       where: {
         id,
       },
+      include: {
+        image: {
+          select: {
+            deleted: true,
+          },
+        },
+      },
     })
+
+    const {
+      image: { deleted },
+    } = deletedPost
+
+    if (!deleted) return deletedPost
+
+    const postsWithSameImage = await prisma.post.findMany({
+      where: {
+        imageId: deletedPost.imageId,
+      },
+    })
+
+    if (postsWithSameImage.length === 0) {
+      await prisma.image.delete({
+        where: {
+          id: deletedPost.imageId,
+          deleted: true,
+        },
+      })
+    }
+
     return deletedPost
   },
 }

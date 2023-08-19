@@ -1,5 +1,5 @@
 import { instantiatedPostService } from '../../../src/factories/post.factory'
-import { clearPrismaDatabase, prisma } from '../../../src/lib/prisma'
+import { clearPrismaDatabase } from '../../../src/lib/prisma'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import {
   MemoryPostRepository,
@@ -470,9 +470,7 @@ describe('PrismaPostService', () => {
   })
 
   afterAll(async () => {
-    await prisma.image.deleteMany()
-
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => {

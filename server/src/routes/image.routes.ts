@@ -6,6 +6,7 @@ import {
   getImageByIdSchema,
   getImagesByUserIdSchema,
   getImagesSchema,
+  updateImageSchema,
 } from '../docs/swagger/schemas/image.schema'
 import { authenticate } from '../middlewares/auth.middleware'
 
@@ -32,6 +33,10 @@ const ImageRoutes = (
       ...optionsWithAuth,
       schema: createImageSchema,
     },
+    update: {
+      ...optionsWithAuth,
+      schema: updateImageSchema,
+    },
     delete: {
       ...optionsWithAuth,
       schema: deleteImageSchema,
@@ -49,6 +54,13 @@ const ImageRoutes = (
     ImageController.getImage,
   )
   fastify.post('/images', optionsWithSchema.create, ImageController.createImage)
+
+  fastify.patch(
+    '/images/:id',
+    optionsWithSchema.update,
+    ImageController.updateImage,
+  )
+
   fastify.delete(
     '/images/:id',
     optionsWithSchema.delete,

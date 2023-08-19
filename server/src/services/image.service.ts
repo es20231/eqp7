@@ -1,4 +1,5 @@
 import { CreateImageDTO } from '../dtos/image/create-image.dto'
+import { UpdateImageDTO } from '../dtos/image/update-image.dto'
 import { Image } from '../entities/image.entity'
 import { IImageRepository } from '../repositories/iimage.repository'
 import { IUserRepository } from '../repositories/iuser.repository'
@@ -8,6 +9,10 @@ interface IImageService {
   getImages: (take?: number, skip?: number) => Promise<ServiceResult<Image[]>>
   getImage: (id: string) => Promise<ServiceResult<Image>>
   createImage: (image: CreateImageDTO) => Promise<ServiceResult<Image>>
+  updateImage: (
+    id: string,
+    image: UpdateImageDTO,
+  ) => Promise<ServiceResult<Image>>
   deleteImage: (id: string) => Promise<ServiceResult<void>>
   getUserImages: (
     userId: string,
@@ -65,6 +70,25 @@ const ImageService = (
       ok: true,
       message: 'Image created successfully',
       payload: created,
+    }
+  },
+  updateImage: async (id: string, image: UpdateImageDTO) => {
+    const imageExists = await imageRepository.getImage(id)
+
+    if (!imageExists) {
+      return {
+        ok: false,
+        message: `Image #${id} not found`,
+        payload: undefined,
+      }
+    }
+
+    const updated = await imageRepository.updateImage(id, image)
+
+    return {
+      ok: true,
+      message: 'Image updated successfully',
+      payload: updated,
     }
   },
   deleteImage: async (id: string) => {

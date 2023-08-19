@@ -3,6 +3,10 @@ import {
   PrismaImageRepository,
   clearImagesPrisma,
 } from '../../../../src/repositories/implementations/prisma/image.repository'
+import {
+  PrismaPostRepository,
+  clearPostsPrisma,
+} from '../../../../src/repositories/implementations/prisma/post.repository'
 
 describe('PrismaImageRepository', () => {
   const repository = PrismaImageRepository
@@ -26,14 +30,13 @@ describe('PrismaImageRepository', () => {
   })
 
   afterAll(async () => {
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    })
+    await clearPrismaDatabase()
   })
 
-  afterEach(async () => await clearImagesPrisma())
+  afterEach(async () => {
+    await clearPostsPrisma()
+    await clearImagesPrisma()
+  })
 
   it('should create an image', async () => {
     const image = {
@@ -43,7 +46,7 @@ describe('PrismaImageRepository', () => {
     const created = await repository.createImage(image)
 
     expect(created).toBeTruthy()
-    expect(created).toStrictEqual({
+    expect(created).toMatchObject({
       id: expect.any(String),
       url: image.url,
       userId: image.userId,
@@ -70,7 +73,7 @@ describe('PrismaImageRepository', () => {
 
     const finded = await repository.getImage(id)
     expect(finded).toBeTruthy()
-    expect(finded).toStrictEqual({
+    expect(finded).toMatchObject({
       id,
       url: image.url,
       userId: image.userId,
@@ -102,7 +105,7 @@ describe('PrismaImageRepository', () => {
 
     expect(images).toBeTruthy()
     expect(images).toHaveLength(2)
-    expect(images).toStrictEqual(
+    expect(images).toMatchObject(
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(String),
@@ -136,7 +139,7 @@ describe('PrismaImageRepository', () => {
     const deleted = await repository.deleteImage(id)
 
     expect(deleted).toBeTruthy()
-    expect(deleted).toStrictEqual({
+    expect(deleted).toMatchObject({
       id,
       url: image.url,
       userId: image.userId,
@@ -147,6 +150,57 @@ describe('PrismaImageRepository', () => {
     const finded = await repository.getImage(id)
 
     expect(finded).toBeUndefined()
+  })
+
+  it('should do soft delete an image by id when image have post relationship', async () => {
+    const image = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const created = await repository.createImage(image)
+
+    const { id: postId } = await prisma.post.create({
+      data: {
+        subtitle: 'Post title',
+        imageId: created.id,
+        userId,
+      },
+    })
+
+    const deleted = await repository.deleteImage(created.id)
+
+    expect(deleted).toMatchObject({
+      id: created.id,
+      url: image.url,
+      userId: image.userId,
+      filter: undefined,
+      deleted: true,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+
+    const finded = await repository.getImage(created.id)
+
+    expect(finded).toBeUndefined()
+
+    expect(
+      await prisma.image.findUnique({ where: { id: created.id } }),
+    ).toMatchObject({
+      id: created.id,
+      url: image.url,
+      userId: image.userId,
+      filter: null,
+      deleted: true,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    })
+
+    await PrismaPostRepository.deletePost(postId)
+
+    expect(
+      await prisma.image.findUnique({ where: { id: created.id } }),
+    ).toBeNull()
   })
 
   it('should throw error when try to delete an image by non existent id', async () => {
