@@ -134,7 +134,7 @@ const UpdateUserFormComponent = ({
   })
 
   return (
-    <div className="grid grid-cols-[40%_1fr] gap-4 w-full h-full items-center justify-start">
+    <div className="grid grid-cols-[40%_1fr] gap-4 w-full h-[80%] items-center justify-start">
       <div className="w-60 h-60 mx-24">
         <ChangeProfilePicture
           name={formatName(user.fullName)}
@@ -142,7 +142,7 @@ const UpdateUserFormComponent = ({
           setFile={setFile}
         />
       </div>
-      <div className="w-full h-full flex flex-col items-center justify-center">
+      <div className="w-full h-full flex flex-col items-start justify-center">
         <form className="h-full w-full flex flex-col items-center justify-center gap-2">
           <Form.Field>
             <Form.Label>Nome completo</Form.Label>

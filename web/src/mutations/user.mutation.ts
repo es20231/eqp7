@@ -3,7 +3,7 @@ import { api } from '@/services/axios'
 import { useMutation } from 'react-query'
 
 interface UpdateUserProps {
-  user: Partial<UserDTO>
+  user: Partial<UserDTO> & { password?: string }
   token: string
 }
 

@@ -2,6 +2,10 @@
 
 import { Button } from '@/components/Button'
 import {
+  ChangePasswordFormComponent,
+  ChangePasswordFormProvider,
+} from '@/components/Form/Providers/ChangePasswordForm'
+import {
   UpdateUserFormComponent,
   UpdateUserFormProvider,
 } from '@/components/Form/Providers/UpdateUserForm'
@@ -13,6 +17,7 @@ import { formatName } from '@/components/UserPresentation'
 import { useUserStore } from '@/stores/user.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
+import * as Tabs from '@radix-ui/react-tabs'
 import { UserCog, X } from 'lucide-react'
 import { useState } from 'react'
 
@@ -25,8 +30,8 @@ const Profile = () => {
   return (
     <div className="h-full px-4 w-full max-w-[70%] flex flex-col gap-8 relative">
       <ScrollArea.Root className="w-full h-[95%]">
-        <ScrollArea.Viewport className="w-full h-full max-w-[70%] px-3">
-          <div className="w-full grid grid-cols-[25%_1fr] gap-4 items-center justify-center mt-8">
+        <ScrollArea.Viewport className="w-full h-full px-3">
+          <div className="w-full flex flex-row gap-4 items-center justify-start mt-8 px-4">
             <div className="h-56 w-56 mx-auto">
               <UserAvatar
                 userImage={userInfo.profilePicture || ''}
@@ -35,7 +40,7 @@ const Profile = () => {
                 height={120}
               />
             </div>
-            <div className="flex flex-col gap-1 items-center justify-center">
+            <div className="flex flex-col flex-1 gap-1 items-center justify-center">
               <div className="w-full flex justify-between items-center">
                 <div>
                   <Text className="font-bold text-start">
@@ -68,33 +73,67 @@ const Profile = () => {
                           Faça as alterações que desejar e clique em salvar.
                         </Text>
                       </Dialog.Description>
-                      <div className="flex flex-col items-center justify-start p-8 w-full max-h-full h-[60vh] gap-8">
-                        <UpdateUserFormProvider
-                          user={{
-                            biography: userInfo.biography || '',
-                            fullName: userInfo.fullName,
-                            profilePicture: userInfo.profilePicture || '',
-                            username: userInfo.username,
-                            email: userInfo.email,
-                            emailVerified: userInfo.emailVerified,
-                            id: userInfo.id,
-                          }}
+                      <Tabs.Root
+                        className="flex flex-col w-[85%] mx-auto h-full py-4 shadow-sm dark:shadow-dark-slate-gray-400/50 shadow-slate-300"
+                        defaultValue="edit"
+                      >
+                        <Tabs.List className="shrink-0 flex border-b border-dark-slate-gray-400/50">
+                          <Tabs.Trigger
+                            className="bg-transparent px-5 h-10 flex-1 flex items-center justify-center leading-none select-none first:rounded-tl-md last:rounded-tr-md outline-none cursor-default data-[state=active]:border-b-2 data-[state=active]:border-pacific-blue-500"
+                            value="account"
+                          >
+                            <Text>Gerenciar informações</Text>
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className="bg-transparent px-5 h-10 flex-1 flex items-center justify-center leading-none select-none first:rounded-tl-md last:rounded-tr-md outline-none cursor-default data-[state=active]:border-b-2 data-[state=active]:border-pacific-blue-500"
+                            value="password"
+                          >
+                            <Text>Mudar senha</Text>
+                          </Tabs.Trigger>
+                        </Tabs.List>
+                        <Tabs.Content
+                          className="flex-1 flex flex-col"
+                          value="account"
+                          asChild
                         >
-                          <UpdateUserFormComponent
-                            token={userInfo.token}
-                            user={{
-                              biography: userInfo.biography || '',
-                              fullName: userInfo.fullName,
-                              profilePicture: userInfo.profilePicture || '',
-                              username: userInfo.username,
-                              email: userInfo.email,
-                              emailVerified: userInfo.emailVerified,
-                              id: userInfo.id,
-                            }}
-                            setIsOpen={setIsOpen}
-                          />
-                        </UpdateUserFormProvider>
-                      </div>
+                          <div className="flex flex-col items-start justify-start p-8 w-full gap-8">
+                            <UpdateUserFormProvider
+                              user={{
+                                biography: userInfo.biography || '',
+                                fullName: userInfo.fullName,
+                                profilePicture: userInfo.profilePicture || '',
+                                username: userInfo.username,
+                                email: userInfo.email,
+                                emailVerified: userInfo.emailVerified,
+                                id: userInfo.id,
+                              }}
+                            >
+                              <UpdateUserFormComponent
+                                token={userInfo.token}
+                                user={{
+                                  biography: userInfo.biography || '',
+                                  fullName: userInfo.fullName,
+                                  profilePicture: userInfo.profilePicture || '',
+                                  username: userInfo.username,
+                                  email: userInfo.email,
+                                  emailVerified: userInfo.emailVerified,
+                                  id: userInfo.id,
+                                }}
+                                setIsOpen={setIsOpen}
+                              />
+                            </UpdateUserFormProvider>
+                          </div>
+                        </Tabs.Content>
+                        <Tabs.Content
+                          className="flex-1 flex flex-col"
+                          value="password"
+                          asChild
+                        >
+                          <ChangePasswordFormProvider>
+                            <ChangePasswordFormComponent />
+                          </ChangePasswordFormProvider>
+                        </Tabs.Content>
+                      </Tabs.Root>
                       <Dialog.Close
                         className="absolute top-8 right-8 p-2"
                         onClick={() => setIsOpen(false)}
@@ -112,7 +151,7 @@ const Profile = () => {
               </Text>
             </div>
           </div>
-          <div className="px-4 max-w-[70%]">
+          <div className="px-4">
             <Title className="text-start">Posts</Title>
             <UserPosts token={userInfo.token} userId={userInfo.id} />
           </div>

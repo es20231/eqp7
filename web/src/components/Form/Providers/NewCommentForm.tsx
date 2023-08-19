@@ -81,8 +81,8 @@ const NewCommentFormComponent = ({
   })
 
   return (
-    <form className="w-full flex items-center justify-center gap-2 px-2 py-1">
-      <div className="h-8 w-9">
+    <form className="w-full flex flex-row items-center justify-start gap-2 px-2 py-1">
+      <div className="h-8 w-8">
         <UserAvatar
           exibitionName={formatName(fullName)}
           userImage={userImage}

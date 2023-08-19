@@ -23,7 +23,7 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
   }
 
   if (isError || !data || !userInfo)
-    return <Error message="Ocorreu um erro ao carregar as imagens do usuário" />
+    return <Error message="Ocorreu um erro ao carregar os posts do usuário" />
 
   const userPosts = preview ? data.slice(0, 3) : data
 
@@ -31,7 +31,7 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
     <ScrollArea.Root className="w-full h-[85%]">
       <ScrollArea.Viewport className="w-full h-full py-3 px-4">
         {userPosts.length > 0 ? (
-          <div className="flex flex-col items-center sm:grid sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
+          <div className="flex flex-col items-center md:grid xl:grid-cols-2 2xl:grid-cols-3 gap-4 w-full xl:mx-auto">
             {userPosts.map((post) => (
               <PostCard post={post} key={post.id} token={token} />
             ))}
