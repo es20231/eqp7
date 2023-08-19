@@ -46,6 +46,15 @@ async function bootstrap() {
         { name: 'user', description: 'User related end-points' },
         { name: 'post', description: 'Post related end-points' },
         { name: 'image', description: 'Image related end-points' },
+        { name: 'comment', description: 'Comment related end-points' },
+        {
+          name: 'comment-reaction',
+          description: 'Comment reaction related end-points',
+        },
+        {
+          name: 'post-reaction',
+          description: 'Post reaction related end-points',
+        },
       ],
       securityDefinitions: {
         bearer: {
