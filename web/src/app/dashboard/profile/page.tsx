@@ -75,17 +75,17 @@ const Profile = () => {
                       </Dialog.Description>
                       <Tabs.Root
                         className="flex flex-col w-[85%] mx-auto h-full py-4 shadow-sm dark:shadow-dark-slate-gray-400/50 shadow-slate-300"
-                        defaultValue="edit"
+                        defaultValue="account"
                       >
                         <Tabs.List className="shrink-0 flex border-b border-dark-slate-gray-400/50">
                           <Tabs.Trigger
-                            className="bg-transparent px-5 h-10 flex-1 flex items-center justify-center leading-none select-none first:rounded-tl-md last:rounded-tr-md outline-none cursor-default data-[state=active]:border-b-2 data-[state=active]:border-pacific-blue-500"
+                            className="bg-transparent px-5 h-10 flex-1 flex items-center justify-center leading-none select-none first:rounded-tl-md last:rounded-tr-md outline-none cursor-pointer data-[state=active]:border-b-2 data-[state=active]:border-pacific-blue-500"
                             value="account"
                           >
                             <Text>Gerenciar informações</Text>
                           </Tabs.Trigger>
                           <Tabs.Trigger
-                            className="bg-transparent px-5 h-10 flex-1 flex items-center justify-center leading-none select-none first:rounded-tl-md last:rounded-tr-md outline-none cursor-default data-[state=active]:border-b-2 data-[state=active]:border-pacific-blue-500"
+                            className="bg-transparent px-5 h-10 flex-1 flex items-center justify-center leading-none select-none first:rounded-tl-md last:rounded-tr-md outline-none cursor-pointer data-[state=active]:border-b-2 data-[state=active]:border-pacific-blue-500"
                             value="password"
                           >
                             <Text>Mudar senha</Text>

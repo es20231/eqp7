@@ -145,7 +145,7 @@ const ImageController = {
 
     const bodySchema = z
       .object({
-        filter: z.string().nonempty('filter is required on body'),
+        filter: z.string(),
       })
       .strict()
 

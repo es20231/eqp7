@@ -40,11 +40,12 @@ const UserAvatar = ({
           height={height}
           className="object-cover w-full h-full"
           unoptimized
+          priority
         />
       </Avatar.Image>
       <Avatar.AvatarFallback
         className="text-slate-50 data-[textlarge=true]:text-7xl"
-        data-textlarge={width !== 10 && height !== 10}
+        data-textlarge={width > 60 && height > 60}
       >
         {fallbackAvatar}
       </Avatar.AvatarFallback>

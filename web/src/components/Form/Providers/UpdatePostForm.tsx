@@ -78,13 +78,16 @@ const UpdatePostFormComponent = ({ post }: UpdatePostFormComponentProps) => {
   return (
     <form className="w-full h-full flex flex-row items-center justify-between py-4 gap-4 px-8">
       <div className="h-56 w-56 rounded-md grow">
-        <Image
-          alt="Post image"
-          src={post.image.url}
-          width={224}
-          height={224}
-          className="object-cover h-full w-full rounded-md"
-        />
+        <figure className={`filter-${post.image.filter}`}>
+          <Image
+            alt="Post image"
+            src={post.image.url}
+            width={224}
+            height={224}
+            className="object-cover h-full w-full rounded-md"
+            unoptimized
+          />
+        </figure>
       </div>
       <div className="w-full h-full flex flex-col items-center justify-center gap-2">
         <Form.Field>

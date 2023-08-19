@@ -11,6 +11,7 @@ export type UserPostDTO = {
   updatedAt: string
   image: {
     url: string
+    filter?: string
   }
   user: {
     username: string

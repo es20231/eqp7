@@ -5,10 +5,9 @@ import { useCreatePost } from '@/mutations/post.mutation'
 import { useDeleteImage } from '@/queries/image.query'
 import { UserImagesDTO, useGetUserImages } from '@/queries/user.query'
 import { queryClient } from '@/services/queryClient'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
-import { Check, ImageOff, Trash2, X } from 'lucide-react'
+import { Check, ImageOff, X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -19,6 +18,7 @@ import {
   NewPostFormComponent,
   NewPostFormProvider,
 } from './Form/Providers/NewPostForm'
+import { ImageCardOptions } from './ImageCardOptions'
 import { Text } from './Text'
 import { Title } from './Title'
 
@@ -111,22 +111,25 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
   const { refetch: deleteImage } = useDeleteImage({ imageId: image.id, token })
 
   const handleDeleteImage = async () => {
-    const { error } = await deleteImage()
+    const { error }: { error: any } = await deleteImage()
     if (!error) toast.success('Imagem deletada com sucesso!')
-    else toast.error('Erro ao deletar imagem')
+    else toast.error(error.response.data.message || 'Erro ao deletar imagem')
     queryClient.invalidateQueries(['images', { userId: image.userId, token }])
   }
 
   return (
     <div className="flex flex-col gap-2 max-w-[15rem]">
       <div className="overflow-hidden rounded-lg shadow-lg">
-        <Image
-          alt="user image"
-          src={image.url}
-          width={300}
-          height={300}
-          className="object-cover w-64 h-64"
-        />
+        <figure className={`filter-${image.filter}`}>
+          <Image
+            alt="user image"
+            src={image.url}
+            width={300}
+            height={300}
+            className="object-cover w-64 h-64"
+            unoptimized
+          />
+        </figure>
       </div>
       <div className="w-full h-fit flex flex-row gap-2">
         <Dialog.Root open={isOpen}>
@@ -147,14 +150,17 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
               <div className="flex flex-col items-center justify-start p-8 w-full max-h-full h-[60vh]">
                 <div className="flex items-center justify-evenly w-full h-full gap-8">
                   <div className="overflow-hidden rounded-lg shadow-lg w-[40vw] h-[40vh]">
-                    <Image
-                      alt="user image"
-                      key={image.id}
-                      src={image.url}
-                      width={300}
-                      height={300}
-                      className="object-cover w-full h-full"
-                    />
+                    <figure className={`filter-${image.filter} h-full w-full`}>
+                      <Image
+                        alt="user image"
+                        key={image.id}
+                        src={image.url}
+                        width={300}
+                        height={300}
+                        className="object-cover w-full h-full"
+                        unoptimized
+                      />
+                    </figure>
                   </div>
                   <div className="w-full text-center flex flex-col items-end justify-end gap-4">
                     <NewPostFormComponent />
@@ -185,41 +191,7 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog.Root>
-        <AlertDialog.Root>
-          <AlertDialog.Trigger
-            asChild
-            className="bg-red-400 h-full w-[25%] rounded-lg"
-          >
-            <Button className="p-1">
-              <Trash2 className="text-slate-50" size={28} strokeWidth={1.5} />
-            </Button>
-          </AlertDialog.Trigger>
-          <AlertDialog.Portal>
-            <AlertDialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-overlayShow" />
-            <AlertDialog.Content className="fixed h-fit pb-8 top-[50%] left-[50%] w-full max-w-[40vw] translate-x-[-50%] translate-y-[-50%] bg-slate-100 dark:bg-rich-black-500 rounded-xl overflow-hidden data-[state=open]:animate-contentShow">
-              <AlertDialog.Title
-                asChild
-                className="text-xl font-bold w-full pt-8 px-8"
-              >
-                <Title className="text-left">Excluir imagem</Title>
-              </AlertDialog.Title>
-              <AlertDialog.Description asChild className="px-8 w-full">
-                <Text className="text-left pt-2">
-                  Essa ação não poderá ser desfeita. Tem certeza que deseja
-                  excluir essa imagem?
-                </Text>
-              </AlertDialog.Description>
-              <div className="flex justify-end gap-4 px-8">
-                <AlertDialog.Cancel className="p-2" asChild>
-                  <Button className="w-[20%]">Cancelar</Button>
-                </AlertDialog.Cancel>
-                <AlertDialog.Action asChild onClick={handleDeleteImage}>
-                  <Button className="w-[20%] bg-red-400">Excluir</Button>
-                </AlertDialog.Action>
-              </div>
-            </AlertDialog.Content>
-          </AlertDialog.Portal>
-        </AlertDialog.Root>
+        <ImageCardOptions handleDeleteImage={handleDeleteImage} image={image} />
       </div>
     </div>
   )
