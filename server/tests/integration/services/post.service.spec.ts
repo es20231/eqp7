@@ -146,6 +146,56 @@ describe('MemoryPostService', () => {
       )
     })
 
+    it('should be able to get two posts when try to get all posts with take 2', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const post2 = {
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
+
+      const post3 = {
+        subtitle: 'Teste 3',
+        userId,
+        imageId,
+      }
+
+      await service.createPost(post)
+      await service.createPost(post2)
+      await service.createPost(post3)
+
+      const result = await service.getPosts(2)
+
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
+      expect(result.payload).toHaveLength(2)
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post.subtitle,
+            userId: post.userId,
+            imageId: post.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post2.subtitle,
+            userId: post2.userId,
+            imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should be able to get a post by id', async () => {
       const post = {
         subtitle: 'Teste',
@@ -215,6 +265,48 @@ describe('MemoryPostService', () => {
             subtitle: post2.subtitle,
             userId: post2.userId,
             imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should be able to get one post from a user when try to get all posts from a user with take 1 and skip 2', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const post2 = {
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
+
+      const post3 = {
+        subtitle: 'Teste 3',
+        userId,
+        imageId,
+      }
+
+      await service.createPost(post)
+      await service.createPost(post2)
+      await service.createPost(post3)
+
+      const result = await service.getPostsByUserId(userId, 1, 2)
+
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
+      expect(result.payload).toHaveLength(1)
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post3.subtitle,
+            userId: post3.userId,
+            imageId: post3.imageId,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
           }),
@@ -483,6 +575,56 @@ describe('PrismaPostService', () => {
       )
     })
 
+    it('should get two posts when try to get all posts with take 2', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const post2 = {
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
+
+      const post3 = {
+        subtitle: 'Teste 3',
+        userId,
+        imageId,
+      }
+
+      await service.createPost(post)
+      await service.createPost(post2)
+      await service.createPost(post3)
+
+      const result = await service.getPosts(2)
+
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
+      expect(result.payload).toHaveLength(2)
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post.subtitle,
+            userId: post.userId,
+            imageId: post.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post2.subtitle,
+            userId: post2.userId,
+            imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should be able to get a post by id', async () => {
       const post = {
         subtitle: 'Teste',
@@ -552,6 +694,48 @@ describe('PrismaPostService', () => {
             subtitle: post2.subtitle,
             userId: post2.userId,
             imageId: post2.imageId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should be able to get one post from a user when try to get all posts from a user with take 1 and skip 2', async () => {
+      const post = {
+        subtitle: 'Teste',
+        userId,
+        imageId,
+      }
+
+      const post2 = {
+        subtitle: 'Teste 2',
+        userId,
+        imageId,
+      }
+
+      const post3 = {
+        subtitle: 'Teste 3',
+        userId,
+        imageId,
+      }
+
+      await service.createPost(post)
+      await service.createPost(post2)
+      await service.createPost(post3)
+
+      const result = await service.getPostsByUserId(userId, 1, 2)
+
+      expect(result.ok).toBeTruthy()
+      expect(result.message).toBe('Posts found successfully')
+      expect(result.payload).toHaveLength(1)
+      expect(result.payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            subtitle: post3.subtitle,
+            userId: post3.userId,
+            imageId: post3.imageId,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
           }),

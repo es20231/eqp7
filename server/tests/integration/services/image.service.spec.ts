@@ -112,6 +112,89 @@ describe('MemoryImageService', () => {
       )
     })
 
+    it('should be able to get two images when try to get all images with take 2', async () => {
+      const image = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image2 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image3 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      await service.createImage(image)
+      await service.createImage(image2)
+      await service.createImage(image3)
+
+      const { ok, message, payload } = await service.getImages(2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Images found successfully')
+      expect(payload).toHaveLength(2)
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            url: image.url,
+            userId: image.userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            url: image2.url,
+            userId: image2.userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should be able to get one image when try to get all images with take 1 and skip 1', async () => {
+      const image = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image2 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image3 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      await service.createImage(image)
+      await service.createImage(image2)
+      await service.createImage(image3)
+
+      const { ok, message, payload } = await service.getImages(1, 1)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Images found successfully')
+      expect(payload).toHaveLength(1)
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            url: image2.url,
+            userId: image2.userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should be able to get an image by id', async () => {
       const image = {
         url: 'https://github.com/CassianoJunior.png',
@@ -177,6 +260,44 @@ describe('MemoryImageService', () => {
             id: expect.any(String),
             url: image2.url,
             userId: image2.userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
+    it('should be able to get one image from a user when try to get all images from a user with take 1 and skip 2', async () => {
+      const image = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image2 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image3 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      await service.createImage(image)
+      await service.createImage(image2)
+      await service.createImage(image3)
+
+      const { ok, message, payload } = await service.getUserImages(userId, 1, 2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Images found successfully')
+      expect(payload).toHaveLength(1)
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            url: image3.url,
+            userId: image3.userId,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
           }),
@@ -334,6 +455,51 @@ describe('PrismaImageService', () => {
       )
     })
 
+    it('should be able to get two images whe try to get all images with take 2', async () => {
+      const image = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image2 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      const image3 = {
+        url: 'https://github.com/CassianoJunior.png',
+        userId,
+      }
+
+      await service.createImage(image)
+      await service.createImage(image2)
+      await service.createImage(image3)
+
+      const { ok, message, payload } = await service.getImages(2)
+
+      expect(ok).toBe(true)
+      expect(message).toBe('Images found successfully')
+      expect(payload).toHaveLength(2)
+      expect(payload).toStrictEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            url: image.url,
+            userId: image.userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            url: image2.url,
+            userId: image2.userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
+    })
+
     it('should be able to get an image by id', async () => {
       const image = {
         url: 'https://github.com/CassianoJunior.png',
@@ -405,6 +571,44 @@ describe('PrismaImageService', () => {
         ]),
       )
     })
+  })
+
+  it('should be able to get one image from a user when try to get all images from an user with take 1 and skip 2', async () => {
+    const image = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const image2 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    const image3 = {
+      url: 'https://github.com/CassianoJunior.png',
+      userId,
+    }
+
+    await service.createImage(image)
+    await service.createImage(image2)
+    await service.createImage(image3)
+
+    const { ok, message, payload } = await service.getUserImages(userId, 1, 2)
+
+    expect(ok).toBe(true)
+    expect(message).toBe('Images found successfully')
+    expect(payload).toHaveLength(1)
+    expect(payload).toStrictEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          url: image3.url,
+          userId: image3.userId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        }),
+      ]),
+    )
   })
 
   describe('delete', () => {

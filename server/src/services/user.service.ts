@@ -9,15 +9,23 @@ import { IUserRepository } from '../repositories/iuser.repository'
 import { ServiceResult } from './result'
 
 interface IUserService {
-  getUsers: () => Promise<ServiceResult<User[]>>
+  getUsers: (take?: number, skip?: number) => Promise<ServiceResult<User[]>>
   getUserById: (id: string) => Promise<ServiceResult<User>>
   getUserByUsername: (username: string) => Promise<ServiceResult<User>>
   getUserByEmail: (email: string) => Promise<ServiceResult<User>>
   createUser: (user: CreateUserDTO) => Promise<ServiceResult<User>>
   updateUser: (id: string, user: UpdateUserDTO) => Promise<ServiceResult<User>>
   deleteUser: (id: string) => Promise<ServiceResult<User>>
-  getUserImages: (id: string) => Promise<ServiceResult<Image[]>>
-  getUserPosts: (id: string) => Promise<ServiceResult<Post[]>>
+  getUserImages: (
+    id: string,
+    take?: number,
+    skip?: number,
+  ) => Promise<ServiceResult<Image[]>>
+  getUserPosts: (
+    id: string,
+    take?: number,
+    skip?: number,
+  ) => Promise<ServiceResult<Post[]>>
 }
 
 const UserService = (
@@ -25,8 +33,8 @@ const UserService = (
   imageRepository: IImageRepository,
   postRepository: IPostRepository,
 ): IUserService => ({
-  getUsers: async () => {
-    const users = await userRepository.getUsers()
+  getUsers: async (take?: number, skip?: number) => {
+    const users = await userRepository.getUsers(take, skip)
 
     return {
       ok: true,
@@ -191,7 +199,7 @@ const UserService = (
     }
   },
 
-  getUserImages: async (id: string) => {
+  getUserImages: async (id: string, take?: number, skip?: number) => {
     const user = await userRepository.getUserById(id)
 
     if (!user) {
@@ -202,7 +210,7 @@ const UserService = (
       }
     }
 
-    const images = await imageRepository.getUserImages(id)
+    const images = await imageRepository.getUserImages(id, take, skip)
 
     return {
       ok: true,
@@ -211,7 +219,7 @@ const UserService = (
     }
   },
 
-  getUserPosts: async (id: string) => {
+  getUserPosts: async (id: string, take?: number, skip?: number) => {
     const user = await userRepository.getUserById(id)
 
     if (!user) {
@@ -222,7 +230,7 @@ const UserService = (
       }
     }
 
-    const posts = await postRepository.getPostsByUserId(id)
+    const posts = await postRepository.getPostsByUserId(id, take, skip)
 
     return {
       ok: true,

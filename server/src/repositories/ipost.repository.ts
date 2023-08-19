@@ -5,8 +5,12 @@ import { Post } from '../entities/post.entity'
 interface IPostRepository {
   createPost(post: CreatePostDTO): Promise<Post>
   getPostById(id: string): Promise<Post | undefined>
-  getPostsByUserId(userId: string): Promise<Post[]>
-  getPosts(): Promise<Post[]>
+  getPostsByUserId(
+    userId: string,
+    take?: number,
+    skip?: number,
+  ): Promise<Post[]>
+  getPosts(take?: number, skip?: number): Promise<Post[]>
   updatePost(id: string, post: UpdatePostDTO): Promise<Post>
   deletePost(id: string): Promise<Post>
 }

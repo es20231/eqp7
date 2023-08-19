@@ -25,6 +25,13 @@ const getPostsSchema = {
   tags: ['post'],
   type: 'object',
   security: [{ bearer: [] }],
+  querystring: {
+    type: 'object',
+    properties: {
+      take: { type: 'number' },
+      skip: { type: 'number' },
+    },
+  },
   response: {
     200: {
       type: 'object',
@@ -96,6 +103,13 @@ const getPostsByUserIdSchema = {
     type: 'object',
     properties: {
       id: { type: 'string' },
+    },
+  },
+  querystring: {
+    type: 'object',
+    properties: {
+      take: { type: 'number' },
+      skip: { type: 'number' },
     },
   },
   response: {

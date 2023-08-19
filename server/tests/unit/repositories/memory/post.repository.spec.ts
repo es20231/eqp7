@@ -127,6 +127,80 @@ describe('MemoryPostRepository', () => {
       },
     ])
   })
+  it('should get two posts when try to get all posts with take 2', async () => {
+    const post1 = {
+      subtitle: 'Post Title',
+      userId,
+      imageId,
+    }
+    const post2 = {
+      subtitle: 'Post Title',
+      userId,
+      imageId,
+    }
+    const post3 = {
+      subtitle: 'Post Title',
+      userId,
+      imageId,
+    }
+    await repository.createPost(post1)
+    await repository.createPost(post2)
+    await repository.createPost(post3)
+    const posts = await repository.getPosts(2)
+    expect(posts).toBeTruthy()
+    expect(posts).toHaveLength(2)
+    expect(posts).toStrictEqual([
+      {
+        id: expect.any(String),
+        subtitle: post1.subtitle,
+        userId: post1.userId,
+        imageId: post1.imageId,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      },
+      {
+        id: expect.any(String),
+        subtitle: post2.subtitle,
+        userId: post2.userId,
+        imageId: post2.imageId,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      },
+    ])
+  })
+  it('should get one post when try to get all posts with take 1 and skip 1', async () => {
+    const post1 = {
+      subtitle: 'Post Title',
+      userId,
+      imageId,
+    }
+    const post2 = {
+      subtitle: 'Post Title',
+      userId,
+      imageId,
+    }
+    const post3 = {
+      subtitle: 'Post Title',
+      userId,
+      imageId,
+    }
+    await repository.createPost(post1)
+    await repository.createPost(post2)
+    await repository.createPost(post3)
+    const posts = await repository.getPosts(1, 1)
+    expect(posts).toBeTruthy()
+    expect(posts).toHaveLength(1)
+    expect(posts).toStrictEqual([
+      {
+        id: expect.any(String),
+        subtitle: post2.subtitle,
+        userId: post2.userId,
+        imageId: post2.imageId,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      },
+    ])
+  })
   it('should update a post', async () => {
     const post = {
       subtitle: 'Post Title',
