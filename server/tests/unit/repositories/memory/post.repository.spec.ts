@@ -10,9 +10,7 @@ describe('MemoryPostRepository', () => {
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
-  afterEach(() => {
-    clearPostMemory()
-  })
+  afterEach(async () => await clearPostMemory())
   it('should create a post', async () => {
     const post = {
       subtitle: 'Post Title',

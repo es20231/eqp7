@@ -18,8 +18,6 @@ const getUserImages = async ({
 
   const { data } = await api(token).get(`/users/${userId}/images`)
 
-  console.log('getUserImagesData', data)
-
   return data.payload as UserImagesDTO[]
 }
 
@@ -57,4 +55,44 @@ const useGetUserPosts = ({ token, userId }: UseGetUserPostsProps) => {
   return useQuery(['posts', { token, userId }], getUserPosts)
 }
 
-export { useGetUserImages, useGetUserPosts }
+type GetAllUsersQueryKey = ['users', { token: string }]
+
+export type UserDTO = {
+  id: string
+  fullName: string
+  username: string
+  email: string
+  biography: string
+  profilePicture: string
+  emailVerified: boolean
+}
+
+const getAllUsers = async ({
+  queryKey,
+}: QueryFunctionContext<GetAllUsersQueryKey>) => {
+  const [, { token }] = queryKey
+
+  const { data } = await api(token).get('/users')
+
+  return data.payload as UserDTO[]
+}
+
+const useGetAllUsers = ({ token }: { token: string }) => {
+  return useQuery(['users', { token }], getAllUsers)
+}
+
+type GetUserQueryKey = ['user', { token: string; id: string }]
+
+const getUser = async ({ queryKey }: QueryFunctionContext<GetUserQueryKey>) => {
+  const [, { token, id }] = queryKey
+
+  const { data } = await api(token).get(`/users/${id}`)
+
+  return data.payload as UserDTO
+}
+
+const useGetUser = ({ token, id }: { token: string; id: string }) => {
+  return useQuery(['user', { token, id }], getUser)
+}
+
+export { useGetAllUsers, useGetUser, useGetUserImages, useGetUserPosts }

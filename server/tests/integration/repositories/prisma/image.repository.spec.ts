@@ -1,4 +1,4 @@
-import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
   PrismaImageRepository,
   clearImagesPrisma,
@@ -12,6 +12,7 @@ describe('PrismaImageRepository', () => {
   })
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await prisma.user.create({
       data: {
         username: 'Cassiano',
@@ -32,9 +33,7 @@ describe('PrismaImageRepository', () => {
     })
   })
 
-  afterEach(() => {
-    clearImagesPrisma()
-  })
+  afterEach(async () => await clearImagesPrisma())
 
   it('should create an image', async () => {
     const image = {

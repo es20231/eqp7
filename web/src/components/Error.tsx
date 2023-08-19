@@ -13,7 +13,7 @@ interface ErrorProps {
 const Error = ({ message }: ErrorProps) => {
   const router = useRouter()
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
+    <div className="flex flex-col items-center justify-center gap-2 max-w-xl mx-auto">
       <Lottie animationData={errorPage} loop autoplay />
       <Title className="text-center">Ocorreu um erro</Title>
       <Text>{message || ''}</Text>

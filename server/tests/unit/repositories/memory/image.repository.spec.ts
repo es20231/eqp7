@@ -10,9 +10,7 @@ describe('MemoryImageRepository', () => {
     expect(repository).toBeTruthy()
   })
 
-  afterEach(() => {
-    clearImageMemory()
-  })
+  afterEach(async () => await clearImageMemory())
 
   it('should create an image', async () => {
     const image = {

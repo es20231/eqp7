@@ -16,6 +16,9 @@ const UserSchema = {
       description: 'User profile picture url',
       format: 'uri',
     },
+    biography: {
+      type: 'string',
+    },
     emailVerified: {
       type: 'boolean',
       default: false,
@@ -236,9 +239,9 @@ const updateUserSchema = {
     type: 'object',
     properties: {
       username: { type: 'string' },
-      email: { type: 'string', format: 'email' },
+      email: { type: 'string' },
       fullName: { type: 'string' },
-      profilePicture: { type: 'string', format: 'uri' },
+      profilePicture: { type: 'string' },
       passord: { type: 'string', minLength: 8 },
       biography: { type: 'string' },
     },

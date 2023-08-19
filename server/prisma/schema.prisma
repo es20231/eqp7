@@ -20,11 +20,11 @@ model User {
   biography      String?
   profilePicture String?
 
-  images Image[]
-  posts  Post[]
-  comments Comment[]
+  images           Image[]
+  posts            Post[]
+  comments         Comment[]
   commentReactions CommentReaction[]
-  postReactions PostReaction[]
+  postReactions    PostReaction[]
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -37,7 +37,7 @@ model Image {
   id     String @id @default(cuid())
   url    String
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   posts Post[]
 
@@ -51,11 +51,11 @@ model Post {
   id       String @id @default(cuid())
   subtitle String
   userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   imageId  String
   image    Image  @relation(fields: [imageId], references: [id])
 
-  comments Comment[]
+  comments      Comment[]
   postReactions PostReaction[]
 
   createdAt DateTime @default(now())
@@ -82,9 +82,9 @@ model Comment {
   id      String @id @default(cuid())
   content String
   userId  String
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId  String
-  post    Post   @relation(fields: [postId], references: [id])
+  post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   commentReactions CommentReaction[]
 
@@ -94,13 +94,13 @@ model Comment {
   @@map("comments")
 }
 
-model CommentReaction{
-  id        String @id @default(cuid())
+model CommentReaction {
+  id        String  @id @default(cuid())
   commentId String
-  comment   Comment   @relation(fields: [commentId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   userId    String
-  user      User   @relation(fields: [userId], references: [id])
-  type      String 
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -108,17 +108,16 @@ model CommentReaction{
   @@map("comment_reactions")
 }
 
-model PostReaction{
-  id        String @id @default(cuid())
-  postId    String
-  post      Post   @relation(fields: [postId], references: [id])
-  userId    String
-  user      User   @relation(fields: [userId], references: [id])
-  type      String
+model PostReaction {
+  id     String @id @default(cuid())
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("post_reactions")
 }
-

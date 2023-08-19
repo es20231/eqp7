@@ -1,4 +1,4 @@
-import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
   PrismaCommentRepository,
   clearCommentsPrisma,
@@ -14,6 +14,7 @@ describe('PrismaCommentRepository', () => {
   })
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await prisma.user.create({
       data: {
         username: 'jose',
@@ -62,9 +63,7 @@ describe('PrismaCommentRepository', () => {
     })
   })
 
-  afterEach(() => {
-    clearCommentsPrisma()
-  })
+  afterEach(async () => await clearCommentsPrisma())
 
   it('should create a comment', async () => {
     const comment = {
@@ -76,7 +75,7 @@ describe('PrismaCommentRepository', () => {
     const created = await repository.createComment(comment)
 
     expect(created).toBeTruthy()
-    expect(created).toStrictEqual({
+    expect(created).toMatchObject({
       id: expect.any(String),
       content: comment.content,
       userId: comment.userId,
@@ -127,7 +126,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -135,7 +134,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment2.content,
       userId: comment2.userId,
@@ -174,7 +173,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -182,7 +181,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment2.content,
       userId: comment2.userId,
@@ -229,7 +228,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment3.content,
       userId: comment3.userId,
@@ -237,7 +236,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment4.content,
       userId: comment4.userId,
@@ -268,7 +267,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -277,7 +276,7 @@ describe('PrismaCommentRepository', () => {
       updatedAt: expect.any(Date),
     })
 
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment2.content,
       userId: comment2.userId,
@@ -316,7 +315,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -324,7 +323,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment2.content,
       userId: comment2.userId,
@@ -371,7 +370,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment3.content,
       userId: comment3.userId,
@@ -379,7 +378,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment4.content,
       userId: comment4.userId,
@@ -428,7 +427,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -437,7 +436,7 @@ describe('PrismaCommentRepository', () => {
       updatedAt: expect.any(Date),
     })
 
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment2.content,
       userId: comment2.userId,
@@ -476,7 +475,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -484,7 +483,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment2.content,
       userId: comment2.userId,
@@ -531,7 +530,7 @@ describe('PrismaCommentRepository', () => {
 
     expect(comments).toBeTruthy()
     expect(comments.length).toBe(2)
-    expect(comments[0]).toStrictEqual({
+    expect(comments[0]).toMatchObject({
       id: expect.any(String),
       content: comment3.content,
       userId: comment3.userId,
@@ -539,7 +538,7 @@ describe('PrismaCommentRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(comments[1]).toStrictEqual({
+    expect(comments[1]).toMatchObject({
       id: expect.any(String),
       content: comment4.content,
       userId: comment4.userId,
@@ -561,7 +560,7 @@ describe('PrismaCommentRepository', () => {
     const comment = await repository.getCommentById(created.id)
 
     expect(comment).toBeTruthy()
-    expect(comment).toStrictEqual({
+    expect(comment).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,
@@ -589,7 +588,7 @@ describe('PrismaCommentRepository', () => {
     const deleted = await repository.deleteComment(created.id)
 
     expect(deleted).toBeTruthy()
-    expect(deleted).toStrictEqual({
+    expect(deleted).toMatchObject({
       id: expect.any(String),
       content: comment1.content,
       userId: comment1.userId,

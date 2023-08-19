@@ -28,7 +28,7 @@ const NewPostFormProvider = ({
   userId,
   imageId,
 }: NewPostFormProviderProps) => {
-  const createLoginForm = useForm<CreateNewPostFormData>({
+  const createNewPostForm = useForm<CreateNewPostFormData>({
     resolver: zodResolver(createNewPostFormSchema),
     defaultValues: {
       userId,
@@ -36,7 +36,7 @@ const NewPostFormProvider = ({
     },
   })
 
-  return <FormProvider {...createLoginForm}>{children}</FormProvider>
+  return <FormProvider {...createNewPostForm}>{children}</FormProvider>
 }
 
 const NewPostFormComponent = () => {

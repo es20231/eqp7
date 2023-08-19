@@ -52,7 +52,6 @@ const LoginFormComponent = () => {
         redirect: false,
       })
         .then((res) => {
-          console.log('login res', res)
           if (res && res.error && res.error === 'CredentialsSignin') {
             toast.error('Usuário ou senha inválidos')
             return
@@ -84,8 +83,8 @@ const LoginFormComponent = () => {
         <Form.Input
           name="username" // macth with the error message field
           placeholder="Usuário"
-          className="bg-dark-slate-gray-500 placeholder:text-gray-300"
-          around="bg-dark-slate-gray-500"
+          className="bg-dark-slate-gray-500 placeholder:text-gray-300 py-2 text-lg"
+          around="bg-dark-slate-gray-500 py-2"
           autoComplete="off"
         />
         <Form.ErrorMessage field="username" />
@@ -94,8 +93,8 @@ const LoginFormComponent = () => {
         <Form.Input
           name="password" // macth with the error message field
           placeholder="Senha"
-          className="bg-dark-slate-gray-500 placeholder:text-zinc-300"
-          around="bg-dark-slate-gray-500"
+          className="bg-dark-slate-gray-500 placeholder:text-zinc-300 py-2 text-lg"
+          around="bg-dark-slate-gray-500 py-2"
           type={showPassword ? 'text' : 'password'}
           right={
             showPassword ? (

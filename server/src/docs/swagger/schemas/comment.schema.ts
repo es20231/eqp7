@@ -1,3 +1,4 @@
+
 const commentSchema = {
   type: 'object',
   properties: {
@@ -5,6 +6,19 @@ const commentSchema = {
     content: { type: 'string' },
     userId: { type: 'string' },
     postId: { type: 'string' },
+    user: {
+      type: 'object',
+      properties: {
+        username: { type: 'string' },
+        profilePicture: { type: 'string' },
+      },
+    },
+    post: {
+      type: 'object',
+      properties: {
+        userId: { type: 'string' },
+      },
+    },
   },
 }
 
@@ -251,11 +265,12 @@ const deleteCommentSchema = {
 }
 
 export {
-  getCommentsByPostIdSchema,
-  getCommentsByUserIdSchema,
+  commentSchema,
   createCommentSchema,
   deleteCommentSchema,
   getCommentByIdSchema,
-  commentSchema,
-  getCommentsSchema,
+  getCommentsByPostIdSchema,
+  getCommentsByUserIdSchema,
+  getCommentsSchema
 }
+

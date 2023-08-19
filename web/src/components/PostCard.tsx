@@ -1,8 +1,18 @@
 import { Text } from '@/components/Text'
-import { UserPostDTO } from '@/queries/post.query'
-import * as Avatar from '@radix-ui/react-avatar'
-import { Heart, HeartOff, UserCircle2 } from 'lucide-react'
+import { UserPostDTO, useDeletePost } from '@/queries/post.query'
+import { queryClient } from '@/services/queryClient'
+import { useUserStore } from '@/stores/user.store'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import {
+  NewCommentFormComponent,
+  NewCommentFormProvider,
+} from './Form/Providers/NewCommentForm'
+import { PostCardOptions } from './PostCardOptions'
+import { PostComments } from './PostComments'
+import { ReactionCard } from './ReactionCard'
+import { UserAvatar } from './UserAvatar'
 
 interface PostCardProps {
   post: UserPostDTO
@@ -10,60 +20,80 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, token }: PostCardProps) => {
-  const userAvatar = ''
+  const { userInfo } = useUserStore((state) => state)
+  const [postId, setPostId] = useState<string | undefined>()
+
+  const { data: deletePost, isError: errorDeletePost } = useDeletePost({
+    postId,
+    token,
+  })
+
+  useEffect(() => {
+    if (postId) {
+      if (deletePost) {
+        toast.success('Post removido com sucesso!')
+        setPostId(undefined)
+      } else {
+        if (errorDeletePost) {
+          setPostId(undefined)
+          toast.error('Erro ao remover post!')
+        }
+      }
+    }
+
+    queryClient.invalidateQueries(['posts', { userId: userInfo?.id, token }])
+  }, [postId, queryClient])
+
   return (
-    <div className="flex flex-col dark:bg-dark-slate-gray-500 bg-slate-400 bg-opacity-50 justify-center w-80 rounded-md">
-      <div className="h-fit py-2 flex flex-row items-center">
-        {userAvatar ? (
-          <Avatar.Root>
-            <Avatar.Image
-              className="w-12 h-12 rounded-full ml-2"
-              src={userAvatar}
-              alt="User avatar"
-            />
-            <Avatar.Fallback />
-          </Avatar.Root>
-        ) : (
-          <UserCircle2 className="w-11 h-11 rounded-full ml-2 stroke-1 bg-gray-400 dark:bg-gray-600" />
-        )}
-        <section className="ml-2">
-          <Text>@{post.user.username}</Text>
-        </section>
+    <div className="flex flex-col dark:bg-dark-slate-gray-500 bg-gray-400/30 bg-opacity-50 justify-center py-1 w-full max-w-sm rounded-lg">
+      <div className="px-4 py-2 flex flex-row items-center gap-2">
+        <div className="h-10 w-10">
+          <UserAvatar
+            userImage={post.user.profilePicture || ''}
+            exibitionName={post.user.fullName}
+            height={36}
+            width={36}
+          />
+        </div>
+        <Text className="text-start flex-1">@{post.user.username}</Text>
+        {userInfo?.id === post.userId ? (
+          <PostCardOptions
+            handleRemovePost={() => setPostId(post.id)}
+            post={post}
+          />
+        ) : null}
       </div>
-      <div className="h-80">
+      <div className="px-2 h-72">
         <Image
           src={post.image.url}
           alt="Picture of the author"
           width={360}
           height={360}
-          className="w-full h-full"
+          className="object-cover rounded-lg w-full h-full"
         />
       </div>
-      <div className="flex flex-col h-28">
-        <div className="flex flex-row justify-start items-center gap-x-3 px-4 h-[38%] ">
-          <div className="flex flex-row items-center gap-x-2 h-full ">
-            <button className="text-zinc-600 dark:text-slate-50 flex items-center h-full">
-              <Heart />
-            </button>
-            <Text className="text-sm mt-0.5 h-full flex items-center">{} </Text>
-          </div>
-          <div className="flex flex-row items-center gap-x-2 h-full ">
-            <button className="text-zinc-600 dark:text-slate-50 flex items-center h-full">
-              <HeartOff />
-            </button>
-            <Text className="text-sm mt-0.5 h-full flex items-center">{} </Text>
-          </div>
+      <div className="flex flex-col h-full">
+        <ReactionCard for="post" record={post} token={token} />
+        <div className="flex flex-col items-start px-3 h-16">
+          <Text className="text-sm line-clamp-3 leading-5 text-left font-bold">
+            {post.user.username}
+          </Text>
+          <Text className="text-sm text-start text-gray-500 dark:text-zinc-300">
+            {post.subtitle}
+          </Text>
         </div>
-        <div className="flex flex-row justify-between items-center px-3 h-[62%]">
-          <section className="flex flex-row items-start gap-x-2 w-full h-full">
-            <Text className="text-xs line-clamp-3 leading-5 px-1 text-left">
-              <b className="pb-4 text-gray-800 dark:text-gray-200">
-                {post.user.username}{' '}
-              </b>
-              {post.subtitle}
-            </Text>
-          </section>
+      </div>
+      <div>
+        <div className="w-full h-32 max-h-32">
+          <PostComments postId={post.id} token={token} preview />
         </div>
+        <NewCommentFormProvider postId={post.id} userId={userInfo?.id || ''}>
+          <NewCommentFormComponent
+            fullName={userInfo?.fullName || ''}
+            userImage={userInfo?.profilePicture || ''}
+            token={token}
+          />
+        </NewCommentFormProvider>
       </div>
     </div>
   )

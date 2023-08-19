@@ -2,10 +2,12 @@
 
 import { Button } from '@/components/Button'
 import { Form } from '@/components/Form/Parts'
+import { Text } from '@/components/Text'
 import { api } from '@/services/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Loader2, LogIn } from 'lucide-react'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useCallback, useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
@@ -72,21 +74,19 @@ const RegisterFormComponent = () => {
         email: data.email,
         password: data.password,
       })
-      .then(async (response) => {
-        console.log('response', response)
+      .then(async () => {
         toast.success('Usuário cadastrado com sucesso')
         await signIn('credentials', {
           username: data.username,
           password: data.password,
           redirect: false,
         })
-          .then((res) => {
+          .then(() => {
             router.push('/dashboard')
           })
           .catch((error) => {
             console.log('error', error)
             toast.error('Erro ao realizar login')
-            router.push('/dashboard')
           })
       })
       .catch((error) => {
@@ -187,11 +187,20 @@ const RegisterFormComponent = () => {
             <Loader2 className="animate-spin text-slate-50" />
           )
         }
-        className="mt-4 py-4 text-slate-50"
+        className="mt-4 py-2 2xl:py-4 text-slate-50"
         onClick={handleClickLoginButton}
       >
         Cadastrar
       </Button>
+      <div className="flex w-full items-center justify-end flex-row gap-2">
+        <Text className="text-sm w-fit">Já possui uma conta?</Text>
+        <Link href="/auth/login">
+          <Text className="group transition duration-300 w-fit hover:font-semibold">
+            Entrar
+            <span className="block max-w-0 group-hover:max-w-full trasition-all duration-500 h-0.5 bg-pacific-blue-500" />
+          </Text>
+        </Link>
+      </div>
     </form>
   )
 }

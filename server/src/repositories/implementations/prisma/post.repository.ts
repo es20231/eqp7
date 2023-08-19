@@ -28,6 +28,8 @@ const PrismaPostRepository: IPostRepository = {
         user: {
           select: {
             username: true,
+            profilePicture: true,
+            fullName: true,
           },
         },
       },
