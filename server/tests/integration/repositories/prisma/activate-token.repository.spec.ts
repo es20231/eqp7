@@ -1,5 +1,5 @@
 import { CreateActivateTokenDTO } from '../../../../src/dtos/activate-token/create-activate-token.dto'
-import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
   PrismaActivateTokenRepository,
   clearPrismaActivateToken,
@@ -14,7 +14,7 @@ describe('PrismaActivateTokenRepository', () => {
   })
 
   beforeAll(async () => {
-    await clearPrismaActivateToken()
+    await clearPrismaDatabase()
 
     const user = await prisma.user.create({
       data: {

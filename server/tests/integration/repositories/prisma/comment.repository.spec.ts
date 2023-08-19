@@ -1,5 +1,4 @@
-import { prisma } from '../../../../src/lib/prisma'
-import { clearPrismaActivateToken } from '../../../../src/repositories/implementations/prisma/activate-token.repository'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
   PrismaCommentRepository,
   clearCommentsPrisma,
@@ -15,7 +14,7 @@ describe('PrismaCommentRepository', () => {
   })
 
   beforeAll(async () => {
-    await clearPrismaActivateToken()
+    await clearPrismaDatabase()
     const user = await prisma.user.create({
       data: {
         username: 'jose',

@@ -8,7 +8,7 @@
     "start:prod": "node dist/index.js",
     "build": "npx tsc --project tsconfig.build.json",
     "dev": "tsx watch src/index.ts",
-    "test": "jest --watch --runInBand",
+    "test": "jest --watchAll --runInBand",
     "test:prod": "jest --runInBand",
     "test:cov": "jest --runInBand --coverage"
   },
