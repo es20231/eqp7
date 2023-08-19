@@ -16,9 +16,7 @@ describe('MemoryCommentReactionRepository', () => {
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
-  afterEach(() => {
-    clearCommentReactionsMemory()
-  })
+  afterEach(async () => await clearCommentReactionsMemory())
   it('should create a comment reaction', async () => {
     const createdCommentReaction = await repository.createCommentReaction({
       type: 'like',

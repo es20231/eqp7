@@ -1,22 +1,16 @@
 import { CreateActivateTokenDTO } from '../../../src/dtos/activate-token/create-activate-token.dto'
 import { instantiatedActivateTokenService } from '../../../src/factories/activate-token.factory'
-import { prisma } from '../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../src/lib/prisma'
 import {
   MemoryActivateTokenRepository,
   clearMemoryActivateToken,
 } from '../../../src/repositories/implementations/memory/activate-token.repository'
-import {
-  MemoryUserRepository,
-  clearUserMemory,
-} from '../../../src/repositories/implementations/memory/user.repository'
+import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 import {
   PrismaActivateTokenRepository,
   clearPrismaActivateToken,
 } from '../../../src/repositories/implementations/prisma/activate-token.repository'
-import {
-  PrismaUserRepository,
-  clearUsersPrisma,
-} from '../../../src/repositories/implementations/prisma/user.repository'
+import { PrismaUserRepository } from '../../../src/repositories/implementations/prisma/user.repository'
 
 describe('MemoryActivateTokenService', () => {
   const service = instantiatedActivateTokenService(
@@ -31,8 +25,7 @@ describe('MemoryActivateTokenService', () => {
   })
 
   beforeAll(async () => {
-    await clearMemoryActivateToken()
-    await clearUserMemory()
+    await clearPrismaDatabase()
 
     const user = await MemoryUserRepository.createUser({
       fullName: 'Test User',
@@ -274,8 +267,7 @@ describe('PrismaActivateTokenService', () => {
   })
 
   beforeAll(async () => {
-    await clearPrismaActivateToken()
-    await clearUsersPrisma()
+    await clearPrismaDatabase()
 
     const user = await prisma.user.create({
       data: {

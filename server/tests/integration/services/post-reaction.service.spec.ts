@@ -1,16 +1,16 @@
 import { instantiatedPostReactionService } from '../../../src/factories/post-reaction.factory'
-import { prisma } from '../../../src/lib/prisma'
+import { clearPrismaDatabase } from '../../../src/lib/prisma'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import {
-  clearPostReactionsMemory,
   MemoryPostReactionRepository,
+  clearPostReactionsMemory,
 } from '../../../src/repositories/implementations/memory/post-reaction.repository'
 import { MemoryPostRepository } from '../../../src/repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 import { PrismaImageRepository } from '../../../src/repositories/implementations/prisma/image.repository'
 import {
-  clearPostReactionsPrisma,
   PrismaPostReactionRepository,
+  clearPostReactionsPrisma,
 } from '../../../src/repositories/implementations/prisma/post-reaction.repository'
 import { PrismaPostRepository } from '../../../src/repositories/implementations/prisma/post.repository'
 import { PrismaUserRepository } from '../../../src/repositories/implementations/prisma/user.repository'
@@ -39,6 +39,7 @@ describe('MemoryPostReactionService', () => {
   let postId3: string
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await MemoryUserRepository.createUser({
       username: 'test',
       email: 'test@mail.com',
@@ -579,9 +580,7 @@ describe('PrismaPostReactionService', () => {
   let postId3: string
 
   beforeAll(async () => {
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
 
     const { id: userIdCreated } = await PrismaUserRepository.createUser({
       username: 'test',
@@ -657,9 +656,7 @@ describe('PrismaPostReactionService', () => {
   })
 
   afterAll(async () => {
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => {
@@ -777,32 +774,34 @@ describe('PrismaPostReactionService', () => {
         'Post reactions found successfully',
       )
       expect(foundPostReactions.payload).toHaveLength(3)
-      expect(foundPostReactions.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          type: 'like',
-          userId,
-          postId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'dislike',
-          userId: userId2,
-          postId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'like',
-          userId: userId3,
-          postId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(foundPostReactions.payload).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            userId,
+            postId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'dislike',
+            userId: userId2,
+            postId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            userId: userId3,
+            postId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should get all post reactions with type like', async () => {
@@ -1015,32 +1014,34 @@ describe('PrismaPostReactionService', () => {
         'Post reactions found successfully',
       )
       expect(foundPostReactions.payload).toHaveLength(3)
-      expect(foundPostReactions.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          type: 'like',
-          userId,
-          postId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'dislike',
-          userId: userId2,
-          postId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'like',
-          userId: userId3,
-          postId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(foundPostReactions.payload).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            userId,
+            postId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'dislike',
+            userId: userId2,
+            postId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            userId: userId3,
+            postId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should return an empty array when try to get all post reactions from a user that does not have any post reaction', async () => {

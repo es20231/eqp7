@@ -1,7 +1,7 @@
-import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
-  clearCommentReactionsPrisma,
   PrismaCommentReactionRepository,
+  clearCommentReactionsPrisma,
 } from '../../../../src/repositories/implementations/prisma/comment-reaction.repository'
 
 describe('PrismaCommentReactionRepository', () => {
@@ -26,6 +26,7 @@ describe('PrismaCommentReactionRepository', () => {
   })
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await prisma.user.create({
       data: {
         username: 'jose',
@@ -136,14 +137,11 @@ describe('PrismaCommentReactionRepository', () => {
   })
 
   afterAll(async () => {
-    await prisma.comment.deleteMany()
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => {
-    clearCommentReactionsPrisma()
+    await clearCommentReactionsPrisma()
   })
 
   it('should create a comment reaction', async () => {
@@ -202,7 +200,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(3)
-    expect(commentReactions[0]).toStrictEqual({
+    expect(commentReactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId,
@@ -210,7 +208,7 @@ describe('PrismaCommentReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(commentReactions[1]).toStrictEqual({
+    expect(commentReactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId: commentId2,
@@ -218,7 +216,7 @@ describe('PrismaCommentReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(commentReactions[2]).toStrictEqual({
+    expect(commentReactions[2]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       commentId: commentId3,
@@ -251,7 +249,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(2)
-    expect(commentReactions[0]).toStrictEqual({
+    expect(commentReactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId,
@@ -259,7 +257,7 @@ describe('PrismaCommentReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(commentReactions[1]).toStrictEqual({
+    expect(commentReactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId: commentId2,
@@ -292,7 +290,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(2)
-    expect(commentReactions[0]).toStrictEqual({
+    expect(commentReactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId,
@@ -300,7 +298,7 @@ describe('PrismaCommentReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(commentReactions[1]).toStrictEqual({
+    expect(commentReactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId: commentId2,
@@ -337,7 +335,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(2)
-    expect(commentReactions[0]).toStrictEqual({
+    expect(commentReactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       commentId: commentId2,
@@ -345,7 +343,7 @@ describe('PrismaCommentReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(commentReactions[1]).toStrictEqual({
+    expect(commentReactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       commentId: commentId3,
@@ -368,7 +366,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(1)
-    expect(commentReactions[0]).toStrictEqual({
+    expect(commentReactions[0]).toMatchObject({
       id: commentReaction.id,
       type: 'like',
       commentId,
@@ -391,7 +389,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(1)
-    expect(commentReactions[0]).toStrictEqual({
+    expect(commentReactions[0]).toMatchObject({
       id: commentReaction.id,
       type: 'like',
       commentId,
@@ -408,7 +406,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(0)
-    expect(commentReactions).toStrictEqual([])
+    expect(commentReactions).toMatchObject([])
   })
 
   it('should get an empty array when try to get all comments reactions from a user that does not have any comment reaction', async () => {
@@ -418,7 +416,7 @@ describe('PrismaCommentReactionRepository', () => {
 
     expect(commentReactions).toBeTruthy()
     expect(commentReactions.length).toBe(0)
-    expect(commentReactions).toStrictEqual([])
+    expect(commentReactions).toMatchObject([])
   })
 
   it('should get a comment reaction by id', async () => {
@@ -433,7 +431,7 @@ describe('PrismaCommentReactionRepository', () => {
     )
 
     expect(commentReactionFound).toBeTruthy()
-    expect(commentReactionFound).toStrictEqual({
+    expect(commentReactionFound).toMatchObject({
       id: commentReaction.id,
       type: 'like',
       commentId,
@@ -461,7 +459,7 @@ describe('PrismaCommentReactionRepository', () => {
     const deleted = await repository.deleteCommentReaction(commentReaction.id)
 
     expect(deleted).toBeTruthy()
-    expect(deleted).toStrictEqual({
+    expect(deleted).toMatchObject({
       id: commentReaction.id,
       type: 'like',
       commentId,

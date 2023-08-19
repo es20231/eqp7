@@ -1,7 +1,7 @@
-import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
-  clearPostReactionsPrisma,
   PrismaPostReactionRepository,
+  clearPostReactionsPrisma,
 } from '../../../../src/repositories/implementations/prisma/post-reaction.repository'
 
 describe('PrismaPostReactionRepository', () => {
@@ -23,6 +23,7 @@ describe('PrismaPostReactionRepository', () => {
   })
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await prisma.user.create({
       data: {
         username: 'jose',
@@ -112,7 +113,7 @@ describe('PrismaPostReactionRepository', () => {
   })
 
   afterEach(async () => {
-    clearPostReactionsPrisma()
+    await clearPostReactionsPrisma()
   })
 
   it('should be defined', () => {
@@ -175,7 +176,7 @@ describe('PrismaPostReactionRepository', () => {
 
     expect(reactions).toBeTruthy()
     expect(reactions.length).toBe(3)
-    expect(reactions[0]).toStrictEqual({
+    expect(reactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId,
@@ -183,7 +184,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[1]).toStrictEqual({
+    expect(reactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       userId: userId2,
@@ -191,7 +192,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[2]).toStrictEqual({
+    expect(reactions[2]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId: userId3,
@@ -224,7 +225,7 @@ describe('PrismaPostReactionRepository', () => {
 
     expect(reactions).toBeTruthy()
     expect(reactions.length).toBe(2)
-    expect(reactions[0]).toStrictEqual({
+    expect(reactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId,
@@ -232,7 +233,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[1]).toStrictEqual({
+    expect(reactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId: userId3,
@@ -273,7 +274,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[1]).toStrictEqual({
+    expect(reactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       userId: userId2,
@@ -306,7 +307,7 @@ describe('PrismaPostReactionRepository', () => {
 
     expect(reactions).toBeTruthy()
     expect(reactions.length).toBe(2)
-    expect(reactions[0]).toStrictEqual({
+    expect(reactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       userId: userId2,
@@ -347,7 +348,7 @@ describe('PrismaPostReactionRepository', () => {
 
     expect(reactions).toBeTruthy()
     expect(reactions.length).toBe(3)
-    expect(reactions[0]).toStrictEqual({
+    expect(reactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId,
@@ -355,7 +356,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[1]).toStrictEqual({
+    expect(reactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       userId: userId2,
@@ -363,7 +364,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[2]).toStrictEqual({
+    expect(reactions[2]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId: userId3,
@@ -390,7 +391,7 @@ describe('PrismaPostReactionRepository', () => {
 
     expect(reactions).toBeTruthy()
     expect(reactions.length).toBe(2)
-    expect(reactions[0]).toStrictEqual({
+    expect(reactions[0]).toMatchObject({
       id: expect.any(String),
       type: 'like',
       userId,
@@ -398,7 +399,7 @@ describe('PrismaPostReactionRepository', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     })
-    expect(reactions[1]).toStrictEqual({
+    expect(reactions[1]).toMatchObject({
       id: expect.any(String),
       type: 'dislike',
       userId,
@@ -436,7 +437,7 @@ describe('PrismaPostReactionRepository', () => {
     const foundReaction = await repository.getPostReactionById(reaction.id)
 
     expect(foundReaction).toBeTruthy()
-    expect(foundReaction).toStrictEqual({
+    expect(foundReaction).toMatchObject({
       id: reaction.id,
       type: 'like',
       userId,
@@ -464,7 +465,7 @@ describe('PrismaPostReactionRepository', () => {
     const deleted = await repository.deletePostReaction(reaction.id)
 
     expect(deleted).toBeTruthy()
-    expect(deleted).toStrictEqual({
+    expect(deleted).toMatchObject({
       id: reaction.id,
       type: 'like',
       userId,

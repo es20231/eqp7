@@ -1,7 +1,7 @@
-import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../../src/lib/prisma'
 import {
-  clearPostsPrisma,
   PrismaPostRepository,
+  clearPostsPrisma,
 } from '../../../../src/repositories/implementations/prisma/post.repository'
 
 describe('PrismaPostRepository', () => {
@@ -14,6 +14,7 @@ describe('PrismaPostRepository', () => {
   })
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await prisma.user.create({
       data: {
         username: 'Jose',
@@ -49,9 +50,7 @@ describe('PrismaPostRepository', () => {
     })
   })
 
-  afterEach(() => {
-    clearPostsPrisma()
-  })
+  afterEach(async () => await clearPostsPrisma())
 
   it('should create a post', async () => {
     const post = {

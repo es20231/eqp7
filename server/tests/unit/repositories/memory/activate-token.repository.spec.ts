@@ -1,4 +1,5 @@
 import { CreateActivateTokenDTO } from '../../../../src/dtos/activate-token/create-activate-token.dto'
+import { clearPrismaDatabase } from '../../../../src/lib/prisma'
 import {
   MemoryActivateTokenRepository,
   clearMemoryActivateToken,
@@ -12,7 +13,7 @@ describe('MemoryActivateTokenRepository', () => {
   })
 
   beforeAll(async () => {
-    await clearMemoryActivateToken()
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => {

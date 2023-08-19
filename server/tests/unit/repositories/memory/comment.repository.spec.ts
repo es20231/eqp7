@@ -10,9 +10,7 @@ describe('MemoryCommentRepository', () => {
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
-  afterEach(() => {
-    clearCommentMemory()
-  })
+  afterEach(async () => await clearCommentMemory())
   it('should create a comment', async () => {
     const comment = {
       content: 'Comment Content',

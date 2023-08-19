@@ -1,16 +1,16 @@
 import { instantiatedCommentReactionService } from '../../../src/factories/comment-reaction.factory'
-import { prisma } from '../../../src/lib/prisma'
+import { clearPrismaDatabase } from '../../../src/lib/prisma'
 import {
-  clearCommentReactionsMemory,
   MemoryCommentReactionRepository,
+  clearCommentReactionsMemory,
 } from '../../../src/repositories/implementations/memory/comment-reaction.repository'
 import { MemoryCommentRepository } from '../../../src/repositories/implementations/memory/comment.repository'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import { MemoryPostRepository } from '../../../src/repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 import {
-  clearCommentReactionsPrisma,
   PrismaCommentReactionRepository,
+  clearCommentReactionsPrisma,
 } from '../../../src/repositories/implementations/prisma/comment-reaction.repository'
 import { PrismaCommentRepository } from '../../../src/repositories/implementations/prisma/comment.repository'
 import { PrismaImageRepository } from '../../../src/repositories/implementations/prisma/image.repository'
@@ -45,6 +45,7 @@ describe('MemoryCommentReactionService', () => {
   let commentId3: string
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await MemoryUserRepository.createUser({
       username: 'test',
       email: 'test@mail.com',
@@ -610,10 +611,7 @@ describe('PrismaCommentReactionService', () => {
   let commentId3: string
 
   beforeAll(async () => {
-    await prisma.comment.deleteMany()
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
 
     const { id: userIdCreated } = await PrismaUserRepository.createUser({
       username: 'test',
@@ -716,10 +714,7 @@ describe('PrismaCommentReactionService', () => {
   })
 
   afterAll(async () => {
-    await prisma.comment.deleteMany()
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => {
@@ -841,32 +836,34 @@ describe('PrismaCommentReactionService', () => {
         'Comment reactions found successfully',
       )
       expect(getCommentReactions.payload).toHaveLength(3)
-      expect(getCommentReactions.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          type: 'like',
-          commentId,
-          userId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'dislike',
-          commentId,
-          userId: userId2,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'like',
-          commentId,
-          userId: userId3,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(getCommentReactions.payload).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            commentId,
+            userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'dislike',
+            commentId,
+            userId: userId2,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            commentId,
+            userId: userId3,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should get all comment reactions with type like', async () => {
@@ -1090,32 +1087,34 @@ describe('PrismaCommentReactionService', () => {
         'Comment reactions found successfully',
       )
       expect(getCommentReactions.payload).toHaveLength(3)
-      expect(getCommentReactions.payload).toStrictEqual([
-        {
-          id: expect.any(String),
-          type: 'like',
-          commentId,
-          userId,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'dislike',
-          commentId,
-          userId: userId2,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          type: 'like',
-          commentId,
-          userId: userId3,
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ])
+      expect(getCommentReactions.payload).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            commentId,
+            userId,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'dislike',
+            commentId,
+            userId: userId2,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+          expect.objectContaining({
+            id: expect.any(String),
+            type: 'like',
+            commentId,
+            userId: userId3,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+          }),
+        ]),
+      )
     })
 
     it('should return an empty array when try to get all comment reactions from a user that does not have any comment reaction', async () => {

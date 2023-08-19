@@ -14,9 +14,7 @@ describe('MemoryPostReactionRepository', () => {
   it('should be defined', () => {
     expect(repository).toBeTruthy()
   })
-  afterEach(() => {
-    clearPostReactionsMemory()
-  })
+  afterEach(async () => await clearPostReactionsMemory())
   it('should create a post reaction', async () => {
     const createdPostReaction = await repository.createPostReaction({
       type: 'like',
