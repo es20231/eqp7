@@ -182,7 +182,6 @@ const UploadComponent = ({
             },
           })
           .then((response) => {
-            console.log(response.data)
             setFiles((prev) =>
               prev.map((prevFile) =>
                 prevFile.id === file.id

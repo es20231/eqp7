@@ -15,7 +15,6 @@ describe('PrismaActivateTokenRepository', () => {
 
   beforeAll(async () => {
     await clearPrismaActivateToken()
-    await prisma.user.deleteMany()
 
     const user = await prisma.user.create({
       data: {

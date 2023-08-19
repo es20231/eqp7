@@ -1,5 +1,5 @@
 import { instantiatedImageService } from '../../../src/factories/image.factory'
-import { prisma } from '../../../src/lib/prisma'
+import { clearPrismaDatabase, prisma } from '../../../src/lib/prisma'
 import {
   MemoryImageRepository,
   clearImageMemory,
@@ -23,6 +23,7 @@ describe('MemoryImageService', () => {
   let userId: string
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const { id } = await MemoryUserRepository.createUser({
       username: 'user-test',
       email: 'test@mail.com',
@@ -238,7 +239,7 @@ describe('PrismaImageService', () => {
   let userId: string
 
   beforeAll(async () => {
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
     const { id } = await prisma.user.create({
       data: {
         username: 'user-test',

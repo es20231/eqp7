@@ -1,4 +1,5 @@
 import { prisma } from '../../../../src/lib/prisma'
+import { clearPrismaActivateToken } from '../../../../src/repositories/implementations/prisma/activate-token.repository'
 import {
   PrismaImageRepository,
   clearImagesPrisma,
@@ -12,6 +13,7 @@ describe('PrismaImageRepository', () => {
   })
 
   beforeAll(async () => {
+    await clearPrismaActivateToken()
     const user = await prisma.user.create({
       data: {
         username: 'Cassiano',
@@ -32,9 +34,7 @@ describe('PrismaImageRepository', () => {
     })
   })
 
-  afterEach(() => {
-    clearImagesPrisma()
-  })
+  afterEach(async () => await clearImagesPrisma())
 
   it('should create an image', async () => {
     const image = {

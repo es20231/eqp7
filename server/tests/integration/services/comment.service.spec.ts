@@ -1,15 +1,15 @@
 import { instantiatedCommentService } from '../../../src/factories/comment.factory'
-import { prisma } from '../../../src/lib/prisma'
+import { clearPrismaDatabase } from '../../../src/lib/prisma'
 import {
-  clearCommentMemory,
   MemoryCommentRepository,
+  clearCommentMemory,
 } from '../../../src/repositories/implementations/memory/comment.repository'
 import { MemoryImageRepository } from '../../../src/repositories/implementations/memory/image.repository'
 import { MemoryPostRepository } from '../../../src/repositories/implementations/memory/post.repository'
 import { MemoryUserRepository } from '../../../src/repositories/implementations/memory/user.repository'
 import {
-  clearCommentsPrisma,
   PrismaCommentRepository,
+  clearCommentsPrisma,
 } from '../../../src/repositories/implementations/prisma/comment.repository'
 import { PrismaImageRepository } from '../../../src/repositories/implementations/prisma/image.repository'
 import { PrismaPostRepository } from '../../../src/repositories/implementations/prisma/post.repository'
@@ -30,6 +30,7 @@ describe('MemoryCommentService', () => {
   let imageId: string
 
   beforeAll(async () => {
+    await clearPrismaDatabase()
     const user = await MemoryUserRepository.createUser({
       username: 'test',
       email: 'test@mail.com',
@@ -566,9 +567,7 @@ describe('PrismaCommentService', () => {
   let imageId: string
 
   beforeAll(async () => {
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
 
     const { id: userIdCreated } = await PrismaUserRepository.createUser({
       username: 'test',
@@ -596,9 +595,7 @@ describe('PrismaCommentService', () => {
   })
 
   afterAll(async () => {
-    await prisma.post.deleteMany()
-    await prisma.image.deleteMany()
-    await prisma.user.deleteMany()
+    await clearPrismaDatabase()
   })
 
   afterEach(async () => {

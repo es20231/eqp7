@@ -8,7 +8,7 @@ const Label = ({
   return (
     <label
       className={twMerge(
-        'flex items-center justify-between text-sm text-zinc-800 dark:text-slate-50',
+        'flex items-center justify-between text-sm 2xl:text-base text-zinc-800 dark:text-slate-50',
         className,
       )}
       {...rest}
