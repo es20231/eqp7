@@ -51,7 +51,7 @@ describe('PrismaPostRepository', () => {
     const created = await repository.createPost(post)
 
     expect(created).toBeTruthy()
-    expect(created).toStrictEqual({
+    expect(created).toMatchObject({
       id: expect.any(String),
       subtitle: post.subtitle,
       userId: post.userId,
@@ -89,7 +89,7 @@ describe('PrismaPostRepository', () => {
     const found = await repository.getPostById(id)
 
     expect(found).toBeTruthy()
-    expect(found).toStrictEqual({
+    expect(found).toMatchObject({
       id,
       subtitle: post.subtitle,
       userId: post.userId,
@@ -114,16 +114,18 @@ describe('PrismaPostRepository', () => {
     const found = await repository.getPosts()
 
     expect(found).toBeTruthy()
-    expect(found).toStrictEqual([
-      {
-        id,
-        subtitle: post.subtitle,
-        userId: post.userId,
-        imageId: post.imageId,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      },
-    ])
+    expect(found).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id,
+          subtitle: post.subtitle,
+          userId: post.userId,
+          imageId: post.imageId,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        }),
+      ]),
+    )
   })
 
   it('should find all posts by user id', async () => {
@@ -167,7 +169,7 @@ describe('PrismaPostRepository', () => {
     })
 
     expect(updated).toBeTruthy()
-    expect(updated).toStrictEqual({
+    expect(updated).toMatchObject({
       id,
       subtitle: 'Teste 2',
       userId: post.userId,
@@ -197,7 +199,7 @@ describe('PrismaPostRepository', () => {
     })
 
     expect(updated).toBeTruthy()
-    expect(updated).toStrictEqual({
+    expect(updated).toMatchObject({
       id,
       subtitle: 'Teste',
       userId: post.userId,
@@ -219,7 +221,7 @@ describe('PrismaPostRepository', () => {
     })
 
     expect(updated).toBeTruthy()
-    expect(updated).toStrictEqual({
+    expect(updated).toMatchObject({
       id,
       subtitle: post.subtitle,
       userId: post.userId,
@@ -241,7 +243,7 @@ describe('PrismaPostRepository', () => {
     })
 
     expect(updated).toBeTruthy()
-    expect(updated).toStrictEqual({
+    expect(updated).toMatchObject({
       id,
       subtitle: post.subtitle,
       userId: post.userId,

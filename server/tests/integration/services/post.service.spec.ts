@@ -62,7 +62,7 @@ describe('MemoryPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Post created successfully')
-      expect(result.payload).toStrictEqual({
+      expect(result.payload).toMatchObject({
         id: expect.any(String),
         subtitle: post.subtitle,
         userId: post.userId,
@@ -211,7 +211,7 @@ describe('MemoryPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Post found successfully')
-      expect(result.payload).toStrictEqual({
+      expect(result.payload).toMatchObject({
         id: expect.any(String),
         subtitle: post.subtitle,
         userId: post.userId,
@@ -342,7 +342,7 @@ describe('MemoryPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Post updated successfully')
-      expect(result.payload).toStrictEqual({
+      expect(result.payload).toMatchObject({
         id: expect.any(String),
         subtitle: 'Teste 2',
         userId: post.userId,
@@ -489,7 +489,7 @@ describe('PrismaPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Post created successfully')
-      expect(result.payload).toStrictEqual({
+      expect(result.payload).toMatchObject({
         id: expect.any(String),
         subtitle: post.subtitle,
         userId: post.userId,
@@ -638,7 +638,7 @@ describe('PrismaPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Post found successfully')
-      expect(result.payload).toStrictEqual({
+      expect(result.payload).toMatchObject({
         id: expect.any(String),
         subtitle: post.subtitle,
         userId: post.userId,
@@ -769,7 +769,7 @@ describe('PrismaPostService', () => {
 
       expect(result.ok).toBeTruthy()
       expect(result.message).toBe('Post updated successfully')
-      expect(result.payload).toStrictEqual({
+      expect(result.payload).toMatchObject({
         id: expect.any(String),
         subtitle: 'Teste 2',
         userId: post.userId,

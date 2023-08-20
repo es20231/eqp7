@@ -6,6 +6,7 @@ interface Post {
   subtitle: string
   userId: string
   imageId: string
+  filter?: string
 
   comments?: Comment[]
   reactions?: PostReaction[]

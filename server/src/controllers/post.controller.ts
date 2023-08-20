@@ -76,7 +76,6 @@ const PostController = {
 
     reply.status(200).send({ message, payload })
   },
-
   getPostsByUserId: async (request: FastifyRequest, reply: FastifyReply) => {
     const queryParamsSchema = z
       .object({
@@ -125,13 +124,13 @@ const PostController = {
 
     reply.status(200).send({ message, payload })
   },
-
   createPost: async (request: FastifyRequest, reply: FastifyReply) => {
     const bodySchema = z
       .object({
         subtitle: z.string().nonempty('subtitle is required'),
         userId: z.string().nonempty('userId is required'),
         imageId: z.string().nonempty('imageId is required'),
+        filter: z.string().optional(),
       })
       .strict()
 
@@ -145,12 +144,13 @@ const PostController = {
       return
     }
 
-    const { subtitle, userId, imageId } = payloadParse
+    const { subtitle, userId, imageId, filter } = payloadParse
 
     const { ok, message, payload } = await postService.createPost({
       subtitle,
       userId,
       imageId,
+      filter,
     })
 
     if (!ok) {
@@ -160,7 +160,6 @@ const PostController = {
 
     reply.status(201).send({ message, payload })
   },
-
   deletePost: async (request: FastifyRequest, reply: FastifyReply) => {
     const paramsSchema = z
       .object({
@@ -189,7 +188,6 @@ const PostController = {
 
     reply.status(200).send({ message, payload })
   },
-
   updatePost: async (request: FastifyRequest, reply: FastifyReply) => {
     const paramsSchema = z
       .object({
@@ -202,6 +200,7 @@ const PostController = {
         subtitle: z.string().optional(),
         userId: z.string().optional(),
         imageId: z.string().optional(),
+        filter: z.string().optional(),
       })
       .strict()
       .refine(
@@ -210,7 +209,7 @@ const PostController = {
         },
         {
           message:
-            'At least one field is required to update: subtitle, userId, imageId',
+            'At least one field is required to update: subtitle, userId, imageId, filter',
         },
       )
 

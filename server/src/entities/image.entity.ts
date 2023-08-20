@@ -4,7 +4,6 @@ interface Image {
   id: string
   url: string
   userId: string
-  filter?: string
   deleted: boolean
 
   posts?: Post[]

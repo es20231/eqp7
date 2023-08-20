@@ -1,13 +1,12 @@
-import { api } from '@/services/axios';
-import { QueryFunctionContext, useQuery } from 'react-query';
-import { UserPostDTO } from './post.query';
+import { api } from '@/services/axios'
+import { QueryFunctionContext, useQuery } from 'react-query'
+import { UserPostDTO } from './post.query'
 
 type GetUserImagesQueryKey = ['images', { token: string; userId: string }]
 
 export type UserImagesDTO = {
   id: string
   url: string
-  filter?: string
   userId: string
   createdAt: string
 }
@@ -96,5 +95,4 @@ const useGetUser = ({ token, id }: { token: string; id: string }) => {
   return useQuery(['user', { token, id }], getUser)
 }
 
-export { useGetAllUsers, useGetUser, useGetUserImages, useGetUserPosts };
-
+export { useGetAllUsers, useGetUser, useGetUserImages, useGetUserPosts }

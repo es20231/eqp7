@@ -15,7 +15,6 @@ describe('Image Factory', () => {
     expect(service.getImages).toBeDefined()
     expect(service.getImage).toBeDefined()
     expect(service.createImage).toBeDefined()
-    expect(service.updateImage).toBeDefined()
     expect(service.deleteImage).toBeDefined()
   })
 })

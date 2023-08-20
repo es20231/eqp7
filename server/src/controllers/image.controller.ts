@@ -136,53 +136,6 @@ const ImageController = {
 
     reply.status(201).send({ message, payload })
   },
-  updateImage: async (request: FastifyRequest, reply: FastifyReply) => {
-    const paramsSchema = z
-      .object({
-        id: z.string().nonempty('Id is required on url params'),
-      })
-      .strict()
-
-    const bodySchema = z
-      .object({
-        filter: z.string(),
-      })
-      .strict()
-
-    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
-      request.params as object,
-      paramsSchema,
-    )
-
-    const { ok: okParseBody, payload: payloadParseBody } = handleZodParse(
-      request.body as object,
-      bodySchema,
-    )
-
-    if (!okParseParams) {
-      reply.status(400).send(payloadParseParams)
-      return
-    }
-
-    if (!okParseBody) {
-      reply.status(400).send(payloadParseBody)
-      return
-    }
-
-    const { id } = payloadParseParams
-    const { filter } = payloadParseBody
-
-    const { ok, message, payload } = await ImageService.updateImage(id, {
-      filter,
-    })
-
-    if (!ok) {
-      reply.status(400).send({ message })
-      return
-    }
-
-    reply.status(200).send({ message, payload })
-  },
   deleteImage: async (request: FastifyRequest, reply: FastifyReply) => {
     const paramsSchema = z
       .object({

@@ -1,5 +1,4 @@
 import { CreateImageDTO } from '../../../dtos/image/create-image.dto'
-import { UpdateImageDTO } from '../../../dtos/image/update-image.dto'
 import { prisma } from '../../../lib/prisma'
 import { IImageRepository } from '../../iimage.repository'
 
@@ -12,12 +11,7 @@ const PrismaImageRepository: IImageRepository = {
       },
     })
 
-    return image
-      ? {
-          ...image,
-          filter: image.filter || undefined,
-        }
-      : undefined
+    return image || undefined
   },
   getImages: async (take?: number, skip?: number) => {
     const images = await prisma.image.findMany({
@@ -28,10 +22,7 @@ const PrismaImageRepository: IImageRepository = {
       skip,
     })
 
-    return images.map((image) => ({
-      ...image,
-      filter: image.filter || undefined,
-    }))
+    return images
   },
   getUserImages: async (userId: string, take?: number, skip?: number) => {
     const userImages = await prisma.image.findMany({
@@ -43,10 +34,7 @@ const PrismaImageRepository: IImageRepository = {
       skip,
     })
 
-    return userImages.map((image) => ({
-      ...image,
-      filter: image.filter || undefined,
-    }))
+    return userImages
   },
   createImage: async (image: CreateImageDTO) => {
     const imageCreated = await prisma.image.create({
@@ -56,25 +44,7 @@ const PrismaImageRepository: IImageRepository = {
       },
     })
 
-    return {
-      ...imageCreated,
-      filter: imageCreated.filter || undefined,
-    }
-  },
-  updateImage: async (id: string, image: UpdateImageDTO) => {
-    const imageUpdated = await prisma.image.update({
-      where: {
-        id,
-      },
-      data: {
-        filter: image.filter,
-      },
-    })
-
-    return {
-      ...imageUpdated,
-      filter: imageUpdated.filter || undefined,
-    }
+    return imageCreated
   },
   deleteImage: async (id: string) => {
     const softDelete = await prisma.image.update({
@@ -84,12 +54,9 @@ const PrismaImageRepository: IImageRepository = {
       data: {
         deleted: true,
       },
-      include: {
-        posts: true,
-      },
     })
 
-    return { ...softDelete, filter: softDelete.filter || undefined }
+    return softDelete
   },
 }
 
