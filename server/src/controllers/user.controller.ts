@@ -24,6 +24,7 @@ const UserController = {
       .object({
         take: z.number().int().nonnegative().optional(),
         skip: z.number().int().nonnegative().optional(),
+        search: z.string().nonempty().optional(),
       })
       .strict()
 
@@ -37,7 +38,7 @@ const UserController = {
       return
     }
 
-    const { take, skip } = payloadParse
+    const { take, skip, search } = payloadParse
 
     const { ok, message, payload } = await UserService.getUsers(take, skip)
 
@@ -50,6 +51,18 @@ const UserController = {
       ...user,
       password: undefined,
     }))
+
+    if (search) {
+      return reply.status(200).send({
+        message,
+        payload: usersWithoutPassword.filter(
+          (user) =>
+            user.email.includes(search) ||
+            user.username.includes(search) ||
+            user.fullName.includes(search),
+        ),
+      })
+    }
 
     return reply.status(200).send({ message, payload: usersWithoutPassword })
   },

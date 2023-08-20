@@ -46,6 +46,7 @@ const getUsersSchema = {
     properties: {
       take: { type: 'number' },
       skip: { type: 'number' },
+      search: { type: 'string' },
     },
   },
   response: {
@@ -409,5 +410,6 @@ export {
   getUserImagesSchema,
   getUserPostsSchema,
   getUsersSchema,
-  updateUserSchema,
+  updateUserSchema
 }
+
