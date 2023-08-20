@@ -33,13 +33,13 @@ const SelectFilter = ({ post, setSelectedFilter }: SelectFilterProps) => {
         <Select.Portal>
           <Select.Content
             sideOffset={2}
-            className="bg-dark-slate-gray-400 w-full rounded-md"
+            className="bg-gray-300 dark:bg-dark-slate-gray-400 w-full rounded-md"
           >
             <ScrollArea.Root className="w-full h-full">
               <ScrollArea.Viewport className="w-full h-full">
                 <Select.Viewport className="p-2 h-full">
                   <Select.Group className="flex flex-col gap-1">
-                    <Select.Label className="px-6 text-xs leading-6">
+                    <Select.Label className="px-6 text-xs leading-6 text-zinc-800 dark:text-slate-50">
                       Filtros disponíveis
                     </Select.Label>
                     <SelectItem value="">Nenhum</SelectItem>
@@ -72,7 +72,7 @@ const SelectItem = forwardRef<
   return (
     <Select.Item
       className={twMerge(
-        'text-base leading-none text-zinc-800 py-4 dark:text-slate-50 rounded-md flex items-center h-6 pr-9 pl-6 relative select-none data-[disabled]:text-gray-300 dark:data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-dark-slate-gray-500',
+        'text-base leading-none text-zinc-800 py-4 dark:text-slate-50 rounded-md flex items-center h-6 pr-9 pl-6 relative select-none data-[disabled]:text-gray-300 dark:data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-gray-200 dark:data-[highlighted]:bg-dark-slate-gray-500',
         className,
       )}
       {...props}
