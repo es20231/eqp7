@@ -10,7 +10,12 @@ const PrismaPostRepository: IPostRepository = {
         id,
       },
     })
-    return post || undefined
+    return post
+      ? {
+          ...post,
+          filter: post.filter || undefined,
+        }
+      : undefined
   },
   getPostsByUserId: async (userId: string, take?: number, skip?: number) => {
     const posts = await prisma.post.findMany({
@@ -34,14 +39,20 @@ const PrismaPostRepository: IPostRepository = {
         },
       },
     })
-    return posts
+    return posts.map((post) => ({
+      ...post,
+      filter: post.filter || undefined,
+    }))
   },
   getPosts: async (take?: number, skip?: number) => {
     const posts = await prisma.post.findMany({
       take,
       skip,
     })
-    return posts
+    return posts.map((post) => ({
+      ...post,
+      filter: post.filter || undefined,
+    }))
   },
   createPost: async (post: CreatePostDTO) => {
     const createdPost = await prisma.post.create({
@@ -49,9 +60,10 @@ const PrismaPostRepository: IPostRepository = {
         subtitle: post.subtitle,
         userId: post.userId,
         imageId: post.imageId,
+        filter: post.filter,
       },
     })
-    return createdPost
+    return { ...createdPost, filter: createdPost.filter || undefined }
   },
   updatePost: async (id: string, post: UpdatePostDTO) => {
     const updatedPost = await prisma.post.update({
@@ -62,15 +74,45 @@ const PrismaPostRepository: IPostRepository = {
         ...post,
       },
     })
-    return updatedPost
+    return { ...updatedPost, filter: updatedPost.filter || undefined }
   },
   deletePost: async (id: string) => {
     const deletedPost = await prisma.post.delete({
       where: {
         id,
       },
+      include: {
+        image: {
+          select: {
+            deleted: true,
+          },
+        },
+      },
     })
-    return deletedPost
+
+    const {
+      image: { deleted },
+    } = deletedPost
+
+    if (!deleted)
+      return { ...deletedPost, filter: deletedPost.filter || undefined }
+
+    const postsWithSameImage = await prisma.post.findMany({
+      where: {
+        imageId: deletedPost.imageId,
+      },
+    })
+
+    if (postsWithSameImage.length === 0) {
+      await prisma.image.delete({
+        where: {
+          id: deletedPost.imageId,
+          deleted: true,
+        },
+      })
+    }
+
+    return { ...deletedPost, filter: deletedPost.filter || undefined }
   },
 }
 

@@ -1,4 +1,4 @@
-name: Back-end Tests
+name: Back-end
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: cd server && npm i
       - name: Run server
-        run: cd server && tsc --project tsconfig.build.json
+        run: cd server && npm run build
 
   test:
     runs-on: ubuntu-latest

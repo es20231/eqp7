@@ -19,6 +19,7 @@ import {
   NewPostFormComponent,
   NewPostFormProvider,
 } from './Form/Providers/NewPostForm'
+import { SelectFilter } from './SelectFilter'
 import { Text } from './Text'
 import { Title } from './Title'
 
@@ -85,6 +86,7 @@ interface ImageCardProps {
 
 const ImageCard = ({ image, token }: ImageCardProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [selectedFilter, setSelectedFilter] = useState('')
 
   const { handleSubmit, reset } = useFormContext<CreateNewPostFormData>()
 
@@ -92,7 +94,7 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
 
   const handleCreateNewPost = handleSubmit(({ imageId, subtitle, userId }) => {
     createPost(
-      { post: { imageId, subtitle, userId }, token },
+      { post: { imageId, subtitle, userId, filter: selectedFilter }, token },
       {
         onSuccess: () => {
           toast.success('Post criado com sucesso')
@@ -111,9 +113,9 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
   const { refetch: deleteImage } = useDeleteImage({ imageId: image.id, token })
 
   const handleDeleteImage = async () => {
-    const { error } = await deleteImage()
+    const { error }: { error: any } = await deleteImage()
     if (!error) toast.success('Imagem deletada com sucesso!')
-    else toast.error('Erro ao deletar imagem')
+    else toast.error(error.response.data.message || 'Erro ao deletar imagem')
     queryClient.invalidateQueries(['images', { userId: image.userId, token }])
   }
 
@@ -126,6 +128,7 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
           width={300}
           height={300}
           className="object-cover w-64 h-64"
+          unoptimized
         />
       </div>
       <div className="w-full h-fit flex flex-row gap-2">
@@ -147,32 +150,40 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
               <div className="flex flex-col items-center justify-start p-8 w-full max-h-full h-[60vh]">
                 <div className="flex items-center justify-evenly w-full h-full gap-8">
                   <div className="overflow-hidden rounded-lg shadow-lg w-[40vw] h-[40vh]">
-                    <Image
-                      alt="user image"
-                      key={image.id}
-                      src={image.url}
-                      width={300}
-                      height={300}
-                      className="object-cover w-full h-full"
-                    />
+                    <figure
+                      className={`filter-${selectedFilter} h-full w-full`}
+                    >
+                      <Image
+                        alt="user image"
+                        key={image.id}
+                        src={image.url}
+                        width={300}
+                        height={300}
+                        className="object-cover w-full h-full"
+                        unoptimized
+                      />
+                    </figure>
                   </div>
                   <div className="w-full text-center flex flex-col items-end justify-end gap-4">
                     <NewPostFormComponent />
-                    <Dialog.Close asChild>
-                      <Button
-                        onClick={handleCreateNewPost}
-                        className="w-[20%]"
-                        rightIcon={
-                          <Check
-                            className="text-slate-50"
-                            size={20}
-                            strokeWidth={1.5}
-                          />
-                        }
-                      >
-                        Postar
-                      </Button>
-                    </Dialog.Close>
+                    <div className="w-full flex items-center justify-between px-2">
+                      <SelectFilter setSelectedFilter={setSelectedFilter} />
+                      <Dialog.Close asChild>
+                        <Button
+                          onClick={handleCreateNewPost}
+                          className="w-fit self-end h-full py-2"
+                          rightIcon={
+                            <Check
+                              className="text-slate-50"
+                              size={20}
+                              strokeWidth={1.5}
+                            />
+                          }
+                        >
+                          Postar
+                        </Button>
+                      </Dialog.Close>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -186,11 +197,8 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
           </Dialog.Portal>
         </Dialog.Root>
         <AlertDialog.Root>
-          <AlertDialog.Trigger
-            asChild
-            className="bg-red-400 h-full w-[25%] rounded-lg"
-          >
-            <Button className="p-1">
+          <AlertDialog.Trigger asChild>
+            <Button className="p-1 bg-red-400 hover:bg-red-500 h-full w-[25%] rounded-lg">
               <Trash2 className="text-slate-50" size={28} strokeWidth={1.5} />
             </Button>
           </AlertDialog.Trigger>
@@ -214,7 +222,9 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
                   <Button className="w-[20%]">Cancelar</Button>
                 </AlertDialog.Cancel>
                 <AlertDialog.Action asChild onClick={handleDeleteImage}>
-                  <Button className="w-[20%] bg-red-400">Excluir</Button>
+                  <Button className="w-[20%] bg-red-400 hover:bg-red-500">
+                    Excluir
+                  </Button>
                 </AlertDialog.Action>
               </div>
             </AlertDialog.Content>

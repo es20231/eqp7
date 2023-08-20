@@ -5,6 +5,7 @@ import { useMutation } from 'react-query'
 export type CreatePostDTO = {
   subtitle: string
   userId: string
+  filter?: string
   imageId: string
 }
 
@@ -33,7 +34,8 @@ const useCreatePost = () => {
 }
 
 export type UpdatePostDTO = {
-  subtitle: string
+  subtitle?: string
+  filter?: string
   id: string
 }
 
@@ -44,7 +46,8 @@ interface UpdatePostProps {
 
 const updatePost = async ({ post, token }: UpdatePostProps) => {
   const { data } = await api(token).patch(`/posts/${post.id}`, {
-    subtitle: post.subtitle,
+    ...post,
+    id: undefined,
   })
 
   const postUpdated: UserPostDTO = data.payload

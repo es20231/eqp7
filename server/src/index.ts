@@ -4,8 +4,10 @@ import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
 import Fastify from 'fastify'
 import { AuthRoutes } from './routes/auth.routes'
+import { CommentReactionRoutes } from './routes/comment-reaction.routes'
 import { CommentRoutes } from './routes/comment.routes'
 import { ImageRoutes } from './routes/image.routes'
+import { PostReactionRoutes } from './routes/post-reaction.routes'
 import { PostRoutes } from './routes/post.routes'
 import { UserRoutes } from './routes/user.routes'
 
@@ -44,6 +46,15 @@ async function bootstrap() {
         { name: 'user', description: 'User related end-points' },
         { name: 'post', description: 'Post related end-points' },
         { name: 'image', description: 'Image related end-points' },
+        { name: 'comment', description: 'Comment related end-points' },
+        {
+          name: 'comment-reaction',
+          description: 'Comment reaction related end-points',
+        },
+        {
+          name: 'post-reaction',
+          description: 'Post reaction related end-points',
+        },
       ],
       securityDefinitions: {
         bearer: {
@@ -88,6 +99,8 @@ async function bootstrap() {
   fastify.register(ImageRoutes)
   fastify.register(AuthRoutes)
   fastify.register(CommentRoutes)
+  fastify.register(CommentReactionRoutes)
+  fastify.register(PostReactionRoutes)
 
   fastify.get('/', async () => {
     return {
@@ -102,7 +115,10 @@ async function bootstrap() {
   //   }
   // })
 
-  await fastify.listen({ port: 3333 })
+  await fastify.listen({
+    host: process.env.HOST || '0.0.0.0',
+    port: Number(process.env.PORT) || 3333,
+  })
 }
 
 bootstrap()

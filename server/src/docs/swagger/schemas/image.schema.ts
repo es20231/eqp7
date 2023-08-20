@@ -164,6 +164,7 @@ const createImageSchema = {
     },
   },
 }
+
 const deleteImageSchema = {
   tags: ['image'],
   type: 'object',
@@ -205,5 +206,6 @@ export {
   deleteImageSchema,
   getImageByIdSchema,
   getImagesByUserIdSchema,
-  getImagesSchema,
+  getImagesSchema
 }
+

@@ -49,7 +49,7 @@ describe('MemoryImageService', () => {
 
       expect(ok).toBe(true)
       expect(message).toBe('Image created successfully')
-      expect(payload).toStrictEqual({
+      expect(payload).toMatchObject({
         id: expect.any(String),
         url: image.url,
         userId: image.userId,
@@ -211,7 +211,7 @@ describe('MemoryImageService', () => {
 
       expect(ok).toBe(true)
       expect(message).toBe('Image found successfully')
-      expect(payload).toStrictEqual({
+      expect(payload).toMatchObject({
         id,
         url: image.url,
         userId: image.userId,
@@ -392,7 +392,7 @@ describe('PrismaImageService', () => {
 
       expect(ok).toBe(true)
       expect(message).toBe('Image created successfully')
-      expect(payload).toStrictEqual({
+      expect(payload).toMatchObject({
         id: expect.any(String),
         url: image.url,
         userId: image.userId,
@@ -516,7 +516,7 @@ describe('PrismaImageService', () => {
 
       expect(ok).toBe(true)
       expect(message).toBe('Image found successfully')
-      expect(payload).toStrictEqual({
+      expect(payload).toMatchObject({
         id,
         url: image.url,
         userId: image.userId,

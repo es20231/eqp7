@@ -7,6 +7,7 @@ const PrismaImageRepository: IImageRepository = {
     const image = await prisma.image.findUnique({
       where: {
         id,
+        deleted: false,
       },
     })
 
@@ -14,6 +15,9 @@ const PrismaImageRepository: IImageRepository = {
   },
   getImages: async (take?: number, skip?: number) => {
     const images = await prisma.image.findMany({
+      where: {
+        deleted: false,
+      },
       take,
       skip,
     })
@@ -24,6 +28,7 @@ const PrismaImageRepository: IImageRepository = {
     const userImages = await prisma.image.findMany({
       where: {
         userId,
+        deleted: false,
       },
       take,
       skip,
@@ -42,13 +47,16 @@ const PrismaImageRepository: IImageRepository = {
     return imageCreated
   },
   deleteImage: async (id: string) => {
-    const deleted = await prisma.image.delete({
+    const softDelete = await prisma.image.update({
       where: {
         id,
       },
+      data: {
+        deleted: true,
+      },
     })
 
-    return deleted
+    return softDelete
   },
 }
 

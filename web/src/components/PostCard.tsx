@@ -63,14 +63,17 @@ const PostCard = ({ post, token }: PostCardProps) => {
           />
         ) : null}
       </div>
-      <div className="px-2 h-72">
-        <Image
-          src={post.image.url}
-          alt="Picture of the author"
-          width={360}
-          height={360}
-          className="object-cover rounded-lg w-full h-full"
-        />
+      <div className="px-2 h-56">
+        <figure className={`filter-${post.filter}`}>
+          <Image
+            src={post.image.url}
+            alt="Picture of the author"
+            width={224}
+            height={224}
+            className="object-cover rounded-lg w-full h-full"
+            unoptimized
+          />
+        </figure>
       </div>
       <div className="flex flex-col h-full">
         <ReactionCard for="post" record={post} token={token} />

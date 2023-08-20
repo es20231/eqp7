@@ -7,6 +7,7 @@ const PostSchema = {
     userId: { type: 'string' },
     subtitle: { type: 'string' },
     imageId: { type: 'string' },
+    filter: { type: 'string', nullable: true },
     createdAt: { type: 'string' },
     updatedAt: { type: 'string' },
     image: ImageSchema,

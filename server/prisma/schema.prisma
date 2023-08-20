@@ -34,10 +34,11 @@ model User {
 }
 
 model Image {
-  id     String @id @default(cuid())
-  url    String
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id      String  @id @default(cuid())
+  url     String
+  userId  String
+  deleted Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   posts Post[]
 
@@ -48,12 +49,14 @@ model Image {
 }
 
 model Post {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   subtitle String
   userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   imageId  String
-  image    Image  @relation(fields: [imageId], references: [id])
+  filter   String?
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  image Image @relation(fields: [imageId], references: [id])
 
   comments      Comment[]
   postReactions PostReaction[]

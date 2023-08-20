@@ -2,6 +2,7 @@ import { AppProvider } from '@/providers/app.provider'
 import { Roboto_Mono as RobotoMono } from 'next/font/google'
 import { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
+import '../assets/instagram.css'
 import './globals.css'
 
 const roboto = RobotoMono({

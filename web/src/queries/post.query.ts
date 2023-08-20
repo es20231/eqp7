@@ -7,6 +7,7 @@ export type UserPostDTO = {
   subtitle: string
   imageId: string
   userId: string
+  filter?: string
   createdAt: string
   updatedAt: string
   image: {

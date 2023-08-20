@@ -49,6 +49,7 @@ const ImageRoutes = (
     ImageController.getImage,
   )
   fastify.post('/images', optionsWithSchema.create, ImageController.createImage)
+
   fastify.delete(
     '/images/:id',
     optionsWithSchema.delete,
