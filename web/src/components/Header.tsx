@@ -20,6 +20,7 @@ const Header = () => {
 
   const handleSignOut = useCallback(() => {
     if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('user-storage')
       signOut()
     }
   }, [])

@@ -11,6 +11,7 @@ import { useGetUser } from '@/queries/user.query'
 import { useUserStore } from '@/stores/user.store'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import { ChevronLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface UserDetailsProps {
   params: {
@@ -22,6 +23,9 @@ const UserDetails = ({ params }: UserDetailsProps) => {
   const { id } = params
 
   const { userInfo } = useUserStore((state) => state)
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
 
   const {
     data: fetchedUser,

@@ -95,4 +95,37 @@ const useGetUser = ({ token, id }: { token: string; id: string }) => {
   return useQuery(['user', { token, id }], getUser)
 }
 
-export { useGetAllUsers, useGetUser, useGetUserImages, useGetUserPosts }
+type ActivateUserQueryKey = [
+  'activate',
+  { token: string; activateToken: string },
+]
+
+const activateUser = async ({
+  queryKey,
+}: QueryFunctionContext<ActivateUserQueryKey>) => {
+  const [, { token, activateToken }] = queryKey
+
+  const { data } = await api(token).get(`/auth/activate/${activateToken}`)
+
+  console.log('activateUserData', data)
+
+  return data.payload as UserDTO
+}
+
+const useActivateUser = ({
+  token,
+  activateToken,
+}: {
+  token: string
+  activateToken: string
+}) => {
+  return useQuery(['activate', { token, activateToken }], activateUser)
+}
+
+export {
+  useActivateUser,
+  useGetAllUsers,
+  useGetUser,
+  useGetUserImages,
+  useGetUserPosts,
+}

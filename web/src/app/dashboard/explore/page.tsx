@@ -4,9 +4,13 @@ import { Error } from '@/components/Error'
 import { ListUsers } from '@/components/ListUsers'
 import { Title } from '@/components/Title'
 import { useUserStore } from '@/stores/user.store'
+import { useRouter } from 'next/navigation'
 
 const Explore = () => {
   const { userInfo } = useUserStore((state) => state)
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
 
   if (!userInfo) {
     return (

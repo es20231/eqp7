@@ -146,7 +146,11 @@ const AuthService = ({
             <p>Olá,</p>
             <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
             <p style="text-align: center;">
-              <a href="https://minigproject.vercel.app/auth/activate/${payloadActivateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
+              <a href="${
+                process.env.FRONTEND_URL || 'https://minigproject.vercel.app'
+              }/auth/activate/${
+        payloadActivateToken.token
+      }" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
             </p>
             <p>Se você não se registrou para uma conta no MinIG, por favor ignore este e-mail.</p>
             <p>Obrigado,</p>
@@ -290,7 +294,11 @@ const AuthService = ({
             <p>Olá,</p>
             <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
             <p style="text-align: center;">
-              <a href="https://minigproject.vercel.app/auth/activate/${activateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
+              <a href="${
+                process.env.FRONTEND_URL || 'https://minigproject.vercel.app'
+              }/auth/activate/${
+        activateToken.token
+      }" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
             </p>
             <p>Se você não se registrou para uma conta no MinIG, por favor ignore este e-mail.</p>
             <p>Obrigado,</p>
