@@ -75,6 +75,7 @@ const registerSchema = {
 const activateSchema = {
   tags: ['auth'],
   type: 'object',
+  security: [{ BearerAuth: [] }],
   params: {
     type: 'object',
     properties: {
@@ -108,6 +109,7 @@ const activateSchema = {
 const getActivateTokenSchema = {
   tags: ['auth'],
   type: 'object',
+  security: [{ BearerAuth: [] }],
   params: {
     type: 'object',
     properties: {
