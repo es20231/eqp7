@@ -139,17 +139,19 @@ const AuthService = ({
 
     await mailService.sendMail({
       to: user.email,
-      subject: 'Account activation - MinIG',
+      subject: 'Ativação de conta - MinIG',
       html: `
-        <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
-          <p>Olá,</p>
-          <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
-          <p style="text-align: center;">
-            <a href="http://localhost:3333/auth/activate/${payloadActivateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
-          </p>
-          <p>Se você não se registrou para uma conta no MinIG, por favor ignore este e-mail.</p>
-          <p>Obrigado,</p>
-          <p>A equipe do MinIG</p>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
+            <p>Olá,</p>
+            <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
+            <p style="text-align: center;">
+              <a href="https://minigproject.vercel.app/auth/activate/${payloadActivateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
+            </p>
+            <p>Se você não se registrou para uma conta no MinIG, por favor ignore este e-mail.</p>
+            <p>Obrigado,</p>
+            <p>A equipe do MinIG</p>
+          </div>
         </div>
       `,
     })
@@ -281,17 +283,19 @@ const AuthService = ({
 
     await mailService.sendMail({
       to: user.email,
-      subject: 'Account activation - MinIG',
+      subject: 'Ativação de conta - MinIG',
       html: `
-        <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
-          <p style="text-align: center;">Olá,</p>
-          <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
-          <p style="text-align: center;">
-            <a href="http://localhost:3333/auth/activate/${activateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
-          </p>
-          <p>Se você não se registrou para uma conta no MinIG, por favor ignore este e-mail.</p>
-          <p>Obrigado,</p>
-          <p>A equipe do MinIG</p>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
+            <p>Olá,</p>
+            <p>Obrigado por se registrar no MinIG! Para ativar sua conta, por favor clique no botão abaixo:</p>
+            <p style="text-align: center;">
+              <a href="https://minigproject.vercel.app/auth/activate/${activateToken.token}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Ativar Conta</a>
+            </p>
+            <p>Se você não se registrou para uma conta no MinIG, por favor ignore este e-mail.</p>
+            <p>Obrigado,</p>
+            <p>A equipe do MinIG</p>
+          </div>
         </div>
       `,
     })
