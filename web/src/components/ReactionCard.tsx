@@ -108,8 +108,6 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
         },
         {
           onSuccess: () => {
-            toast.success('Reação registrada com sucesso!')
-
             triggerCommentReactions()
           },
           onError: (err: any) => {

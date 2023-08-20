@@ -73,7 +73,11 @@ const UserDetails = ({ params }: UserDetailsProps) => {
               </Text>
               <Text className="text-start">Biografia:</Text>
               <Text className="text-justify max-w-5xl text-gray-500 dark:text-zinc-300">
-                {fetchedUser.biography}
+                {fetchedUser.biography || (
+                  <span className="text-orange-300">
+                    Este usuário ainda não possui biografia
+                  </span>
+                )}
               </Text>
             </div>
           </div>

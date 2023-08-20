@@ -55,7 +55,7 @@ const useGetUserPosts = ({ token, userId }: UseGetUserPostsProps) => {
   return useQuery(['posts', { token, userId }], getUserPosts)
 }
 
-type GetAllUsersQueryKey = ['users', { token: string }]
+type GetAllUsersQueryKey = ['users', { token: string; search: string }]
 
 export type UserDTO = {
   id: string
@@ -70,15 +70,22 @@ export type UserDTO = {
 const getAllUsers = async ({
   queryKey,
 }: QueryFunctionContext<GetAllUsersQueryKey>) => {
-  const [, { token }] = queryKey
+  const [, { token, search }] = queryKey
 
-  const { data } = await api(token).get('/users')
+  const { data } = await api(token).get(
+    `/users${search ? `?search=${search}` : ''}`,
+  )
 
   return data.payload as UserDTO[]
 }
 
-const useGetAllUsers = ({ token }: { token: string }) => {
-  return useQuery(['users', { token }], getAllUsers)
+interface UseGetAllUsersProps {
+  token: string
+  search?: string
+}
+
+const useGetAllUsers = ({ token, search }: UseGetAllUsersProps) => {
+  return useQuery(['users', { token, search: search || '' }], getAllUsers)
 }
 
 type GetUserQueryKey = ['user', { token: string; id: string }]

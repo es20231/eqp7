@@ -101,6 +101,7 @@ const ChangePasswordFormComponent = () => {
           console.log('ChangePasswordLoginError:', err)
           if (err.response.data.message.includes('Invalid credentials')) {
             toast.error('Senha atual incorreta')
+            reset({ currentPassword: '' })
           } else {
             toast.error(
               err.response.data.message ||

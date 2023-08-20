@@ -64,7 +64,7 @@ const PostCard = ({ post, token }: PostCardProps) => {
         ) : null}
       </div>
       <div className="px-2 h-56">
-        <figure className={`filter-${post.filter}`}>
+        <figure className={`filter-${post.filter} h-full w-full`}>
           <Image
             src={post.image.url}
             alt="Picture of the author"
