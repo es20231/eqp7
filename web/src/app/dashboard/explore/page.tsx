@@ -5,10 +5,15 @@ import { ListUsers } from '@/components/ListUsers'
 import { Title } from '@/components/Title'
 import { useUserStore } from '@/stores/user.store'
 import { Search } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const Explore = () => {
   const { userInfo } = useUserStore((state) => state)
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
+
   const [draft, setDraft] = useState('')
   const [search, setSearch] = useState('')
 

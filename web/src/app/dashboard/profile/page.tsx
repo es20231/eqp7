@@ -19,11 +19,15 @@ import * as Dialog from '@radix-ui/react-dialog'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import * as Tabs from '@radix-ui/react-tabs'
 import { UserCog, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const Profile = () => {
   const { userInfo } = useUserStore((state) => state)
   const [isOpen, setIsOpen] = useState(false)
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
 
   if (!userInfo) return null
 

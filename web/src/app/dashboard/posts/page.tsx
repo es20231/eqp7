@@ -4,9 +4,13 @@ import { Error } from '@/components/Error'
 import { Title } from '@/components/Title'
 import { UserPosts } from '@/components/UserPosts'
 import { useUserStore } from '@/stores/user.store'
+import { useRouter } from 'next/navigation'
 
 export default function Posts() {
   const { userInfo } = useUserStore((state) => state)
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
 
   if (!userInfo) {
     return (

@@ -7,6 +7,7 @@ import { UserPosts } from '@/components/UserPosts'
 import { useUserStore } from '@/stores/user.store'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { Suspense, useEffect } from 'react'
 
 const Dashboard = () => {
@@ -18,9 +19,13 @@ const Dashboard = () => {
     if (data) {
       setUserInfo({
         ...data.user,
+        emailVerified: userInfo?.emailVerified || false,
       })
     }
   }, [])
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
 
   return (
     userInfo && (

@@ -5,9 +5,13 @@ import { Title } from '@/components/Title'
 import { UploadImage } from '@/components/UploadImage'
 import { UserImages } from '@/components/UserImages'
 import { useUserStore } from '@/stores/user.store'
+import { useRouter } from 'next/navigation'
 
 const Images = () => {
   const { userInfo } = useUserStore((state) => state)
+
+  const router = useRouter()
+  if (userInfo && !userInfo.emailVerified) router.push('/auth/activate')
 
   if (!userInfo) {
     return (

@@ -6,6 +6,7 @@ import {
   loginSchema,
   registerSchema,
 } from '../docs/swagger/schemas/auth.schema'
+import { authenticate } from '../middlewares/auth.middleware'
 
 const AuthRoutes = (
   fastify: FastifyInstance,
@@ -23,10 +24,12 @@ const AuthRoutes = (
     },
     activate: {
       ...options,
+      preValidation: authenticate,
       schema: activateSchema,
     },
     getActivateToken: {
       ...options,
+      preValidation: authenticate,
       schema: getActivateTokenSchema,
     },
   }
