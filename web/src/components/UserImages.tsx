@@ -108,6 +108,7 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
       },
     )
     reset()
+    setSelectedFilter('')
   })
 
   const { refetch: deleteImage } = useDeleteImage({ imageId: image.id, token })
@@ -188,7 +189,10 @@ const ImageCard = ({ image, token }: ImageCardProps) => {
                 </div>
               </div>
               <Dialog.Close
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setSelectedFilter('')
+                  setIsOpen(false)
+                }}
                 className="absolute top-8 right-8 p-2"
               >
                 <X />
