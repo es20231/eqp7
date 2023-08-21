@@ -1,12 +1,13 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 import { CommentReactionController } from '../controllers/comment-reaction.controller'
 import {
-  getCommentReactionsSchema,
-  getCommentReactionByIdSchema,
-  getCommentReactionsByUserIdSchema,
-  getCommentReactionsByCommentIdSchema,
   createCommentReactionSchema,
   deleteCommentReactionSchema,
+  getCommentReactionByIdSchema,
+  getCommentReactionsAmountByCommentIdSchema,
+  getCommentReactionsByCommentIdSchema,
+  getCommentReactionsByUserIdSchema,
+  getCommentReactionsSchema,
 } from '../docs/swagger/schemas/comment-reaction.schema'
 import { authenticate } from '../middlewares/auth.middleware'
 
@@ -37,6 +38,10 @@ const CommentReactionRoutes = (
       ...optionsWithAuth,
       schema: getCommentReactionsByCommentIdSchema,
     },
+    getCommentReactionsAmountByCommentId: {
+      ...optionsWithAuth,
+      schema: getCommentReactionsAmountByCommentIdSchema,
+    },
     create: {
       ...optionsWithAuth,
       schema: createCommentReactionSchema,
@@ -66,6 +71,11 @@ const CommentReactionRoutes = (
     '/comment-reactions/comment/:id',
     optionsWithSchema.getCommentReactionsByCommentId,
     CommentReactionController.getCommentReactionsByCommentId,
+  )
+  fastify.get(
+    '/comment-reactions/comment/:id/amount',
+    optionsWithSchema.getCommentReactionsAmountByCommentId,
+    CommentReactionController.getCommentReactionsAmountByCommentId,
   )
   fastify.post(
     '/comment-reactions',

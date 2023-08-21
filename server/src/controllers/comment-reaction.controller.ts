@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedCommentReactionService } from '../factories/comment-reaction.factory'
 import { PrismaCommentReactionRepository } from '../repositories/implementations/prisma/comment-reaction.repository'
@@ -128,12 +128,52 @@ const CommentReactionController = {
         skip,
       )
 
-    if (!ok) {
+    if (!ok || payload === undefined) {
       reply.status(400).send({ message })
       return
     }
 
     reply.status(200).send({ message, payload })
+  },
+  getCommentReactionsAmountByCommentId: async (
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ) => {
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Comment id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
+
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
+
+    const { id } = payloadParseParams
+
+    const { ok, message, payload } =
+      await commentReactionService.getCommentReactionsByCommentId(id)
+
+    if (!ok || payload === undefined) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({
+      message,
+      payload: {
+        commentId: id,
+        likes: payload.filter((reaction) => reaction.type === 'like').length,
+        dislikes: payload.filter((reaction) => reaction.type === 'dislike')
+          .length,
+      },
+    })
   },
   getCommentReactionsByUserId: async (
     request: FastifyRequest,
