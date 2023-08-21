@@ -1,6 +1,12 @@
 import { PostReactionDTO } from '@/mutations/post-reaction.mutation'
 import { api } from '@/services/axios'
-import { QueryFunctionContext, useQuery } from 'react-query'
+import { QueryFunctionContext, useInfiniteQuery, useQuery } from 'react-query'
+
+export type PostReactionsAmountDTO = {
+  postId: string
+  likes: number
+  dislikes: number
+}
 
 export type UserPostDTO = {
   id: string
@@ -20,6 +26,41 @@ export type UserPostDTO = {
   }
 }
 
+type GetPostReactionsAmountQueryKey = [
+  'post-reactions-amount',
+  { postId: string; token: string },
+]
+
+const getPostReactionsAmount = async ({
+  queryKey,
+}: QueryFunctionContext<GetPostReactionsAmountQueryKey>) => {
+  const [, { postId, token }] = queryKey
+
+  const { data } = await api(token).get(`/post-reactions/post/${postId}/amount`)
+
+  console.log('getPostReactionsAmountData', data)
+
+  return data.payload as PostReactionsAmountDTO
+}
+
+interface UseGetPostReactionsAmountProps {
+  postId: string
+  token: string
+}
+
+const useGetPostReactionsAmount = ({
+  postId,
+  token,
+}: UseGetPostReactionsAmountProps) => {
+  return useQuery(
+    ['post-reactions-amount', { postId, token }],
+    getPostReactionsAmount,
+    {
+      enabled: false,
+    },
+  )
+}
+
 type GetPostReactionsQueryKey = [
   'post-reactions',
   { postId: string; token: string },
@@ -32,10 +73,17 @@ interface GetPostReactionsProps {
 
 const getPostReactions = async ({
   queryKey,
+  pageParam = 1,
 }: QueryFunctionContext<GetPostReactionsQueryKey>) => {
   const [, { postId, token }] = queryKey
 
-  const { data } = await api(token).get(`/post-reactions/post/${postId}`)
+  const take = 10
+
+  const skip = (Math.max(pageParam, 1) - 1) * take
+
+  const { data } = await api(token).get(
+    `/post-reactions/post/${postId}?take=${take}&skip=${skip}`,
+  )
 
   console.log('getPostReactionsData', data)
 
@@ -43,8 +91,23 @@ const getPostReactions = async ({
 }
 
 const useGetPostReactions = ({ postId, token }: GetPostReactionsProps) => {
-  return useQuery(['post-reactions', { postId, token }], getPostReactions, {
+  return useInfiniteQuery({
+    queryKey: ['post-reactions', { postId, token }],
+    queryFn: ({ pageParam, meta }) =>
+      getPostReactions({
+        pageParam,
+        queryKey: ['post-reactions', { postId, token }],
+        meta,
+      }),
     enabled: false,
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length < 10) {
+        return undefined
+      }
+
+      return pages.length + 1
+    },
   })
 }
 
@@ -105,4 +168,9 @@ const useDeletePostReaction = ({
   )
 }
 
-export { useDeletePost, useDeletePostReaction, useGetPostReactions }
+export {
+  useDeletePost,
+  useDeletePostReaction,
+  useGetPostReactions,
+  useGetPostReactionsAmount,
+}

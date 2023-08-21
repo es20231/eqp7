@@ -1,5 +1,5 @@
 import { api } from '@/services/axios'
-import { QueryFunctionContext, useQuery } from 'react-query'
+import { QueryFunctionContext, useInfiniteQuery, useQuery } from 'react-query'
 import { UserPostDTO } from './post.query'
 
 type GetUserImagesQueryKey = ['images', { token: string; userId: string }]
@@ -13,10 +13,17 @@ export type UserImagesDTO = {
 
 const getUserImages = async ({
   queryKey,
+  pageParam = 1,
 }: QueryFunctionContext<GetUserImagesQueryKey>) => {
   const [, { token, userId }] = queryKey
 
-  const { data } = await api(token).get(`/users/${userId}/images`)
+  const take = 12
+
+  const skip = (Math.max(pageParam, 1) - 1) * take
+
+  const { data } = await api(token).get(
+    `/users/${userId}/images?take=${take}&skip=${skip}`,
+  )
 
   return data.payload as UserImagesDTO[]
 }
@@ -27,7 +34,23 @@ interface UseGetUserImageProps {
 }
 
 const useGetUserImages = ({ token, userId }: UseGetUserImageProps) => {
-  return useQuery(['images', { token, userId }], getUserImages)
+  return useInfiniteQuery({
+    queryKey: ['images', { token, userId }],
+    queryFn: ({ pageParam, meta }) =>
+      getUserImages({
+        pageParam,
+        queryKey: ['images', { token, userId }],
+        meta,
+      }),
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length < 12) {
+        return undefined
+      }
+
+      return pages.length + 1
+    },
+  })
 }
 
 type GetUserPostsQueryKey = ['posts', { token: string; userId: string }]
@@ -36,10 +59,17 @@ export type UserPosts = UserPostDTO[]
 
 const getUserPosts = async ({
   queryKey,
+  pageParam = 1,
 }: QueryFunctionContext<GetUserPostsQueryKey>) => {
   const [, { token, userId }] = queryKey
 
-  const { data } = await api(token).get(`/users/${userId}/posts`)
+  const take = 6
+
+  const skip = (Math.max(pageParam, 1) - 1) * take
+
+  const { data } = await api(token).get(
+    `/users/${userId}/posts?take=${take}&skip=${skip}`,
+  )
 
   console.log('getUserPostsData', data)
 
@@ -52,7 +82,23 @@ interface UseGetUserPostsProps {
 }
 
 const useGetUserPosts = ({ token, userId }: UseGetUserPostsProps) => {
-  return useQuery(['posts', { token, userId }], getUserPosts)
+  return useInfiniteQuery({
+    queryKey: ['posts', { token, userId }],
+    queryFn: ({ pageParam, meta }) =>
+      getUserPosts({
+        pageParam,
+        queryKey: ['posts', { token, userId }],
+        meta,
+      }),
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length < 6) {
+        return undefined
+      }
+
+      return pages.length + 1
+    },
+  })
 }
 
 type GetAllUsersQueryKey = ['users', { token: string; search: string }]
@@ -69,11 +115,16 @@ export type UserDTO = {
 
 const getAllUsers = async ({
   queryKey,
+  pageParam = 1,
 }: QueryFunctionContext<GetAllUsersQueryKey>) => {
   const [, { token, search }] = queryKey
 
+  const take = 12
+
+  const skip = (Math.max(pageParam, 1) - 1) * take
+
   const { data } = await api(token).get(
-    `/users${search ? `?search=${search}` : ''}`,
+    `/users?take=${take}&skip=${skip}${search ? `?search=${search}` : ``}`,
   )
 
   return data.payload as UserDTO[]
@@ -85,7 +136,23 @@ interface UseGetAllUsersProps {
 }
 
 const useGetAllUsers = ({ token, search }: UseGetAllUsersProps) => {
-  return useQuery(['users', { token, search: search || '' }], getAllUsers)
+  return useInfiniteQuery({
+    queryKey: ['users', { token, search: search || '' }],
+    queryFn: ({ pageParam, meta }) =>
+      getAllUsers({
+        pageParam,
+        meta,
+        queryKey: ['users', { token, search: search || '' }],
+      }),
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length < 12) {
+        return undefined
+      }
+
+      return pages.length + 1
+    },
+  })
 }
 
 type GetUserQueryKey = ['user', { token: string; id: string }]
