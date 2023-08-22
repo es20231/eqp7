@@ -1,0 +1,20 @@
+name: Front-end
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  Next-Build:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: cd web && npm i
+      - name: Build
+        run: cd web && npm run build
