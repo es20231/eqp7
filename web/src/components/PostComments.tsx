@@ -8,8 +8,8 @@ import {
 import { useUserStore } from '@/stores/user.store'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
-import { MessagesSquare, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Loader2, MessagesSquare, X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button } from './Button'
 import { CommentCardOptions } from './CommentCardOptions'
@@ -35,17 +35,34 @@ const PostComments = ({
     isLoading,
     isError,
     refetch: refetchComments,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
   } = useGetPostComments({ token, postId })
 
-  if (isLoading) {
-    return <p>Loading...</p>
-  }
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (loadMoreRef && loadMoreRef.current) {
+      const intersectionObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          if (hasNextPage) fetchNextPage()
+        }
+      })
+
+      intersectionObserver.observe(loadMoreRef.current)
+
+      return () => intersectionObserver.disconnect()
+    }
+  }, [loadMoreRef, loadMoreRef.current, hasNextPage, fetchNextPage])
 
   if (isError || comments === undefined) {
     return <Error message="Erro ao carregar os comentários do post" />
   }
 
-  const commentsPreview = comments.slice(0, 2)
+  const allComments = comments.pages.flatMap((page) => page)
+
+  const commentsPreview = allComments.slice(0, 2)
 
   if (preview)
     return (
@@ -58,18 +75,40 @@ const PostComments = ({
 
   return (
     <div className="w-full h-full max-w-3xl">
-      <ScrollArea.Root className="w-full h-[85%]">
-        <ScrollArea.Viewport className="w-full h-full px-3">
-          {comments.length ? (
-            comments.map((comment) => (
-              <CommentCard
-                comment={comment}
-                key={comment.id}
-                preview={false}
-                token={token}
-                refetchComments={refetchComments}
-              />
-            ))
+      <ScrollArea.Root className="w-full h-[85%]" id="scroll-area">
+        <ScrollArea.Viewport className="w-full h-full px-3 pb-4">
+          {allComments.length ? (
+            <>
+              {allComments.map((comment) => (
+                <CommentCard
+                  comment={comment}
+                  key={comment.id}
+                  preview={false}
+                  token={token}
+                  refetchComments={refetchComments}
+                />
+              ))}
+              <div
+                ref={loadMoreRef}
+                className={
+                  !hasNextPage
+                    ? 'hidden'
+                    : 'h-5 flex items-center justify-center w-full'
+                }
+              >
+                {isFetchingNextPage ? (
+                  <Loader2 className="animate-spin text-zinc-800 dark:text-slate-50" />
+                ) : null}
+              </div>
+
+              {isLoading && <Text className="text-xs">Loading...</Text>}
+
+              {!hasNextPage && !isLoading && (
+                <Text className="text-center text-xs italic">
+                  Não há mais comentários para carregar
+                </Text>
+              )}
+            </>
           ) : (
             <div className="flex flex-col w-full px-4 items-center justify-center gap-2">
               <MessagesSquare
@@ -77,7 +116,7 @@ const PostComments = ({
                 size={28}
               />
               <Text className="text-xs">
-                Esse post ainda não contém comentários. Seja o primeio a
+                Esse post ainda não contém comentários. Seja o primeiro a
                 comentar!
               </Text>
             </div>
@@ -128,11 +167,13 @@ const PreviewPostComments = ({
             <Dialog.Portal>
               <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-overlayShow" />
               <Dialog.Content className="fixed h-full top-[50%] left-[50%] max-h-[75vh] w-full max-w-[70vw] translate-x-[-50%] translate-y-[-50%] bg-slate-100 dark:bg-rich-black-500 rounded-xl overflow-hidden data-[state=open]:animate-contentShow">
-                <Dialog.Title className="text-xl font-bold w-full pt-8 px-8">
-                  <Title className="text-left">Comentários</Title>
+                <Dialog.Title asChild>
+                  <Title className="text-left text-xl font-bold w-full pt-8 px-8">
+                    Comentários
+                  </Title>
                 </Dialog.Title>
-                <Dialog.Description className="px-8 w-full">
-                  <Text className="text-left">
+                <Dialog.Description asChild>
+                  <Text className="text-left px-8 w-full">
                     Todos os comentários desse post estão listados abaixo.
                   </Text>
                 </Dialog.Description>

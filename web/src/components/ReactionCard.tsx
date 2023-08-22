@@ -2,8 +2,16 @@
 
 import { useCreateCommentReaction } from '@/mutations/comment-reaction.mutation'
 import { useCreatePostReaction } from '@/mutations/post-reaction.mutation'
-import { PostCommentDTO, useGetCommentReactions } from '@/queries/comment.query'
-import { UserPostDTO, useGetPostReactions } from '@/queries/post.query'
+import {
+  PostCommentDTO,
+  useGetCommentReactions,
+  useGetCommentReactionsAmount,
+} from '@/queries/comment.query'
+import {
+  UserPostDTO,
+  useGetPostReactions,
+  useGetPostReactionsAmount,
+} from '@/queries/post.query'
 import { useUserStore } from '@/stores/user.store'
 import { ThumbsDown, ThumbsUp } from 'lucide-react'
 import { useEffect } from 'react'
@@ -21,6 +29,20 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
   const { userInfo } = useUserStore((state) => state)
 
   const {
+    data: postReactionsAmount,
+    isLoading: isLoadingPostReactionsAmount,
+    isError: isErrorPostReactionsAmount,
+    refetch: triggerPostReactionsAmount,
+  } = useGetPostReactionsAmount({ postId: record.id, token })
+
+  const {
+    data: commentReactionsAmount,
+    isLoading: isLoadingCommentReactionsAmount,
+    isError: isErrorCommentReactionsAmount,
+    refetch: triggerCommentReactionsAmount,
+  } = useGetCommentReactionsAmount({ commentId: record.id, token })
+
+  const {
     data: postReactions,
     isLoading: isLoadingPostReactions,
     isError: isErrorPostReactions,
@@ -35,41 +57,58 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
   } = useGetCommentReactions({ commentId: record.id, token })
 
   useEffect(() => {
-    if (for_ === 'post') triggerPostReactions()
-    else triggerCommentReactions()
+    if (for_ === 'post') {
+      triggerPostReactions()
+      triggerPostReactionsAmount()
+    } else {
+      triggerCommentReactions()
+      triggerCommentReactionsAmount()
+    }
   }, [
     commentReactions,
     postReactions,
+    commentReactionsAmount,
+    postReactionsAmount,
     for_,
     triggerCommentReactions,
     triggerPostReactions,
+    triggerCommentReactionsAmount,
+    triggerPostReactionsAmount,
   ])
 
   const { mutateAsync: postReactionMutate } = useCreatePostReaction()
   const { mutateAsync: commentReactionMutate } = useCreateCommentReaction()
 
-  if (isLoadingPostReactions || isLoadingCommentReactions)
+  if (
+    isLoadingPostReactions ||
+    isLoadingCommentReactions ||
+    isLoadingPostReactionsAmount ||
+    isLoadingCommentReactionsAmount
+  )
     return <Text>Loading...</Text>
 
-  const recordReactions = for_ === 'post' ? postReactions : commentReactions
+  const allPostReactions = postReactions?.pages.flatMap((page) => page)
+  const allCommentReactions = commentReactions?.pages.flatMap((page) => page)
+
+  const recordReactions =
+    for_ === 'post' ? allPostReactions : allCommentReactions
+
+  const recordReactionsAmount =
+    for_ === 'post' ? postReactionsAmount : commentReactionsAmount
 
   if (
     isErrorPostReactions ||
     isErrorCommentReactions ||
-    recordReactions === undefined
+    isErrorPostReactionsAmount ||
+    isErrorCommentReactionsAmount ||
+    recordReactions === undefined ||
+    recordReactionsAmount === undefined
   )
     return <Text>Erro ao carregar reações</Text>
 
   const userReaction = recordReactions.find(
     (reaction) => reaction.userId === userInfo?.id,
   )?.type
-
-  const likeAmount =
-    recordReactions.filter((reaction) => reaction.type === 'like').length || 0
-
-  const dislikeAmount =
-    recordReactions.filter((reaction) => reaction.type === 'dislike').length ||
-    0
 
   const handleCreateReaction = async (type: 'like' | 'dislike') => {
     if (userReaction) {
@@ -89,6 +128,7 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
         {
           onSuccess: () => {
             triggerPostReactions()
+            triggerPostReactionsAmount()
           },
           onError: (err: any) => {
             console.log('ReactionCardError:', err)
@@ -109,6 +149,7 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
         {
           onSuccess: () => {
             triggerCommentReactions()
+            triggerCommentReactionsAmount()
           },
           onError: (err: any) => {
             console.log('ReactionCardError:', err)
@@ -142,7 +183,7 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
           />
         </Button>
         <Text className="text-sm group-data-[comment=true]:text-xs mt-0.5 h-full flex items-center">
-          {likeAmount}
+          {recordReactionsAmount?.likes ?? 'erro'}
         </Text>
       </div>
       <div className="flex flex-row items-center justify-center -gap-1 h-full py-1 group-data-[comment=true]:py-0">
@@ -163,7 +204,7 @@ const ReactionCard = ({ for: for_, token, record }: ReactionCardProps) => {
           />
         </Button>
         <Text className="text-sm h-full flex items-center group-data-[comment=true]:text-xs">
-          {dislikeAmount}
+          {recordReactionsAmount?.dislikes ?? 'erro'}
         </Text>
       </div>
     </div>

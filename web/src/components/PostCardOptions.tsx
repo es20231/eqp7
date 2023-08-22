@@ -161,10 +161,13 @@ const ManagePost = ({ post }: ManagePostProps) => {
   const [reactionId, setReactionId] = useState<string | undefined>(undefined)
 
   const {
-    data: postReactions,
+    data,
     isLoading: isPostReactionsLoading,
     isError: isPostReactionsError,
     refetch: refetchPostReactions,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useGetPostReactions({ postId: post.id, token: userInfo?.token || '' })
 
   const { data: deleteReaction, isError: errorDeleteReaction } =
@@ -192,9 +195,11 @@ const ManagePost = ({ post }: ManagePostProps) => {
     return <Text>Loading...</Text>
   }
 
-  if (isPostReactionsError || postReactions === undefined) {
+  if (isPostReactionsError || data === undefined) {
     return <Error message="Erro ao carregar reações do post" />
   }
+
+  const postReactions = data.pages.flatMap((page) => page)
 
   return (
     <Tabs.Root
@@ -236,6 +241,10 @@ const ManagePost = ({ post }: ManagePostProps) => {
           <ManageReaction
             reactions={postReactions}
             setReactionId={setReactionId}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            isLoading={isPostReactionsLoading}
           />
         </div>
       </Tabs.Content>

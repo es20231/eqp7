@@ -160,10 +160,13 @@ const ManageComment = ({ comment }: ManageCommentProps) => {
   const [reactionId, setReactionId] = useState<string | undefined>(undefined)
 
   const {
-    data: reactions,
+    data,
     isLoading: isLoadingReactions,
     isError: isErrorReactions,
     refetch: refetchReactions,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
   } = useGetCommentReactions({
     commentId: comment.id,
     token: userInfo?.token || '',
@@ -192,8 +195,10 @@ const ManageComment = ({ comment }: ManageCommentProps) => {
 
   if (isLoadingReactions) return <Text>Loading...</Text>
 
-  if (isErrorReactions || reactions === undefined)
+  if (isErrorReactions || data === undefined)
     return <Error message="Erro ao carregar reações" />
+
+  const reactions = data.pages.flatMap((page) => page)
 
   return (
     <div className="h-full w-full max-w-lg flex flex-col items-center justify-center gap-2">
@@ -211,7 +216,14 @@ const ManageComment = ({ comment }: ManageCommentProps) => {
         </div>
         <Text className="text-start text-sm pl-2">{comment.content}</Text>
       </div>
-      <ManageReaction setReactionId={setReactionId} reactions={reactions} />
+      <ManageReaction
+        setReactionId={setReactionId}
+        reactions={reactions}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        isLoading={isLoadingReactions}
+      />
     </div>
   )
 }

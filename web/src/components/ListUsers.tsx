@@ -3,8 +3,9 @@
 import { UserDTO, useGetAllUsers } from '@/queries/user.query'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import * as Tooltip from '@radix-ui/react-tooltip'
-import { Share2, UserMinus2 } from 'lucide-react'
+import { Loader2, Share2, UserMinus2 } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { Error } from './Error'
 import { Text } from './Text'
@@ -25,7 +26,30 @@ const ListUsers = ({
   draft,
   preview = false,
 }: ListUsersProps) => {
-  const { data, isLoading, isError } = useGetAllUsers({ token, search })
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetAllUsers({ token, search })
+
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (loadMoreRef && loadMoreRef.current) {
+      const intersectionObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          if (hasNextPage) fetchNextPage()
+        }
+      })
+
+      intersectionObserver.observe(loadMoreRef.current)
+
+      return () => intersectionObserver.disconnect()
+    }
+  }, [loadMoreRef, loadMoreRef.current, hasNextPage, fetchNextPage])
 
   if (isLoading) {
     // TODO: skeleton loader
@@ -35,8 +59,9 @@ const ListUsers = ({
   if (isError || !data)
     return <Error message="Ocorreu um erro ao carregar os usuários" />
 
-  console.log('data: ', data)
-  const users = preview ? data.slice(0, 5) : data
+  const allUsers = data.pages.flatMap((page) => page)
+
+  const users = preview ? allUsers.slice(0, 5) : allUsers
 
   const usersToShow = users
     .filter((user) => user.id !== userId)
@@ -52,7 +77,31 @@ const ListUsers = ({
       <ScrollArea.Viewport className="w-full h-full py-3 px-4">
         <div className="flex flex-col w-full gap-3">
           {usersToShow.length > 0 ? (
-            usersToShow.map((user) => <UserCard key={user.id} user={user} />)
+            <>
+              {usersToShow.map((user) => (
+                <UserCard key={user.id} user={user} />
+              ))}
+              <div
+                ref={loadMoreRef}
+                className={
+                  !hasNextPage
+                    ? 'hidden h-5'
+                    : 'h-5 flex items-center justify-center w-full'
+                }
+              >
+                {isFetchingNextPage ? (
+                  <Loader2 className="animate-spin text-zinc-800 dark:text-slate-50" />
+                ) : null}
+              </div>
+
+              {isLoading && <Text className="text-xs">Loading...</Text>}
+
+              {!hasNextPage && !isLoading && (
+                <Text className="text-center text-xs italic">
+                  Não há mais usuários para carregar
+                </Text>
+              )}
+            </>
           ) : (
             <div className="flex flex-col items-center justify-center">
               <UserMinus2
