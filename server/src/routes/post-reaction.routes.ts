@@ -1,12 +1,13 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 import { PostReactionController } from '../controllers/post-reaction.controller'
 import {
-  getPostReactionsSchema,
-  getPostReactionByIdSchema,
-  getPostReactionsByUserIdSchema,
-  getPostReactionsByPostIdSchema,
   createPostReactionSchema,
   deletePostReactionSchema,
+  getPostReactionByIdSchema,
+  getPostReactionsAmountByPostIdSchema,
+  getPostReactionsByPostIdSchema,
+  getPostReactionsByUserIdSchema,
+  getPostReactionsSchema,
 } from '../docs/swagger/schemas/post-reaction.schema'
 import { authenticate } from '../middlewares/auth.middleware'
 
@@ -37,6 +38,10 @@ const PostReactionRoutes = (
       ...optionsWithAuth,
       schema: getPostReactionsByPostIdSchema,
     },
+    getPostReactionsAmountByPostId: {
+      ...optionsWithAuth,
+      schema: getPostReactionsAmountByPostIdSchema,
+    },
     create: {
       ...optionsWithAuth,
       schema: createPostReactionSchema,
@@ -66,6 +71,11 @@ const PostReactionRoutes = (
     '/post-reactions/post/:id',
     optionsWithSchema.getPostReactionsByPostId,
     PostReactionController.getPostReactionsByPostId,
+  )
+  fastify.get(
+    '/post-reactions/post/:id/amount',
+    optionsWithSchema.getPostReactionsAmountByPostId,
+    PostReactionController.getPostReactionsAmountByPostId,
   )
   fastify.post(
     '/post-reactions',

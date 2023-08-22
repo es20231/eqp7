@@ -1,7 +1,7 @@
-import { HTMLAttributes, ReactNode } from 'react'
+import { ButtonHTMLAttributes, ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   leftIcon?: ReactNode
   rightIcon?: ReactNode

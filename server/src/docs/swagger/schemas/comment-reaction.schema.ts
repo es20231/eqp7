@@ -62,6 +62,49 @@ const getCommentReactionsByCommentIdSchema = {
   },
 }
 
+const getCommentReactionsAmountByCommentIdSchema = {
+  tags: ['comment-reaction'],
+  type: 'object',
+  security: [{ bearer: [] }],
+  params: {
+    type: 'object',
+    properties: {
+      commentId: { type: 'string' },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      description: 'Get comment reactions amount by comment id successful',
+      properties: {
+        message: { type: 'string' },
+        payload: {
+          type: 'object',
+          properties: {
+            commentId: { type: 'string' },
+            likes: { type: 'number' },
+            dislikes: { type: 'number' },
+          },
+        },
+      },
+    },
+    400: {
+      type: 'object',
+      description: 'Get comment reactions amount by comment id failed',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    401: {
+      type: 'object',
+      description: 'Unauthorized',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+  },
+}
+
 const getCommentReactionsByUserIdSchema = {
   tags: ['comment-reaction'],
   type: 'object',
@@ -261,8 +304,13 @@ const deleteCommentReactionSchema = {
 }
 
 export {
-  commentReactionSchema, createCommentReactionSchema,
-  deleteCommentReactionSchema, getCommentReactionByIdSchema, getCommentReactionsByCommentIdSchema,
-  getCommentReactionsByUserIdSchema, getCommentReactionsSchema
+  commentReactionSchema,
+  createCommentReactionSchema,
+  deleteCommentReactionSchema,
+  getCommentReactionByIdSchema,
+  getCommentReactionsAmountByCommentIdSchema,
+  getCommentReactionsByCommentIdSchema,
+  getCommentReactionsByUserIdSchema,
+  getCommentReactionsSchema
 }
 

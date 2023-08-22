@@ -1,11 +1,14 @@
+'use client'
+
 import { PostCard } from '@/components/PostCard'
 import { Text } from '@/components/Text'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
-import { ImageOff } from 'lucide-react'
+import { ImageOff, Loader2 } from 'lucide-react'
 
 import { Error } from '@/components/Error'
 import { useGetUserPosts } from '@/queries/user.query'
 import { useUserStore } from '@/stores/user.store'
+import { useEffect, useRef } from 'react'
 
 interface UserPostsProps {
   userId: string
@@ -14,9 +17,36 @@ interface UserPostsProps {
 }
 
 const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
-  const { data, isLoading, isError } = useGetUserPosts({ token, userId })
+  const {
+    data,
+    isLoading,
+    isError,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetUserPosts({ token, userId })
 
   const { userInfo } = useUserStore((state) => state)
+
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    console.log('useEffect')
+    if (loadMoreRef && loadMoreRef.current) {
+      console.log('creating intersection observer')
+      const intersectionObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          if (hasNextPage) fetchNextPage()
+          console.log('fetching next page')
+        }
+      })
+
+      intersectionObserver.observe(loadMoreRef.current)
+
+      return () => intersectionObserver.disconnect()
+    }
+    console.log('loadMoreRef', loadMoreRef)
+  }, [loadMoreRef, loadMoreRef.current, hasNextPage, fetchNextPage])
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -25,17 +55,41 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
   if (isError || !data || !userInfo)
     return <Error message="Ocorreu um erro ao carregar os posts do usuário" />
 
-  const userPosts = preview ? data.slice(0, 3) : data
+  const allUserPosts = data.pages.flatMap((page) => page)
+
+  const userPosts = preview ? allUserPosts.slice(0, 3) : allUserPosts
 
   return (
     <ScrollArea.Root className="w-full h-[85%]">
       <ScrollArea.Viewport className="w-full h-full py-3 px-4">
         {userPosts.length > 0 ? (
-          <div className="flex flex-col items-center md:grid xl:grid-cols-2 2xl:grid-cols-3 gap-4 w-full xl:mx-auto">
-            {userPosts.map((post) => (
-              <PostCard post={post} key={post.id} token={token} />
-            ))}
-          </div>
+          <>
+            <div className="flex flex-col items-center md:grid xl:grid-cols-2 2xl:grid-cols-3 gap-4 w-full xl:mx-auto">
+              {userPosts.map((post) => (
+                <PostCard post={post} key={post.id} token={token} />
+              ))}
+            </div>
+            <div
+              ref={loadMoreRef}
+              className={
+                !hasNextPage
+                  ? 'hidden h-5 w-fit'
+                  : 'h-5 bg-red-50 flex items-center justify-center w-full'
+              }
+            >
+              {isFetchingNextPage ? (
+                <Loader2 className="animate-spin text-zinc-800 dark:text-slate-50" />
+              ) : null}
+            </div>
+
+            {isLoading && <Text className="text-xs">Loading...</Text>}
+
+            {!hasNextPage && !isLoading && (
+              <Text className="text-center text-xs italic py-5">
+                Não há mais posts para carregar
+              </Text>
+            )}
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full gap-4 pt-10">
             <ImageOff className="text-zinc-600 dark:text-slate-50" size={64} />
@@ -47,9 +101,6 @@ const UserPosts = ({ userId, token, preview = false }: UserPostsProps) => {
           </div>
         )}
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar orientation="horizontal">
-        <ScrollArea.Thumb />
-      </ScrollArea.Scrollbar>
       <ScrollArea.Scrollbar
         orientation="vertical"
         className="flex select-none touch-none p-0.5 bg-slate-100 dark:bg-zinc-800 transition-colors duration-[160ms] ease-out hover:bg-slate-200 dark:hover:bg-zinc-950 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"

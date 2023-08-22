@@ -79,7 +79,7 @@ const PostCard = ({ post, token }: PostCardProps) => {
         <ReactionCard for="post" record={post} token={token} />
         <div className="flex flex-col items-start px-3 h-16">
           <Text className="text-sm line-clamp-3 leading-5 text-left font-bold">
-            {post.user.username}
+            {post.user?.username}
           </Text>
           <Text className="text-sm text-start text-gray-500 dark:text-zinc-300">
             {post.subtitle}

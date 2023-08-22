@@ -62,6 +62,49 @@ const getPostReactionsByPostIdSchema = {
   },
 }
 
+const getPostReactionsAmountByPostIdSchema = {
+  tags: ['post-reaction'],
+  type: 'object',
+  security: [{ bearer: [] }],
+  params: {
+    type: 'object',
+    properties: {
+      id: { type: 'string' },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      description: 'Get post reactions amount by post id successful',
+      properties: {
+        message: { type: 'string' },
+        payload: {
+          type: 'object',
+          properties: {
+            postId: { type: 'string' },
+            likes: { type: 'number' },
+            dislikes: { type: 'number' },
+          },
+        },
+      },
+    },
+    400: {
+      type: 'object',
+      description: 'Get post reactions by post id failed',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    401: {
+      type: 'object',
+      description: 'Unauthorized',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+  },
+}
+
 const getPostReactionsByUserIdSchema = {
   tags: ['post-reaction'],
   type: 'object',
@@ -262,7 +305,11 @@ const deletePostReactionSchema = {
 
 export {
   createPostReactionSchema,
-  deletePostReactionSchema, getPostReactionByIdSchema, getPostReactionsByPostIdSchema,
-  getPostReactionsByUserIdSchema, getPostReactionsSchema, postReactionSchema
+  deletePostReactionSchema,
+  getPostReactionByIdSchema,
+  getPostReactionsAmountByPostIdSchema,
+  getPostReactionsByPostIdSchema,
+  getPostReactionsByUserIdSchema,
+  getPostReactionsSchema,
+  postReactionSchema,
 }
-

@@ -8,9 +8,9 @@ import { queryClient } from '@/services/queryClient'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as ScrollArea from '@radix-ui/react-scroll-area'
-import { Check, ImageOff, Trash2, X } from 'lucide-react'
+import { Check, ImageOff, Loader2, Trash2, X } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { Button } from './Button'
@@ -30,7 +30,30 @@ interface UserImagesProps {
 }
 
 const UserImages = ({ userId, token, preview = false }: UserImagesProps) => {
-  const { data, isLoading, isError } = useGetUserImages({ token, userId })
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetUserImages({ token, userId })
+
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (loadMoreRef && loadMoreRef.current) {
+      const intersectionObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          if (hasNextPage) fetchNextPage()
+        }
+      })
+
+      intersectionObserver.observe(loadMoreRef.current)
+
+      return () => intersectionObserver.disconnect()
+    }
+  }, [loadMoreRef, loadMoreRef.current, hasNextPage, fetchNextPage])
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -39,23 +62,46 @@ const UserImages = ({ userId, token, preview = false }: UserImagesProps) => {
   if (isError || !data)
     return <Error message="Ocorreu um erro ao carregar as imagens do usuário" />
 
-  const userImages = preview ? data.slice(0, 5) : data
+  const allUserImages = data.pages.flatMap((page) => page)
+
+  const userImages = preview ? allUserImages.slice(0, 5) : allUserImages
 
   return (
     <ScrollArea.Root className="w-full h-[85%]">
       <ScrollArea.Viewport className="w-full h-full py-3 px-4">
         {userImages.length ? (
-          <div className="grid grid-cols-3 2xl:grid-cols-5 gap-4 w-full">
-            {userImages.map((image) => (
-              <NewPostFormProvider
-                key={image.id}
-                imageId={image.id}
-                userId={image.userId}
-              >
-                <ImageCard image={image} token={token} />
-              </NewPostFormProvider>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-3 2xl:grid-cols-5 gap-4 w-full">
+              {userImages.map((image) => (
+                <NewPostFormProvider
+                  key={image.id}
+                  imageId={image.id}
+                  userId={image.userId}
+                >
+                  <ImageCard image={image} token={token} />
+                </NewPostFormProvider>
+              ))}
+            </div>
+            <div
+              ref={loadMoreRef}
+              className={
+                !hasNextPage
+                  ? 'hidden h-5 w-fit'
+                  : 'h-5 flex items-center justify-center w-full'
+              }
+            >
+              {isFetchingNextPage ? (
+                <Loader2 className="animate-spin text-zinc-800 dark:text-slate-50" />
+              ) : null}
+            </div>
+
+            {isLoading && <Text className="text-xs">Loading...</Text>}
+            {!hasNextPage && !isLoading && (
+              <Text className="text-center text-xs italic py-5">
+                Não há mais imagens para carregar
+              </Text>
+            )}
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full gap-4 pt-10">
             <ImageOff

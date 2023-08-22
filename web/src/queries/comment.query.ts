@@ -1,5 +1,5 @@
 import { api } from '@/services/axios'
-import { QueryFunctionContext, useQuery } from 'react-query'
+import { QueryFunctionContext, useInfiniteQuery, useQuery } from 'react-query'
 
 type GetPostCommentsQueryKey = ['comments', { token: string; postId: string }]
 
@@ -21,10 +21,17 @@ export type PostCommentDTO = {
 
 const getPostComments = async ({
   queryKey,
+  pageParam = 1,
 }: QueryFunctionContext<GetPostCommentsQueryKey>) => {
   const [, { token, postId }] = queryKey
 
-  const { data } = await api(token).get(`/comments/post/${postId}`)
+  const take = 5
+
+  const skip = (Math.max(pageParam, 1) - 1) * take
+
+  const { data } = await api(token).get(
+    `/comments/post/${postId}${`?take=${take}&skip=${skip}`}`,
+  )
 
   console.log('getPostCommentsData', data)
 
@@ -37,7 +44,23 @@ interface UseGetPostCommentsProps {
 }
 
 const useGetPostComments = ({ token, postId }: UseGetPostCommentsProps) => {
-  return useQuery(['comments', { token, postId }], getPostComments)
+  return useInfiniteQuery({
+    queryKey: ['comments', { token, postId }],
+    queryFn: ({ pageParam, meta }) =>
+      getPostComments({
+        pageParam,
+        queryKey: ['comments', { token, postId }],
+        meta,
+      }),
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length < 5) {
+        return undefined
+      }
+
+      return pages.length + 1
+    },
+  })
 }
 
 type GetCommentReactionsQueryKey = [
@@ -56,13 +79,61 @@ export type CommentReactionDTO = {
   }
 }
 
-const getCommentReactions = async ({
+export type CommentReactionsAmountDTO = {
+  commentId: string
+  likes: number
+  dislikes: number
+}
+
+type GetCommentReactionsAmountQueryKey = [
+  'comment-reactions-amount',
+  { commentId: string; token: string },
+]
+
+const getCommentReactionsAmount = async ({
   queryKey,
-}: QueryFunctionContext<GetCommentReactionsQueryKey>) => {
+}: QueryFunctionContext<GetCommentReactionsAmountQueryKey>) => {
   const [, { commentId, token }] = queryKey
 
   const { data } = await api(token).get(
-    `/comment-reactions/comment/${commentId}`,
+    `/comment-reactions/comment/${commentId}/amount`,
+  )
+
+  console.log('getCommentReactionsAmountData', data)
+
+  return data.payload as CommentReactionsAmountDTO
+}
+
+interface UseGetCommentReactionsAmountProps {
+  commentId: string
+  token: string
+}
+
+const useGetCommentReactionsAmount = ({
+  commentId,
+  token,
+}: UseGetCommentReactionsAmountProps) => {
+  return useQuery(
+    ['comment-reactions-amount', { commentId, token }],
+    getCommentReactionsAmount,
+    {
+      enabled: false,
+    },
+  )
+}
+
+const getCommentReactions = async ({
+  queryKey,
+  pageParam = 1,
+}: QueryFunctionContext<GetCommentReactionsQueryKey>) => {
+  const [, { commentId, token }] = queryKey
+
+  const take = 5
+
+  const skip = (Math.max(pageParam, 1) - 1) * take
+
+  const { data } = await api(token).get(
+    `/comment-reactions/comment/${commentId}${`?take=${take}&skip=${skip}`}`,
   )
 
   console.log('getCommentReactionsData', data)
@@ -79,11 +150,24 @@ const useGetCommentReactions = ({
   commentId,
   token,
 }: UseGetCommentReactionsProps) => {
-  return useQuery(
-    ['comment-reactions', { commentId, token }],
-    getCommentReactions,
-    { enabled: false },
-  )
+  return useInfiniteQuery({
+    queryKey: ['comment-reactions', { commentId, token }],
+    queryFn: ({ pageParam, meta }) =>
+      getCommentReactions({
+        meta,
+        queryKey: ['comment-reactions', { commentId, token }],
+        pageParam,
+      }),
+    enabled: false,
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length < 5) {
+        return undefined
+      }
+
+      return pages.length + 1
+    },
+  })
 }
 
 type DeleteCommentQueryKey = [{ commentId: string; token: string }]
@@ -147,5 +231,6 @@ export {
   useDeleteComment,
   useDeleteCommentReaction,
   useGetCommentReactions,
+  useGetCommentReactionsAmount,
   useGetPostComments,
 }

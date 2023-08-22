@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { instantiatedPostReactionService } from '../factories/post-reaction.factory'
 import { PrismaPostReactionRepository } from '../repositories/implementations/prisma/post-reaction.repository'
@@ -121,12 +121,52 @@ const PostReactionController = {
     const { ok, message, payload } =
       await postReactionService.getPostReactionsByPostId(id, type, take, skip)
 
-    if (!ok) {
+    if (!ok || payload === undefined) {
       reply.status(400).send({ message })
       return
     }
 
     reply.status(200).send({ message, payload })
+  },
+  getPostReactionsAmountByPostId: async (
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ) => {
+    const paramsSchema = z
+      .object({
+        id: z.string().nonempty('Id is required on url params'),
+      })
+      .strict()
+
+    const { ok: okParseParams, payload: payloadParseParams } = handleZodParse(
+      request.params as object,
+      paramsSchema,
+    )
+
+    if (!okParseParams) {
+      reply.status(400).send(payloadParseParams)
+      return
+    }
+
+    const { id } = payloadParseParams
+
+    const { ok, message, payload } =
+      await postReactionService.getPostReactionsByPostId(id)
+
+    if (!ok || payload === undefined) {
+      reply.status(400).send({ message })
+      return
+    }
+
+    reply.status(200).send({
+      message,
+      payload: {
+        postId: id,
+        likes: payload.filter((reaction) => reaction.type === 'like').length,
+        dislikes: payload.filter((reaction) => reaction.type === 'dislike')
+          .length,
+      },
+    })
   },
   getPostReactionsByUserId: async (
     request: FastifyRequest,

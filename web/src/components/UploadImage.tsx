@@ -259,7 +259,7 @@ interface FileListProps {
 
 const FileList = ({ files }: FileListProps) => {
   return (
-    <ScrollArea.Root className="w-full h-[55%] min-h-full">
+    <ScrollArea.Root className="w-full h-[75%]">
       <ScrollArea.Viewport className="w-full h-full px-4 py-2">
         <div className="grid grid-cols-3 gap-4 w-full h-full">
           {files.map((file) => (
